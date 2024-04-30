@@ -172,7 +172,7 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-
+                        
                                     <div class="input-group">
                                         <label for="date"><strong>Date:</strong></label>
                                         <input type="date" name="date" class="form-control @error('date') is-invalid @enderror">

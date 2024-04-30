@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::table('asset', function (Blueprint $table) {
             $table->boolean('po_added')->default(false);
-        });
+        }); 
     }
 
     /**
-     * Reverse the migrations.
+     * here
      */
     public function down(): void
     {
