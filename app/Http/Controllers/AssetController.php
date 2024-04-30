@@ -164,7 +164,7 @@ class AssetController extends Controller
             'unit' => 'required',
             'delivery_qty' => 'required',
             'unit_cost' => 'required',
-        ]);
+        ]); //commit
         $asset = Asset::where('item_no', $item_no)->first();
         $asset->iar_no = $request->input('iar_no');
         $asset->supplier = $request->input('supplier');
