@@ -102,6 +102,9 @@ Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/mainpage', function () {
     return view('mainpage');
 });
+Route::get('/', function () {
+    return view('mainpage');
+});
 
 //USER PROFILE
 Route::get('/user-profile', 'SuppliesController@displayprofile');
