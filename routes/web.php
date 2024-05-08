@@ -25,18 +25,16 @@ use App\Http\Controllers\AssetController;
 //MAIN TABLE
 Route::resource('/displaysupplies', 'SuppliesController');
 Route::get('supplies-view', 'SuppliesController@displaysupplies');
-Route::get('/addsupplies', 'SuppliesController@addsupply');
-Route::post('/storesupplies', 'SuppliesController@storenewsupply');
-Route::get('/editsupplies/{pr_no}', 'SuppliesController@editsupply');
-Route::put('/updatesupplies/{pr_no}', 'SuppliesController@updatesupply');
 Route::get('/deletesupply/{stock_no}', 'SuppliesController@deletesupply');
 Route::get('/searchsupply', 'SuppliesController@search');
 //Route::get('/calendar', 'SuppliesController@calendar');
+Route::get('/supplies/issued-summary', 'SuppliesController@displayIssuedSummary')->name('supplies.issued_summary');
 
 //No. Auto-generations
 Route::get('/generate-iar-no', [SuppliesController::class, 'generateIARNo']);
 Route::get('/generate-stock-no', [SuppliesController::class, 'generateStockNo']);
 Route::get('/generate-item-no', [SuppliesController::class, 'generateItemNo']);
+Route::get('/generate-pr-no', [SuppliesController::class, 'generatePrNo']);
 
 Route::get('/generate-item-no', [AssetController::class, 'generateItemNo']);
 Route::get('/generate-class-id', [AssetController::class, 'generateClassId']);
@@ -46,15 +44,19 @@ Route::get('/generate-par-no', [AssetController::class, 'generateParNo']);
 
 //ISSUED TABLE
 Route::get('issued-supplies-view', 'SuppliesController@displayissued');
+//Route::get('issued-supplies-view', 'SuppliesController@displayissued');
 Route::get('/searchissued', 'SuppliesController@issuedsearch');
-Route::get('/editissued/{stock_no}', 'SuppliesController@editissued');
-Route::put('/updateissued/{stock_no}', 'SuppliesController@updateissued');
+Route::get('/addissued', 'SuppliesController@addissued');
+Route::post('/storenewissued', 'SuppliesController@storenewissued');
 
 //DELIVERED TABLE
 Route::get('delivered-supplies-view', 'SuppliesController@displaydelivered');
 Route::get('/searchdelivered', 'SuppliesController@deliveredsearch');
+Route::get('/adddelivered', 'SuppliesController@adddelivered');
+Route::post('/storenewdelivered', 'SuppliesController@storenewdelivered');
 Route::get('/editdelivered/{stock_no}', 'SuppliesController@editdelivered');
 Route::put('/updatedelivered/{stock_no}', 'SuppliesController@updatedelivered');
+
 
 //FORMS
 Route::get('supply-forms-and-reports-generation', 'SuppliesController@forms');

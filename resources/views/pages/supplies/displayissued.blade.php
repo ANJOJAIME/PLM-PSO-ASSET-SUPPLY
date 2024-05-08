@@ -121,7 +121,7 @@
                 text-align: center;
                 border:none;
                 top: 100px;
-                right: 220px;
+                right: 50px;
                 height: 40px;
                 padding-top: 10px;
                 border-radius: 4px;
@@ -273,6 +273,11 @@
         <header class="custom-header">
             <img src="/image/PLMLogo.png" alt="logo">
         </header>
+        <div>
+            <h4>
+                <a href="{{url('/addissued')}}" class="btn btn-primary"><strong>ADD ISSUED</strong></a>
+            </h4>
+        <div>
         <div class="search-bar" style="position: fixed; top: 80px; left: 300px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 444px; height: 40px; padding: 4.608px 0px 4.608px 9.217px; justify-content: space-between; align-items: center; flex-shrink: 0;">
             <form action="/searchissued" method="get" autocomplete="off">
                 <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="stock_no" placeholder="Search here...">
@@ -320,7 +325,6 @@
                             <th>Report No.</th>
                             <th>RIS No.</th>
                             <th>Quantity Issued</th>
-                            <th>Editted Last</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -333,8 +337,7 @@
                             <td>{{$issueddata->requesting_office}}</td>
                             <td>{{$issueddata->report_no}}</td>
                             <td>{{$issueddata->ris_no}}</td>
-                            <td>{{$issueddata->issued}}</td>
-                            <td>{{$issueddata->updated_at}}</td>
+                            <td>{{$issueddata->quantity_issued}}</td>
                             <td>
                                 <a href="{{ url('editissued/'.$issueddata->stock_no)}}" class="btn-edit" style="text-decoration: none;">Edit</a>
                             </td>

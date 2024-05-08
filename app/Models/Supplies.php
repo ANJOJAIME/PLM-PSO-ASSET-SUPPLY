@@ -37,6 +37,11 @@ class Supplies extends Model
 
         use SoftDeletes;
 
+    public function getTotalDeliveredAttribute()
+    {
+        return self::where('description', $this->description)->sum('delivered');
+    }
+
     public function getKeyName()
     {
         return 'pr_no';
@@ -56,10 +61,10 @@ class Supplies extends Model
         $date = now();
         $year = $date->format('y');
         $month = $date->format('m');
-        // Get all stock_no values
-        $iarNos = self::pluck('iar_no')->toArray();
+        // Get all iar_no values, including soft deleted items
+        $iarNos = self::withTrashed()->pluck('iar_no')->toArray();
 
-        // Extract the last 4 digits of each stock_no and get the maximum value
+        // Extract the last 4 digits of each iar_no and get the maximum value
         $maxNumber = 0;
         foreach ($iarNos as $iarNo) {
             $number = intval(substr($iarNo, -4));
@@ -69,19 +74,16 @@ class Supplies extends Model
         }
         // Increment the number
         $number = str_pad($maxNumber + 1, 4, '0', STR_PAD_LEFT);
-
         return "S{$year}-{$month}-{$number}";
     }
 
     public static function generateStockNo()
     {
-        // Get all stock_no values
-        $stockNos = self::pluck('stock_no')->toArray();
+        $stockNos = self::withTrashed()->pluck('stock_no')->toArray();
 
-        // Extract the last 3 digits of each stock_no and get the maximum value
         $maxNumber = 0;
         foreach ($stockNos as $stockNo) {
-            $number = intval(substr($stockNo, 2)); // start at 2 to skip the "CS"
+            $number = intval(substr($stockNo, 2));
             if ($number > $maxNumber) {
                 $maxNumber = $number;
             }
@@ -94,8 +96,8 @@ class Supplies extends Model
 
     public static function generateItemNo()
     {
-        // Get all item_no values
-        $itemNos = self::pluck('item_no')->toArray();
+        // Get all item_no values, including soft deleted items
+        $itemNos = self::withTrashed()->pluck('item_no')->toArray();
 
         // Extract the numeric part of each item_no and get the maximum value
         $maxNumber = 0;
@@ -108,5 +110,33 @@ class Supplies extends Model
         $number = str_pad($maxNumber + 1, 3, '0', STR_PAD_LEFT);
 
         return $number;
+    }
+
+    public static function generatePrNo()
+    {
+        $date = now();
+        $year = $date->format('Y');
+        // Get all pr_no values, including soft deleted items
+        $prNos = self::withTrashed()->pluck('pr_no')->toArray();
+        // Extract the numeric part of each pr_no and get the maximum value
+        $maxNumber = 0;
+        foreach ($prNos as $prNo) {
+            $number = intval(substr($prNo, 5, 2));
+            if ($number > $maxNumber) {
+                $maxNumber = $number;
+            }
+        }
+        // Increment the number
+        $number = str_pad($maxNumber + 1, 2, '0', STR_PAD_LEFT);
+        $prNo = "{$year}-00-00-{$number}-00";
+        
+        // Check if the generated pr_no already exists
+        while (in_array($prNo, $prNos)) {
+            $maxNumber++;
+            $number = str_pad($maxNumber, 2, '0', STR_PAD_LEFT);
+            $prNo = "{$year}-00-00-{$number}-00";
+        }
+        
+        return $prNo;
     }
 }

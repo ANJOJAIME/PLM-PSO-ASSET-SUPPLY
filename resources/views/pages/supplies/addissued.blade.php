@@ -1,3 +1,11 @@
+@php
+$defaultDescription = '';
+if (isset($issued) && $issued->stock_no) {
+    $item = $items->firstWhere('stock_no', $issued->stock_no);
+    $defaultDescription = $item ? $item->description : '';
+}
+@endphp
+
 <!doctype html>
 <html lang="en">
     <head>
@@ -8,7 +16,7 @@
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         
-        <title>PLM | Issued Supplies Edit</title>
+        <title>PLM | Issued Supplies</title>
         <style>
             body {
                 font-family: Arial;
@@ -124,21 +132,37 @@
                     <div class="card">
                         <div class="card-body">
                             <h1><strong>Edit Issued Supply</strong></h1>
-                            <form action="{{url('/updateissued/'.$issued->stock_no)}}" method="POST" autocomplete="off">
+                            <form action="{{url('/storenewissued')}}" class="form-body" method="POST" autocomplete="off">
                                 @csrf 
-                                @method('PUT')
                                 <div class="input-group">
                                     <div class="input-group">
                                         <label for="stock_no"><strong>Stock No.:</strong></label>
-                                        <input type="text" name="stock_no" value="{{ $issued->stock_no ?? '' }}" readonly style="width: 447px; height: 32px; background-color: rgba(209,223,255,255); border: 0.5px solid #000; border-radius: 2px; padding-left: 12px; color: rgba(86,93,103,255)">
+                                        <select name="stock_no" id="stock_no" class="form-control @error('stock_no') is-invalid @enderror" data-url="{{ url('description') }}/">
+                                            <option value="">Select Stock No.</option>
+                                            @foreach($items as $item)
+                                                <option value="{{ $item->stock_no }}"
+                                                        {{ old('stock_no', $issued->stock_no ?? '') == $item->stock_no ? 'selected' : '' }}
+                                                        @if ($item->balance_after <= 0) disabled @endif>
+                                                    {{ $item->stock_no }} - {{ $item->description }}
+                                                    @if ($item->balance_after <= 0)
+                                                        (Out of Stock)
+                                                    @endif
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('stock_no')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
                                     </div>
                                     <div class="input-group">
                                         <label for="description"><strong>Item Description:</strong></label>
-                                        <input type="text" name="description" value="{{ $issued->description ?? '' }}" readonly style="width: 447px; height: 32px; background-color: rgba(209,223,255,255); border: 0.5px solid #000; border-radius: 2px; padding-left: 12px; color: rgba(86,93,103,255)">
+                                        <input type="text" name="description" id="description" class="form-control @error('description') is-invalid @enderror" value="{{ old('description', $defaultDescription) }}" readonly>
                                     </div>
                                     <div class="input-group">
                                         <label for="date_issuance"><strong>Date of Issuance:</strong></label>
-                                        <input type="date" name="date_issuance" value="{{ old('date_issuance', $issued->date_issuance ?? '') }}" class="form-control @error('date_issuance') is-invalid @enderror">
+                                        <input type="date" name="date_issuance" class="form-control @error('date_issuance') is-invalid @enderror">
                                         @error('date_issuance')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -181,7 +205,7 @@
                                     </div>
                                     <div class="input-group">
                                         <label for="report_no"><strong>Report No:</strong></label>
-                                        <input type="text" name="report_no" value="{{ old('report_no', $issued->report_no ?? '') }}" class="form-control @error('report_no') is-invalid @enderror">
+                                        <input type="text" name="report_no" class="form-control @error('report_no') is-invalid @enderror">
                                         @error('report_no')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -190,7 +214,7 @@
                                     </div>
                                     <div class="input-group">
                                         <label for="ris_no"><strong>RIS No:</strong></label>
-                                        <input type="text" name="ris_no" value="{{ old('ris_no', $issued->ris_no ?? '') }}" class="form-control @error('ris_no') is-invalid @enderror">
+                                        <input type="text" name="ris_no" class="form-control @error('ris_no') is-invalid @enderror">
                                         @error('ris_no')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -198,8 +222,8 @@
                                         @enderror
                                     </div>
                                     <div class="input-group">
-                                        <label for="issued"><strong>Quantity Issued:</strong></label>
-                                        <input type="text" name="issued" value="{{ old('issued', $issued->issued ?? '') }}" class="form-control @error('issued') is-invalid @enderror">
+                                        <label for="quantity_issued"><strong>Quantity Issued:</strong></label>
+                                        <input type="text" name="quantity_issued" class="form-control @error('quantity_issued') is-invalid @enderror">
                                         @error('issued')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -217,27 +241,45 @@
         </div>
         <script>
             document.querySelector('form').addEventListener('submit', function(event) {
-                var item_no = document.querySelector('input[name="date_issuance"]').value;
-                var description = document.querySelector('input[name="requesting_office"]').value;
-                var date_issuance = document.querySelector('input[name="report_no"]').value;
-                var requesting_office = document.querySelector('input[name="ris_no"]').value;
-                var report_no = document.querySelector('input[name="issued"]').value;
-                    
+                let stock_no = document.querySelector('select[name="stock_no"]').value;
+                let description = document.querySelector('input[name="description"]').value;
+                let date_issuance = document.querySelector('input[name="date_issuance"]').value;
+                let requesting_office = document.querySelector('select[name="requesting_office"]').value;
+                let report_no = document.querySelector('input[name="report_no"]').value;
+                let ris_no = document.querySelector('input[name="ris_no"]').value;
+                let quantity_issued = document.querySelector('input[name="quantity_issued"]').value;
 
-                var message = 'Are you sure you want to EDIT this item:\n' +
-                    'Item No: ' + item_no + '\n' +
-                    'Description: ' + description + '\n' +
+                var message = 'Are you sure you want to ADD this item:\n' +
+                    'Stock No.: ' + stock_no + '\n' +
+                    'Item Description: ' + description + '\n' +
                     'Date of Issuance: ' + date_issuance + '\n' +
                     'Requesting Office: ' + requesting_office + '\n' +
-                    'Report No: ' + report_no + '\n' +
-                    'RIS No: ' + ris_no + '\n' +
-                    'Quantity Issued: ' + issued + '\n' +
-                    "\nif not select 'cancel'";
-
-                if (!confirm(message)) {
-                    event.preventDefault();
-                }
+                    'Report No.: ' + report_no + '\n' +
+                    'RIS No.: ' + ris_no + '\n' +
+                    'Quantity Issued: ' + quantity_issued + '\n';
             });
         </script>
+
+        <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const stockNoDropdown = document.getElementById('stock_no');
+            const descriptionInput = document.getElementById('description');
+
+            stockNoDropdown.addEventListener('change', function() {
+                // Find the selected option
+                const selectedOption = this.options[this.selectedIndex];
+                // Extract the description part from the option text (assuming format "stock_no - description")
+                const description = selectedOption.text.split(' - ')[1] || '';
+                // Set the description input field
+                descriptionInput.value = description;
+            });
+
+            // Trigger change event on page load in case there's a selected option
+            if (stockNoDropdown.value) {
+                stockNoDropdown.dispatchEvent(new Event('change'));
+            }
+        });
+        </script>
+
     </body>
 </html>

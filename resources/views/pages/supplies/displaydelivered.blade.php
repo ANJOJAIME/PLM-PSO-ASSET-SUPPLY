@@ -121,7 +121,7 @@
                 text-align: center;
                 border:none;
                 top: 100px;
-                right: 220px;
+                right: 50px;
                 height: 40px;
                 padding-top: 10px;
                 border-radius: 4px;
@@ -273,6 +273,11 @@
         <header class="custom-header">
             <img src="/image/PLMLogo.png" alt="logo">
         </header>
+        <div>
+            <h4>
+                <a href="{{url('/adddelivered')}}" class="btn btn-primary"><strong>ADD DELIVERED</strong></a>
+            </h4>
+        <div>
         <div class="search-bar" style="position: fixed; top: 80px; left: 300px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 444px; height: 40px; padding: 4.608px 0px 4.608px 9.217px; justify-content: space-between; align-items: center; flex-shrink: 0;">
             <form action="/searchdelivered" method="get" autocomplete="off">
                 <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="stock_no" placeholder="Search here...">

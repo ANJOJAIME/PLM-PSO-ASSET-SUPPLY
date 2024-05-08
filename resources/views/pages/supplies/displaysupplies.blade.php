@@ -370,11 +370,7 @@
                 <a class="archives" href="{{ route('pages.supplies.archive') }}" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Archive</a>
             </div>
         </div>
-        <div>
-            <h4>
-                <a href="{{url('/addsupplies')}}" class="btn btn-primary"><strong>ADD SUPPLIES</strong></a>
-            </h4>
-        <div>
+        
         <div class="profile">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="profile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: transparent">
                 <i class="fa fa-user"></i>
@@ -418,31 +414,38 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Stock No.</th>
                             <th>Item Description</th>
                             <th>Unit</th>
                             <th>Delivered</th>
                             <th>Quantity Issued</th>
                             <th>Balance After</th>
                             <th>Supplies Status</th>
-                            <th>Editted Last</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($supplies as $suppliesdata)
+                        @php
+                            $issuedTotal = $issuedTotals[$suppliesdata->description] ?? 0;
+                            $balanceAfter = $suppliesdata->totalDelivered - $issuedTotal;
+                            $status = 'No value yet'; // Default status
+                            if ($balanceAfter <= 50 && $balanceAfter > 1) {
+                                $status = 'LOW LEVEL';
+                            } elseif ($balanceAfter > 50 && $balanceAfter <= 100) {
+                                $status = 'MID LEVEL';
+                            } elseif ($balanceAfter > 100) {
+                                $status = 'HIGH LEVEL';
+                            }
+                        @endphp
                         <tr>
-                            <td>{{$suppliesdata->stock_no}}</td>
                             <td>{{$suppliesdata->description}}</td>
                             <td>{{$suppliesdata->unit}}</td>
-                            <td>{{$suppliesdata->delivered}}</td>
-                            <td>{{$suppliesdata->issued}}</td>
-                            <td>{{ $suppliesdata->balance_after ?? '--' }}</td>
-                            <td>{{ isset($suppliesdata->balance_after) ? $suppliesdata->status : 'No value yet' }}</td>
-                            <td>{{$suppliesdata->updated_at}}</td>
+                            <td>{{$suppliesdata->totalDelivered}}</td>
+                            <td>{{ $issuedTotal }}</td>
+                            <td>{{ $balanceAfter }}</td>
+                            <td>{{ $status }}</td>
                             <td>
                                 <a href="{{ url('deletesupply/'.$suppliesdata->stock_no)}}" class="btn-delete" style="text-decoration: none;" onclick="return confirm('Are you sure you want to delete this data with Stock No. {{$suppliesdata->stock_no}} in the supplies?')">Delete</a>
-                                <a href="{{ url('editsupplies/'.$suppliesdata->pr_no)}}" class="btn-edit" style="text-decoration: none;">Edit</a>
                             </td>
                         </tr>
                         @endforeach

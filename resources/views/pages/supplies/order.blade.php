@@ -45,13 +45,12 @@
 <body>
     <div style="text-align: center">
         <h1>SUPPLIES GENERAL REPORT</h1>
-        PAMANTASAN NG LUNGSOD NG MAYNILA <br>
-        intramuros, manila <br><br><br>
+        <strong>PAMANTASAN NG LUNGSOD NG MAYNILA</strong><br>
+        General Luna, corner Muralla St, Intramuros, Manila, 1002 Metro Manila <br><br><br>
     </div>
     <div class="container">
         <table class="table table-striped">
             <tr>
-            <th>Stock No</th>
                 <th>Item Description</th>
                 <th>Unit</th>
                 <th>Delivered</th>
@@ -60,15 +59,26 @@
                 <th>Status</th>
             </tr>   
             @if($supplies->isNotEmpty())
-                @foreach($supplies as $supply)
+                @foreach($supplies as $suppliesdata)
+                    @php
+                        $issuedTotal = $issuedTotals[$suppliesdata->description] ?? 0;
+                        $balanceAfter = $suppliesdata->totalDelivered - $issuedTotal;
+                        $status = 'No value yet'; // Default status
+                        if ($balanceAfter <= 50 && $balanceAfter > 1) {
+                            $status = 'LOW LEVEL';
+                        } elseif ($balanceAfter > 50 && $balanceAfter <= 100) {
+                            $status = 'MID LEVEL';
+                        } elseif ($balanceAfter > 100) {
+                            $status = 'HIGH LEVEL';
+                        }
+                    @endphp
                     <tr>
-                        <td>{{$supply->stock_no}}</td>
-                        <td>{{$supply->description}}</td>
-                        <td>{{$supply->unit}}</td>
-                        <td>{{$supply->delivered}}</td>
-                        <td>{{$supply->issued}}</td>
-                        <td>{{$supply->balance_after}}</td>
-                        <td>{{$supply->status}}</td>
+                        <td>{{$suppliesdata->description}}</td>
+                        <td>{{$suppliesdata->unit}}</td>
+                        <td>{{$suppliesdata->totalDelivered}}</td>
+                        <td>{{ $issuedTotal }}</td>
+                        <td>{{ $balanceAfter }}</td>
+                        <td>{{ $status }}</td>
                     </tr>
                 @endforeach
             @endif

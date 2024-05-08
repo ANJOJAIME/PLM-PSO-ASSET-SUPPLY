@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-
 use Illuminate\Http\Request;
 use App\Models\Supplies;
+use App\Models\Issued;
 use App\Models\User;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
@@ -21,84 +21,28 @@ class SuppliesController extends Controller
     }
     public function displaysupplies()
     {
-        $supplies = Supplies::where('added', true)->get();
+        $supplies = Supplies::select('description', 'unit')
+                     ->distinct('description')
+                     ->get();
         $notifications = Notification::all();
+        $issuedTotals = Issued::select('description', \DB::raw('SUM(quantity_issued) as total_quantity'))
+                            ->groupBy('description')
+                            ->pluck('total_quantity', 'description');
 
-        return view('pages.supplies.displaysupplies', ['supplies' => $supplies, 'notifications' => $notifications]);
+        return view('pages.supplies.displaysupplies', ['supplies' => $supplies, 'notifications' => $notifications, 'issuedTotals' => $issuedTotals]);
     }
-
-    public function addsupply()
-    {
-        $items = Supplies::all();
-
-        return view('pages.supplies.addsupply', ['items' => $items]);
-    }
-
-    public function storenewsupply(Request $request)
-    {
-        $validatedData = $request->validate([
-            'pr_no' => 'required',
-        ]);
-
-        // Try to find the item with the provided stock_no
-        $supply = Supplies::where('pr_no', $request->input('pr_no'))->first();
-
-        if ($supply) {
-            $supply->added = true;
-        } else {
-            $supply = new Supplies;
-            $supply->pr_no = $request->input('pr_no');
-            $supply->added = true;
-        }
-
-        $supply->save();
-
-        $notification = new Notification;
-        $notification->type = 'Add';
-        $notification->item = $supply->pr_no;
-        $notification->save();
-
-        return redirect('/supplies-view')->with('status', 'Supply Added Successfully!');
-    }
- 
-    public function editsupply($pr_no)
-    {
-        $supply = Supplies::where('pr_no', $pr_no)->first();
-        return view('pages.supplies.editsupply', ['supply' => $supply]);
-    }
-
-    public function updatesupply(Request $request, $pr_no)
-    {
-            $request->validate([
-                'stock_no' => 'required',
-                'description' => 'required',
-                'unit' => 'required',
-            ]);
-        $supply = Supplies::find($pr_no);
-        $supply->stock_no = $request->input('stock_no');
-        $supply->description = $request->input('description');
-        $supply->unit = $request->input('unit');
-        $supply->update();
-
-        $notification = new Notification;
-        $notification->type = 'Edit';
-        $notification->details =  $supply->pr_no;
-        $notification->item =  $supply->description;
-        $notification->save();
-
-        return redirect('/supplies-view')->with('status', 'Supply Updated Successfully!');
-    }
-
+    
+    
     public function deletesupply($stock_no)
     {
         $supply = Supplies::where('stock_no', $stock_no)->first();
         $supply->delete();
 
-        $notification = new Notification;
-        $notification->type = 'Delete';
-        $notification->details =  $supply->stock_no;
-        $notification->item =  $supply->description;
-        $notification->save();
+       // $notification = new Notification;
+        //$notification->type = 'Delete';
+        //$notification->details =  $supply->stock_no;
+        //$notification->item =  $supply->description;
+        //$notification->save();
         
         return redirect('/supplies-view')->with('status', 'Supply Deleted Successfully! Item can be recovered in archive...');
     }
@@ -115,48 +59,48 @@ class SuppliesController extends Controller
     //ISSUED TABLE
     public function displayissued()
     {
-        $issued = Supplies::where('added', true)->get();
-        $searched_stock_no = request('stock_no');
-        return view('pages.supplies.displayissued', ['issued' => $issued, 'searched_stock_no' => $searched_stock_no]);
+        $issued = Issued::all();
+        return view('pages.supplies.displayissued', ['issued' => $issued]);
     }
 
-    public function issuedsearch(Request $request)
+    public function addissued()
     {
-        $stock_no = $request->input('stock_no');
-        $issued = Supplies::where('stock_no', 'like', "%{$stock_no}%")->get();
-
-        return view('pages.supplies.displayissued', ['issued' => $issued, 'searched_stock_no' => $stock_no]);
+        $items = Supplies::all();
+        
+        return view('pages.supplies.addissued', ['items' => $items]);
     }
 
-    public function editissued($stock_no)
+    public function storenewissued(Request $request)
     {
-        $issued = Supplies::where('stock_no', $stock_no)->first();
-        return view('pages.supplies.editissued', compact('issued'));
-    }
+        $issued = new Issued;
+        
+        $validatedData = $request->validate([
+            'stock_no' => 'required',
+            'date_issuance' => 'required',
+            'report_no' => 'required',
+            'requesting_office' => 'required',
+            'quantity_issued' => 'required',
+            'ris_no' => 'required',
+            'description' => 'required',
+        ]);
 
-    public function updateissued(Request $request, $stock_no)
-    {
-            $request->validate([
-                'date_issuance' => 'required',
-                'requesting_office' => 'required',
-                'report_no' => 'required',
-                'ris_no' => 'required',
-                'issued' => 'required',
-            ]);
-        $issued = Supplies::where('stock_no', $stock_no)->first();
         $issued->date_issuance = $request->input('date_issuance');
-        $issued->requesting_office = $request->input('requesting_office');
+        $issued->stock_no = $request->input('stock_no');
         $issued->report_no = $request->input('report_no');
+        $issued->requesting_office = $request->input('requesting_office');
+        $issued->quantity_issued = $request->input('quantity_issued');
         $issued->ris_no = $request->input('ris_no');
-        $issued->issued = $request->input('issued');
-        $issued->update();
-        return redirect('/issued-supplies-view')->with('status', 'Issued Supply Updated Successfully!');
+        $issued->description = $request->input('description');
+
+        $issued->save();
+
+        return redirect('/issued-supplies-view')->with('status', 'Issued Supply Added Successfully!');
     }
 
     //DELIVERED TABLE
     public function displaydelivered()
     {
-        $delivered = Supplies::where('added', true)->get();
+        $delivered = Supplies::all();
         $searched_stock_no = request('stock_no');
         return view('pages.supplies.displaydelivered', ['delivered' => $delivered, 'searched_stock_no' => $searched_stock_no]);
     }
@@ -167,6 +111,69 @@ class SuppliesController extends Controller
         $delivered = Supplies::where('stock_no', 'like', "%{$stock_no}%")->get();
 
         return view('pages.supplies.displaydelivered', ['delivered' => $delivered, 'searched_stock_no' => $stock_no]);
+    }
+
+    public function adddelivered()
+    {
+        $items = Supplies::all();
+
+        return view('pages.supplies.adddelivered', ['items' => $items]);
+    }
+
+    public function storenewdelivered(Request $request)
+    {
+        $supply = new Supplies;
+        
+        $validatedData = $request->validate([
+            'stock_no' => 'required',
+            'description' => 'required',
+            'delivery_date' => 'required',
+            'actual_delivery_date' => 'required',
+            'acceptance_date' => 'required',
+            'delivered' => 'required',
+            'iar_no' => 'required',
+            'item_no' => 'required',
+            'dr_no' => 'required',
+            'unit' => 'required',
+            'check_no' => 'required',
+            'po_no' => 'required',
+            'po_date' => 'required',
+            'po_amount' => 'required',
+            'pr_no' => 'required',
+            'price_per_purchase_request' => 'required',
+            'bur' => 'required',
+            'remarks',
+        ]);
+
+        $supply->description = $request->input('description');
+        $supply->delivery_date = $request->input('delivery_date');
+        $supply->actual_delivery_date = $request->input('actual_delivery_date');
+        $supply->acceptance_date = $request->input('acceptance_date');
+        $supply->delivered = $request->input('delivered');
+        $supply->iar_no = $request->input('iar_no');
+        $supply->dr_no = $request->input('dr_no');
+        $supply->unit = $request->input('unit');
+        $supply->check_no = $request->input('check_no');
+        $supply->po_no = $request->input('po_no');
+        $supply->po_date = $request->input('po_date');
+        $supply->po_amount = $request->input('po_amount');
+        $supply->price_per_purchase_request = $request->input('price_per_purchase_request');
+        
+        $supply->bur = $request->input('bur');
+        $supply->remarks = $request->input('remarks');
+        $supply->stock_no = Supplies::generateStockNo();
+        $supply->item_no = Supplies::generateItemNo();
+        $supply->iar_no = Supplies::generateIARNo();
+        $supply->pr_no = Supplies::generatePrNo();
+
+        $supply->save();
+
+        $notification = new Notification;
+        $notification->type = 'Add';
+        $notification->item = $supply->pr_no;
+        $notification->save();
+
+        return redirect('/delivered-supplies-view')->with('status', 'Delivered Supply Added Successfully!');
     }
 
     public function editdelivered($stock_no)
@@ -285,6 +292,11 @@ class SuppliesController extends Controller
         return response()->json(['item_no' => Supplies::generateItemNo()]);
     }
 
+    public function generatePrNo()
+    {
+        return response()->json(['pr_no' => Supplies::generatePrNo()]);
+    }
+
     //USER PROFILE
     public function displayprofile()
     {
@@ -300,21 +312,38 @@ class SuppliesController extends Controller
     //PDF
     public function displayPDF()
     {
-        $supplies = Supplies::all();
-        return view('pages.supplies.order', ['supplies' => $supplies]);
+        $supplies = Supplies::select('description', 'unit')
+                     ->distinct('description')
+                     ->get();
+        $issuedTotals = Issued::select('description', \DB::raw('SUM(quantity_issued) as total_quantity'))
+                     ->groupBy('description')
+                     ->pluck('total_quantity', 'description');
+
+        return view('pages.supplies.order', ['supplies' => $supplies, 'issuedTotals' => $issuedTotals]);
     }
 
     public function downloadPDF()
     {
-        $supplies = Supplies::where('added', true)->get();
-        $pdf = PDF::loadView('pages.supplies.order', ['supplies' => $supplies])->setPaper('a4', 'landscape');
+        $supplies = Supplies::select('description', 'unit')
+                     ->distinct('description')
+                     ->get();
+        $issuedTotals = Issued::select('description', \DB::raw('SUM(quantity_issued) as total_quantity'))
+                     ->groupBy('description')
+                     ->pluck('total_quantity', 'description');
+
+        $pdf = PDF::loadView('pages.supplies.order', ['supplies' => $supplies, 'issuedTotals' => $issuedTotals])->setPaper('a4', 'landscape');
         return $pdf->download('General Report Supplies.pdf');
     }
     
     public function forms()
     {
-        $supplies = Supplies::all();
-        return view('pages.supplies.suppliesforms', ['supplies' => $supplies]);
+        $supplies = Supplies::select('description', 'unit')
+                     ->distinct('description')
+                     ->get();
+        $issuedTotals = Issued::select('description', \DB::raw('SUM(quantity_issued) as total_quantity'))
+                     ->groupBy('description')
+                     ->pluck('total_quantity', 'description');
+        return view('pages.supplies.suppliesforms', ['supplies' => $supplies, 'issuedTotals' => $issuedTotals]);
     }
 
     public function getItemDetails(Request $request)
@@ -428,7 +457,17 @@ class SuppliesController extends Controller
         $barcode = $generator->getBarcode($data, $generator::TYPE_CODE_128);
 
         $pdf = PDF::loadView('pages.supplies.barcode', ['barcode' => $barcode]);
-        $pdf->setPaper([0, 0, 127, 254], 'landscape');
+        $pdf->setPaper([0, 0, 127, 300], 'landscape');
+        $pdf->setOptions(['dpi' => 300, 'defaultFont' => 'sans-serif']);
+        $pdf->setOption('margin-left', 0);
+        $pdf->setOption('margin-right', 0);
+        $pdf->setOption('margin-top', 0);
+        $pdf->setOption('margin-bottom', 0);
+        $pdf->setOption('page-width', '100%');
+        $pdf->setOption('page-height', '100%');
+        $pdf->setOption('viewport-size', '100%');
+        $pdf->setOption('viewport-width', '100%');
+        $pdf->setOption('viewport-height', '100%');
         
         return $pdf->download($supply->stock_no . '_barcode.pdf');
     }
