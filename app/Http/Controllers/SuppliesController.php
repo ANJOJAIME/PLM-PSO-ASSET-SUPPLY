@@ -66,8 +66,14 @@ class SuppliesController extends Controller
     public function addissued()
     {
         $items = Supplies::all();
+        $supplies = Supplies::select('description', 'unit')
+                     ->distinct('description')
+                     ->get();
+        $issuedTotals = Issued::select('description', \DB::raw('SUM(quantity_issued) as total_quantity'))
+                            ->groupBy('description')
+                            ->pluck('total_quantity', 'description');
         
-        return view('pages.supplies.addissued', ['items' => $items]);
+        return view('pages.supplies.addissued', ['items' => $items, 'supplies' => $supplies, 'issuedTotals' => $issuedTotals]);
     }
 
     public function storenewissued(Request $request)
@@ -337,12 +343,15 @@ class SuppliesController extends Controller
     
     public function forms()
     {
-        $supplies = Supplies::select('description', 'unit')
-                     ->distinct('description')
-                     ->get();
+        $issuedStockNos = Issued::select('stock_no')->distinct()->get()->pluck('stock_no')->toArray();
+        $supplies = Supplies::select('description', 'unit', 'stock_no')
+                            ->whereIn('stock_no', $issuedStockNos)
+                            ->distinct('description')
+                            ->get();
         $issuedTotals = Issued::select('description', \DB::raw('SUM(quantity_issued) as total_quantity'))
                      ->groupBy('description')
                      ->pluck('total_quantity', 'description');
+                     
         return view('pages.supplies.suppliesforms', ['supplies' => $supplies, 'issuedTotals' => $issuedTotals]);
     }
 
@@ -440,35 +449,48 @@ class SuppliesController extends Controller
     {
         $item_no = $request->get('stock_no');
         $supply = Supplies::where('stock_no', $item_no)->first();
-
+    
         if (!$supply) {
             return response()->json(['error' => 'Item not found'], 404);
         }
-
-        $data = $supply->item_no . ', ' .
-                $supply->description . ', ' .
-                $supply->unit . ', ' .
-                $supply->date_issuance . ', ' .
-                $supply->requesting_office . ', ' .
-                $supply->report_no . ', ' .
-                $supply->ris_no;
-
+    
+        // Create an associative array for the supply data
+        $data = [
+            'item_no' => $supply->item_no,
+            'description' => $supply->description,
+            'unit' => $supply->unit,
+            'date_issuance' => $supply->date_issuance,
+            'requesting_office' => $supply->requesting_office,
+            'report_no' => $supply->report_no,
+            'ris_no' => $supply->ris_no
+        ];
+    
+        // Generate the barcode using a string
         $generator = new BarcodeGeneratorHTML();
-        $barcode = $generator->getBarcode($data, $generator::TYPE_CODE_128);
-
-        $pdf = PDF::loadView('pages.supplies.barcode', ['barcode' => $barcode]);
+        $barcode = $generator->getBarcode($supply->stock_no, $generator::TYPE_CODE_128);
+    
+        // Pass both the barcode and the array of supply data to the view
+        $pdf = Pdf::loadView('pages.supplies.barcode', [
+            'barcode' => $barcode,
+            'data' => $data
+        ]);
+    
+        // PDF options
         $pdf->setPaper([0, 0, 127, 300], 'landscape');
-        $pdf->setOptions(['dpi' => 300, 'defaultFont' => 'sans-serif']);
-        $pdf->setOption('margin-left', 0);
-        $pdf->setOption('margin-right', 0);
-        $pdf->setOption('margin-top', 0);
-        $pdf->setOption('margin-bottom', 0);
-        $pdf->setOption('page-width', '100%');
-        $pdf->setOption('page-height', '100%');
-        $pdf->setOption('viewport-size', '100%');
-        $pdf->setOption('viewport-width', '100%');
-        $pdf->setOption('viewport-height', '100%');
-        
+        $pdf->setOptions([
+            'dpi' => 300,
+            'defaultFont' => 'sans-serif',
+            'margin-left' => 0,
+            'margin-right' => 0,
+            'margin-top' => 0,
+            'margin-bottom' => 0,
+            'page-width' => '100%',
+            'page-height' => '100%',
+            'viewport-size' => '100%',
+            'viewport-width' => '100%',
+            'viewport-height' => '100%'
+        ]);
+    
         return $pdf->download($supply->stock_no . '_barcode.pdf');
     }
 

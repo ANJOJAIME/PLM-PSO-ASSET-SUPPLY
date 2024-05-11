@@ -135,27 +135,32 @@ if (isset($issued) && $issued->stock_no) {
                             <form action="{{url('/storenewissued')}}" class="form-body" method="POST" autocomplete="off">
                                 @csrf 
                                 <div class="input-group">
-                                    <div class="input-group">
-                                        <label for="stock_no"><strong>Stock No.:</strong></label>
-                                        <select name="stock_no" id="stock_no" class="form-control @error('stock_no') is-invalid @enderror" data-url="{{ url('description') }}/">
-                                            <option value="">Select Stock No.</option>
-                                            @foreach($items as $item)
-                                                <option value="{{ $item->stock_no }}"
-                                                        {{ old('stock_no', $issued->stock_no ?? '') == $item->stock_no ? 'selected' : '' }}
-                                                        @if ($item->balance_after <= 0) disabled @endif>
-                                                    {{ $item->stock_no }} - {{ $item->description }}
-                                                    @if ($item->balance_after <= 0)
-                                                        (Out of Stock)
-                                                    @endif
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('stock_no')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
+                                    <label for="stock_no"><strong>Stock No.:</strong></label>
+                                    <select name="stock_no" id="stock_no" class="form-control @error('stock_no') is-invalid @enderror" data-url="{{ url('description') }}/">
+                                        <option value="">Select Stock No.</option>
+                                        @foreach($items as $item)
+                                            @php
+                                                // Calculate the total issued for the current item description
+                                                $issuedTotal = $issuedTotals[$item->description] ?? 0;
+                                                // Calculate the remaining balance for the current supply
+                                                $balanceAfter = $item->totalDelivered - $issuedTotal;
+                                            @endphp
+                                            <option value="{{ $item->stock_no }}"
+                                                    {{ old('stock_no', $issued->stock_no ?? '') == $item->stock_no ? 'selected' : '' }}
+                                                    @if($balanceAfter <= 0) disabled @endif>
+                                                {{ $item->stock_no }} - {{ $item->description }}
+                                                @if($balanceAfter <= 0)
+                                                    (Out of Stock)
+                                                @endif
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('stock_no')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                                     <div class="input-group">
                                         <label for="description"><strong>Item Description:</strong></label>
                                         <input type="text" name="description" id="description" class="form-control @error('description') is-invalid @enderror" value="{{ old('description', $defaultDescription) }}" readonly>
