@@ -8,7 +8,7 @@
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <title>PLM | Supplies Archive: Delivered</title>
+        <title>PLM | Supplies Archive: Issued</title>
 
         <style>
             body {
@@ -53,8 +53,8 @@
                 position: absolute;
                 left: 160px;
                 top: 160px;
-                max-height: calc(100vh - 320px);
-                max-width: calc(100vw - 320px);
+                max-height: 500px;
+                max-width: 1500px;
                 overflow-y: auto;
                 overflow-x: auto;
                 border-radius: 15px;
@@ -63,8 +63,8 @@
 
             .table-container table {
                 border-collapse: collapse;
-                width: 100%;
-                height: 100%;
+                width: 1200px;
+                height: 550px;
                 border-radius: 15px;
                 overflow: hidden;
                 table-layout: fixed;
@@ -192,12 +192,11 @@
         </style>
 
     <body>
-        <div class="label"><strong>Deleted Delivered Items</strong></div>
+        <div class="label"><strong>Deleted Issued Items</strong></div>
         <header class="custom-header">
             <img src="/image/PLMLogo.png" alt="logo">
         </header>
-       
-        <a href="{{url('/supplies-view')}}" class="btn btn-primary"><strong>Back to Main</strong></a>
+        <a href="{{url('/issued-supplies-view')}}" class="btn btn-primary"><strong>Back to Main</strong></a>
         <div class="profile">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="profile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: transparent">
                 <i class="fa fa-user"></i>
@@ -220,13 +219,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($delivered as $deliveredata)
+                        @foreach ($issued as $issueddata)
                             <tr>
-                                <td>{{ $deliveredata->stock_no }}</td>
-                                <td>{{ $deliveredata->description }}</td>
+                                <td>{{ $issueddata->stock_no }}</td>
+                                <td>{{ $issueddata->description }}</td>
                                 <td>
-                                    <a href="{{ route('pages.supplies.recover', ['stock_no' => $deliveredata->stock_no]) }}" class="btn-recover">Recover</a>
-                                    <form method="POST" action="{{ route('pages.supplies.forceDelete', ['stock_no' => $deliveredata->stock_no]) }}">
+                                    <a href="{{ route('pages.issued.recover', ['stock_no' => $issueddata->stock_no]) }}" class="btn-recover">Recover</a>
+                                    <form method="POST" action="{{ route('pages.issued.forceDelete', ['stock_no' => $issueddata->stock_no]) }}">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn-delete">Permanently Delete</button>

@@ -48,6 +48,8 @@ Route::get('issued-supplies-view', 'SuppliesController@displayissued');
 Route::get('/searchissued', 'SuppliesController@issuedsearch');
 Route::get('/addissued', 'SuppliesController@addissued');
 Route::post('/storenewissued', 'SuppliesController@storenewissued');
+Route::get('/deleteissued/{stock_no}', 'SuppliesController@deleteissued');
+
 
 //DELIVERED TABLE
 Route::get('delivered-supplies-view', 'SuppliesController@displaydelivered');
@@ -132,6 +134,7 @@ Route::get('/requisition-issue-form', 'SuppliesController@RISForm');
 Route::get('/inspection-acceptance-report', 'SuppliesController@IARForm');
 
 //ARCHIVE
+//SUPPLIES
 Route::get('/supplies/archive/{stock_no}/recover', 'SuppliesController@recover')->name('pages.supplies.recover');
 Route::delete('/supplies/archive/{stock_no}/forceDelete', 'SuppliesController@forceDelete')->name('pages.supplies.forceDelete');
 Route::get('/supplies/archive', 'SuppliesController@archive')->name('pages.supplies.archive');
@@ -140,8 +143,19 @@ Route::get('/assets/archive/{item_no}/recover', 'AssetController@recover')->name
 Route::delete('/assets/archive/{item_no}/forceDelete', 'AssetController@forceDelete')->name('pages.assets.forceDelete');
 Route::get('/assets/archive', 'AssetController@archive')->name('pages.assets.archive');
 
+//ISSUED
+Route::get('/issued/archive/{stock_no}/recover', 'SuppliesController@recoverIssued')->name('pages.issued.recover');
+Route::delete('/issued/archive/{stock_no}/forceDelete', 'SuppliesController@forceDeleteIssued')->name('pages.issued.forceDelete');
+Route::get('/issued/archive', 'SuppliesController@archiveIssued')->name('pages.issued.archive');
+
 
 Route::get('/generate-barcode', 'SuppliesController@generateBarcode');
+
+//DEPARTMENT
+Route::get('/plm-departments', 'SuppliesController@displaydepartment');
+Route::get('/adddepartment', 'SuppliesController@adddepartment');
+Route::post('/storedepartment', 'SuppliesController@storedepartment');
+Route::get('/deletedepartment/{id}', 'SuppliesController@deletedepartment');
 
 
 
