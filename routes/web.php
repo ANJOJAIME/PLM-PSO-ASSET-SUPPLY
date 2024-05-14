@@ -151,5 +151,11 @@ Route::get('/issued/archive', 'SuppliesController@archiveIssued')->name('pages.i
 
 Route::get('/generate-barcode', 'SuppliesController@generateBarcode');
 
+//DEPARTMENT
+Route::get('/plm-departments', 'SuppliesController@displaydepartment');
+Route::get('/adddepartment', 'SuppliesController@adddepartment');
+Route::post('/storedepartment', 'SuppliesController@storedepartment');
+Route::get('/deletedepartment/{id}', 'SuppliesController@deletedepartment');
+
 
 

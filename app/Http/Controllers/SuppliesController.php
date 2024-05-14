@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Supplies;
 use App\Models\Issued;
 use App\Models\User;
+use App\Models\Department;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\PDF;
@@ -81,8 +82,9 @@ class SuppliesController extends Controller
         $issuedTotals = Issued::select('description', \DB::raw('SUM(quantity_issued) as total_quantity'))
                             ->groupBy('description')
                             ->pluck('total_quantity', 'description');
+        $departments = Department::all();
         
-        return view('pages.supplies.addissued', ['items' => $items, 'supplies' => $supplies, 'issuedTotals' => $issuedTotals]);
+        return view('pages.supplies.addissued', ['items' => $items, 'supplies' => $supplies, 'issuedTotals' => $issuedTotals, 'departments' => $departments]);
     }
 
     public function deleteissued($stock_no)
@@ -262,6 +264,60 @@ class SuppliesController extends Controller
         $delivered->remarks = $request->input('remarks');
         $delivered->update();
         return redirect('/delivered-supplies-view')->with('status', 'Delivered Supply Updated Successfully!');
+    }
+
+    //DEPARTMENT
+    public function displaydepartment()
+    {
+        $departments = Department::all();
+        $notifications = Notification::all();
+    
+        return view('pages.supplies.displaydepartment', ['departments' => $departments, 'notifications' => $notifications]);
+    }
+    
+    public function adddepartment()
+    {
+        $departments = Department::all();   
+        return view('pages.supplies.adddepartment');
+    }
+
+    public function storedepartment(Request $request)
+    {
+        $department = new Department;
+        
+        $validatedData = $request->validate([
+            'department_name' => 'required',
+            'department_head' => 'required',
+            'contact' => 'required',
+        ]);
+
+        $department->department_name = $request->input('department_name');
+        $department->department_head = $request->input('department_head');
+        $department->contact = $request->input('contact');
+
+        $department->save();
+
+        $notification = new Notification;
+        $notification->type = 'Add';
+        $notification->details =  $department->department_name;
+        $notification->item =  $department->department_head;
+        $notification->save();
+
+        return redirect('/plm-departments')->with('status', 'Department Added Successfully!');
+    }
+
+    public function deletedepartment($id)
+    {
+        $department = Department::where('id', $id)->first();
+        $department->delete();
+
+        $notification = new Notification;
+        $notification->type = 'Delete';
+        $notification->details =  $department->department_name;
+        $notification->item =  $department->department_head;
+        $notification->save();
+
+        return redirect('/plm-departments')->with('status', 'Department Deleted Successfully!');
     }
 
     //ARCHIVE CONTROLLER
