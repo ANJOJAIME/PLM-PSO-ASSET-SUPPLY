@@ -31,36 +31,45 @@ class SuppliesController extends Controller
 
         return view('pages.supplies.displaysupplies', ['supplies' => $supplies, 'notifications' => $notifications, 'issuedTotals' => $issuedTotals]);
     }
-    
-    
-    public function deletesupply($stock_no)
-    {
-        $supply = Supplies::where('stock_no', $stock_no)->first();
-        $supply->delete();
-
-       // $notification = new Notification;
-        //$notification->type = 'Delete';
-        //$notification->details =  $supply->stock_no;
-        //$notification->item =  $supply->description;
-        //$notification->save();
-        
-        return redirect('/supplies-view')->with('status', 'Supply Deleted Successfully! Item can be recovered in archive...');
-    }
 
     public function search(Request $request)
     {
-        $stock_no = $request->input('stock_no');
-        $supplies = Supplies::where('stock_no', 'like', "%{$stock_no}%")->get();
-        $notifications = Notification::all(); // Fetch all notifications
+        $description = $request->input('description');
+        $supplies = Supplies::where('description', 'like', "%{$description}%")->get();
 
-        return view('pages.supplies.displaysupplies', ['supplies' => $supplies, 'notifications' => $notifications, 'searched_stock_no' => $stock_no]); // Pass both supplies and notifications to the view
+        return view('pages.supplies.displaysupplies', ['supplies' => $supplies, 'searched_description' => $description]); 
+    }
+    
+    public function deletesupply($stock_no)
+    {
+        $delivered = Supplies::where('stock_no', $stock_no)->first();
+        $delivered->delete();
+
+        $notification = new Notification;
+        $notification->type = 'Delete';
+        $notification->details =  $delivered->stock_no;
+        $notification->item =  $delivered->description;
+        $notification->save();
+        
+        return redirect('/delivered-supplies-view')->with('status', 'Supply Deleted Successfully! Item can be recovered in archive...');
     }
 
     //ISSUED TABLE
     public function displayissued()
     {
         $issued = Issued::all();
-        return view('pages.supplies.displayissued', ['issued' => $issued]);
+        $searched_stock_no = request('stock_no');
+        $notifications = Notification::all();
+        
+        return view('pages.supplies.displayissued', ['issued' => $issued, 'searched_stock_no' => $searched_stock_no, 'notifications' => $notifications]);
+    }
+
+    public function issuedsearch(Request $request)
+    {
+        $stock_no = $request->input('stock_no');
+        $issued = Issued::where('stock_no', 'like', "%{$stock_no}%")->get();
+
+        return view('pages.supplies.displayissued', ['issued' => $issued, 'searched_stock_no' => $stock_no]);
     }
 
     public function addissued()
@@ -74,6 +83,20 @@ class SuppliesController extends Controller
                             ->pluck('total_quantity', 'description');
         
         return view('pages.supplies.addissued', ['items' => $items, 'supplies' => $supplies, 'issuedTotals' => $issuedTotals]);
+    }
+
+    public function deleteissued($stock_no)
+    {
+        $issued = Issued::where('stock_no', $stock_no)->first();
+        $issued->delete();
+
+        $notification = new Notification;
+        $notification->type = 'Delete';
+        $notification->details =  $issued->stock_no;
+        $notification->item =  $issued->description;
+        $notification->save();
+
+        return redirect('/issued-supplies-view')->with('status', 'Issued Supply Deleted Successfully! Item can be recovered in archive...');
     }
 
     public function storenewissued(Request $request)
@@ -100,6 +123,12 @@ class SuppliesController extends Controller
 
         $issued->save();
 
+        $notification = new Notification;
+        $notification->type = 'Add';
+        $notification->details =  $issued->stock_no;
+        $notification->item = $issued->description;
+        $notification->save();
+
         return redirect('/issued-supplies-view')->with('status', 'Issued Supply Added Successfully!');
     }
 
@@ -108,7 +137,8 @@ class SuppliesController extends Controller
     {
         $delivered = Supplies::all();
         $searched_stock_no = request('stock_no');
-        return view('pages.supplies.displaydelivered', ['delivered' => $delivered, 'searched_stock_no' => $searched_stock_no]);
+        $notifications = Notification::all();
+        return view('pages.supplies.displaydelivered', ['delivered' => $delivered, 'searched_stock_no' => $searched_stock_no, 'notifications' => $notifications]);
     }
 
     public function deliveredsearch(Request $request)
@@ -176,7 +206,8 @@ class SuppliesController extends Controller
 
         $notification = new Notification;
         $notification->type = 'Add';
-        $notification->item = $supply->pr_no;
+        $notification->details =  $supply->stock_no;
+        $notification->item =  $supply->description;
         $notification->save();
 
         return redirect('/delivered-supplies-view')->with('status', 'Delivered Supply Added Successfully!');
@@ -234,7 +265,8 @@ class SuppliesController extends Controller
     }
 
     //ARCHIVE CONTROLLER
-    public function destroy(Supplies $supply)
+    //SUPPLIES
+    public function destroy(Supplies $delivered)
     {
         $supply->delete();
 
@@ -243,22 +275,22 @@ class SuppliesController extends Controller
 
     public function archive()
     {
-        $supplies = Supplies::onlyTrashed()->get();
+        $delivered = Supplies::onlyTrashed()->get();
 
-        return view('pages.supplies.archive', ['supplies' => $supplies]);
+        return view('pages.supplies.archive', ['delivered' => $delivered]);
     }
 
     public function recover($stock_no)
     {
-        $supply = Supplies::onlyTrashed()->where('stock_no', $stock_no)->first();
+        $delivered = Supplies::onlyTrashed()->where('stock_no', $stock_no)->first();
 
-        if ($supply) {
-            $supply->restore();
+        if ($delivered) {
+            $delivered->restore();
 
             $notification = new Notification;
             $notification->type = 'Recover Item';
-            $notification->details =  $supply->stock_no;
-            $notification->item =  $supply->description;
+            $notification->details =  $delivered->stock_no;
+            $notification->item =  $delivered->description;
             $notification->save();
 
             return redirect()->route('pages.supplies.archive');
@@ -270,18 +302,67 @@ class SuppliesController extends Controller
 
     public function forceDelete($stock_no)
     {
-        $supply = Supplies::onlyTrashed()->where('stock_no', $stock_no)->first();
+        $delivered = Supplies::onlyTrashed()->where('stock_no', $stock_no)->first();
     
         $supply->forceDelete();
         $notification = new Notification;
         $notification->type = 'Item Permanently Delete';
-        $notification->details =  $supply->stock_no;
-        $notification->item =  $supply->description;
+        $notification->details =  $delivered->stock_no;
+        $notification->item =  $delivered->description;
         $notification->save();
     
         return redirect()->route('pages.supplies.archive');
     }
+   
+    //ISSUED
+    public function destroyIssued(Issued $issued)
+    {
+        $issued->delete();
 
+        return redirect()->route('pages.issued.displayissued');
+    }
+
+    public function archiveIssued()
+    {
+        $issued = Issued::onlyTrashed()->get();
+
+        return view('pages.supplies.issuedarchive', ['issued' => $issued]);
+    }
+
+    public function recoverIssued($stock_no)
+    {
+        $issued = Issued::onlyTrashed()->where('stock_no', $stock_no)->first();
+
+        if ($issued) {
+            $issued->restore();
+
+            $notification = new Notification;
+            $notification->type = 'Recover Item';
+            $notification->details =  $issued->stock_no;
+            $notification->item =  $issued->description;
+            $notification->save();
+
+            return redirect()->route('pages.issued.archive');
+        }
+
+        // Handle the case where $supply is null, e.g., show an error message
+        return redirect()->route('pages.issued.archive')->with('error', 'Issued Supply not found');
+    }
+
+    public function forceDeleteIssued($stock_no)
+    {
+        $issued = Issued::onlyTrashed()->where('stock_no', $stock_no)->first();
+    
+        $issued->forceDelete();
+        $notification = new Notification;
+        $notification->type = 'Item Permanently Delete';
+        $notification->details =  $issued->stock_no;
+        $notification->item =  $issued->description;
+        $notification->save();
+    
+        return redirect()->route('pages.issued.archive');
+    }
+    
     //NO. GENERATION
     public function generateIARNo()
     {

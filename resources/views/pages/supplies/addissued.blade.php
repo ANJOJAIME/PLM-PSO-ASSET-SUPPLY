@@ -131,7 +131,7 @@ if (isset($issued) && $issued->stock_no) {
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-body">
-                            <h1><strong>Edit Issued Supply</strong></h1>
+                            <h1><strong>Add Issued Supply</strong></h1>
                             <form action="{{url('/storenewissued')}}" class="form-body" method="POST" autocomplete="off">
                                 @csrf 
                                 <div class="input-group">

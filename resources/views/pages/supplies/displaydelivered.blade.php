@@ -131,16 +131,6 @@
                 font-style: normal;
                 line-height: normal;
             }
-            .dropdown {
-                left: 15px; /* Adjust as needed */
-                top: 220px; /* Adjust as needed */
-                z-index: 2;
-            }
-            .gendropdown {
-                top: 100px;
-                right: 35px;
-                border-radius: 8px;
-            }
             .custom-header {
                 position: absolute;
                 left: 0px; /* Adjust as needed */
@@ -176,7 +166,7 @@
             .btn-edit, .btn-delete{
                 background-color: #EFF0FF; 
                 color: #000;
-                font-size: 17px;
+                font-size: 14px;
                 padding: 5px 5px;
                 border-radius: 8px;
                 text-align: center;
@@ -238,7 +228,6 @@
                 top: 138px; 
                 left: 300px;"
             }
-            
             #profile {
                 position: absolute;
                 top: 20px;
@@ -265,6 +254,52 @@
                 color: #2D349A;
                 font-size: 25px;
             }
+            .notifdropdown {
+                position: absolute;
+                top: 10px;
+                left: 500px;
+                z-index: 2;
+            }
+            #notificationButton {
+                position: absolute;
+                top: 10px;
+                left: 940px;
+                background-color: blue;
+                color: white;
+                padding: 5px 5px;
+                border: none;
+                z-index: 3;
+            }
+            #notificationButton::after {
+                display: none;
+            }
+            #notificationButton:focus {
+                outline: none;
+                box-shadow: none;
+            }
+            .fa-bell::before {
+                content: "\f0f3";
+                color: #4F74BB;
+                font-size: 20px;
+            }
+            .fa-bell:hover::before {
+                color: #2D349A;
+                font-size: 25px;
+            }
+            .dropdown-menu {
+                overflow-y: auto;
+                max-height: 300px;
+                width: 400px;
+            }
+            #notificationBadge {
+                top: -10px;
+                right: 5px;
+                height: 10px;
+                width: 10px;
+                background-color: red;
+                border-radius: 50%;
+                display: inline-block;
+            }
         </style>
 
     </head>
@@ -275,12 +310,15 @@
         </header>
         <div>
             <h4>
-                <a href="{{url('/adddelivered')}}" class="btn btn-primary"><strong>ADD DELIVERED</strong></a>
+                <a href="{{url('/adddelivered')}}" class="btn btn-primary"><i class="fa fa-plus-circle"></i><strong> ADD DELIVERED</strong></a>
             </h4>
         <div>
         <div class="search-bar" style="position: fixed; top: 80px; left: 300px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 444px; height: 40px; padding: 4.608px 0px 4.608px 9.217px; justify-content: space-between; align-items: center; flex-shrink: 0;">
             <form action="/searchdelivered" method="get" autocomplete="off">
-                <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="stock_no" placeholder="Search here...">
+                <div style="display: flex; align-items: center;">
+                    <i class="fa fa-search" style="color: #4F74BB; margin-right: 5px;"></i>
+                    <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="stock_no" placeholder="Search here...">
+                </div>
             </form>
         </div>
         <div class="profile">
@@ -294,6 +332,23 @@
                 <a href="/mainpage" class="logout" style="color: black; background-color: transparent; display: block; text-align: center; padding-right: 10px; font-family: Arial; text-decoration: none">Logout</a>
             </div>
         </div>
+        <div class="notifdropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="notificationButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: transparent">
+                <i class="fa fa-bell">
+                    <span id="notificationBadge" class="badge badge-danger"></span>
+                </i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationButton">
+                @foreach($notifications->reverse() as $notification)
+                    <div class="dropdown-item">
+                        <p>Timestamp: {{ $notification->created_at }}</p>
+                        <p>Action: {{ $notification->type }}</p>
+                        <p>Stock No.: {{ $notification->details }}</p>
+                        <p>Item: {{ $notification->item }}</p>
+                    </div>
+                @endforeach
+            </div>
+        </div>
         <div class="side-bar" style="padding: 10px;">
             <h2 style="color: white; text-align: right; font-size: 20px; padding-top: 80px; padding-right: 10px"><strong>Supplies Management</strong></h2>
             <div class="items">
@@ -301,10 +356,11 @@
                 <a class="delivered" href="/delivered-supplies-view" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivered</a>
                 <a class="issued" href="/issued-supplies-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issued</a>
                 <a class="reports&forms" href="supply-forms-and-reports-generation" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Reports and Forms</a>
-                <a class="archives" href="{{ route('pages.supplies.archive') }}" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Archive</a>
+                <a class="archives" href="{{ route('pages.supplies.archive') }}" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivered Archive</a>
+                <a class="Issuedarchives" href="{{ route('pages.issued.archive') }}" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issued Archive</a>
             </div>
         </div>
-        <div class="success-alert" style="position: fixed; top:350px; right:600px; z-index: 4;">
+        <div class="success-alert" style="position: fixed; top:350px; right:500px; z-index: 4;">
             @if(session('status'))
                 <div id="alert" class="alert alert-success">{{session('status')}}</div>
                 <script>
@@ -362,7 +418,7 @@
                             <td>{{$delivereddata->bur}}</td>
                             <td>{{$delivereddata->remarks}}</td>
                             <td>
-                                <a href="{{ url('editdelivered/'.$delivereddata->stock_no)}}" class="btn-edit" style="text-decoration: none;">Edit</a>
+                                <a href="{{ url('deletesupply/'.$delivereddata->stock_no)}}" class="btn-delete" style="text-decoration: none;" onclick="return confirm('Are you sure you want to delete this data with Stock No. {{$delivereddata->stock_no}} in the delivered?')"><i class="fa fa-trash"></i>Delete</a>
                             </td>
                         </tr>
                         @endforeach
@@ -386,37 +442,21 @@
             });
         </script>
         <script>
-        $(document).ready(function(){
-            $(".gendropdown .dropdown-item").hover(function(){
-                $(this).css("background-color", "#0069d9");
-                $(this).css("color", "white");
-                }, function(){
-                $(this).css("background-color", "#e6edfd");
-                $(this).css("color", "black");
-            });
-        });
-        </script>
-        <script>
             $(document).ready(function(){
-                $(".dropdown .dropdown-item").hover(function(){
-                    $(this).css("background-color", "white");
-                    $(this).css("color", "#2D349A");
-                    }, function(){
-                    $(this).css("background-color", "transparent");
-                    $(this).css("color", "white");
+                $("#notificationButton").click(function(){
+                    $("#notificationDropdown").toggle();
+                    hideNotificationBadge();
                 });
             });
         </script>
         <script>
-            $(document).ready(function(){
-                $("#dropdownMenuButton1").hover(function(){
-                    $(this).css("background-color", "#2D349A");
-                    $(this).css("color", "white");
-                    }, function(){
-                    $(this).css("background-color", "#e6edfd");
-                    $(this).css("color", "black");
-                });
-            });
-        </script>   
+            // Hide the notification badge when a notification is viewed
+            function hideNotificationBadge() {
+                var badge = document.querySelector('#notificationBadge');
+                if (badge) {
+                    badge.style.display = 'none';
+                }
+            }
+        </script>
     </body>
 </html>
