@@ -138,6 +138,11 @@ Req Office: {{ session('form_data.roffice') }}                           Date of
     <div>
         <pre>Date Inspected:  {{ session('form_data.date_inspected') }}                         Date Received:  {{ session('form_data.date_received') }}  </pre>
     </div>
+    <div class="rect"> </div> 
+
+    <div class="rect1"> </div> 
+
+    <div class="rect2"> </div> 
     
     <div>
         <h5 class="txt1">Inspected, verified and found OK <br>
@@ -159,7 +164,7 @@ Req Office: {{ session('form_data.roffice') }}                           Date of
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header" style="height: 50px;">
-                        <h5 class="modal-title" id="exampleModalLabel"><strong>Purchase Request Form</strong></h5>
+                        <h5 class="modal-title" id="exampleModalLabel"><strong>Inspection & Acceptance Report</strong></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -222,18 +227,6 @@ Req Office: {{ session('form_data.roffice') }}                           Date of
                             <div class="form-group">
                                     <label for="chief-input"><strong>Chief, Property & Supplies Office</strong></label>
                                     <input type="text" class="form-control" id="chief-input" name="chief" autocomplete="off">
-                            </div>
-                            <div class="form-group">
-                                <input type="checkbox" id="checkbox" name="inspect">
-                                <label for="checkbox">Inspected, verified and found OK to quantity and specifications</label>
-                            </div>
-                            <div class="form-group">
-                                <input type="checkbox" id="checkbox1" name="complete">
-                                <label for="checkbox1">Complete</label>
-                            </div>
-                            <div class="form-group">
-                                <input type="checkbox" id="checkbox2" name="partial">
-                                <label for="checkbox2">Partial</label>
                             </div>
                             <table id="itemsTable" class="table" style="border: 1px solid black; text-align: center;">
                                 <thead>

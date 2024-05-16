@@ -114,6 +114,7 @@ Route::get('/', function () {
 Route::get('/user-profile', 'SuppliesController@displayprofile');
 
 Route::get('/supplies/unit', 'SuppliesController@getUnit');
+Route::get('/supplies/unit/ris', 'SuppliesController@getUnit1');
 
 //ASSET FORMS
 Route::get('asset-forms-and-reports-generation', 'AssetController@assetsforms');

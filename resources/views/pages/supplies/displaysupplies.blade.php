@@ -428,6 +428,8 @@
                                 $status = 'MID LEVEL';
                             } elseif ($balanceAfter > 100) {
                                 $status = 'HIGH LEVEL';
+                            } elseif ($balanceAfter < 0) {
+                                $status = 'OUT OF STOCK';
                             }
                         @endphp
                         <tr>

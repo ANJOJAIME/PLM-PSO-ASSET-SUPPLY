@@ -360,7 +360,7 @@ class SuppliesController extends Controller
     {
         $delivered = Supplies::onlyTrashed()->where('stock_no', $stock_no)->first();
     
-        $supply->forceDelete();
+        $delivered->forceDelete();
         $notification = new Notification;
         $notification->type = 'Item Permanently Delete';
         $notification->details =  $delivered->stock_no;
@@ -530,6 +530,7 @@ class SuppliesController extends Controller
         $supply = Supplies::all()->where('item_no', $item_no)->first();
         return response()->json(['unit' => $supply->unit, 'description' => $supply->description]);
     }
+
     //REQUISITION AND ISSUE SLIP
     public function RISForm()
     {
@@ -552,8 +553,9 @@ class SuppliesController extends Controller
     {
         $stock_no = $request->get('stock_no');
         $supply = Supplies::all()->where('stock_no', $stock_no)->first();
-        return response()->json(['unit' => $supply->unit, 'description' => $supply->description]);
+        return response()->json(['description' => $supply->description, 'unit' => $supply->unit]);
     }
+
     //INSPECTION AND ACCEPTANCE REPORT
     public function IARForm()
     {

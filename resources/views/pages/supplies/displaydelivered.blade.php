@@ -377,20 +377,20 @@
                     <thead>
                         <tr>
                             <th>Stock No.</th>
+                            <th>Item No.</th>
                             <th>Item Description</th>
+                            <th>Unit</th>
                             <th>Delivery Date</th>
                             <th>Actual Delivery Date</th>
                             <th>Acceptance Date</th>
                             <th>Quantity Delivered</th>
                             <th>IAR No.</th>
-                            <th>Item No.</th>
-                            <th>Unit</th>
                             <th>DR No.</th>
                             <th>Check No.</th>
+                            <th>PR No.</th>
                             <th>PO No.</th>
                             <th>PO Date</th>
                             <th>PO Amount</th>
-                            <th>PR No.</th>
                             <th>Price Per Purchase Request</th>
                             <th>BUR</th>
                             <th>Remarks</th>
@@ -401,20 +401,20 @@
                         @foreach($delivered as $delivereddata)
                         <tr>
                             <td>{{$delivereddata->stock_no}}</td>
+                            <td>{{$delivereddata->item_no}}</td>
                             <td>{{$delivereddata->description}}</td>
+                            <td>{{$delivereddata->unit}}</td>
                             <td>{{$delivereddata->delivery_date}}</td>
                             <td>{{$delivereddata->actual_delivery_date}}</td>
                             <td>{{$delivereddata->acceptance_date}}</td>
                             <td>{{$delivereddata->delivered}}</td>
                             <td>{{$delivereddata->iar_no}}</td>
-                            <td>{{$delivereddata->item_no}}</td>
-                            <td>{{$delivereddata->unit}}</td>
                             <td>{{$delivereddata->dr_no}}</td>
                             <td>{{$delivereddata->check_no}}</td>
+                            <td>{{$delivereddata->pr_no}}</td>
                             <td>{{$delivereddata->po_no}}</td>
                             <td>{{$delivereddata->po_date}}</td>
                             <td>{{$delivereddata->po_amount}}</td>
-                            <td>{{$delivereddata->pr_no}}</td>
                             <td>{{$delivereddata->price_per_purchase_request}}</td>
                             <td>{{$delivereddata->bur}}</td>
                             <td>{{$delivereddata->remarks}}</td>
