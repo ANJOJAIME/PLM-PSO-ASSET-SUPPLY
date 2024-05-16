@@ -494,6 +494,7 @@ class SuppliesController extends Controller
     public function forms()
     {
         $issuedStockNos = Issued::select('stock_no')->distinct()->get()->pluck('stock_no')->toArray();
+        
         $supplies = Supplies::select('description', 'unit', 'stock_no')
                             ->whereIn('stock_no', $issuedStockNos)
                             ->distinct('description')
@@ -502,7 +503,7 @@ class SuppliesController extends Controller
                      ->groupBy('description')
                      ->pluck('total_quantity', 'description');
                      
-        return view('pages.supplies.suppliesforms', ['supplies' => $supplies, 'issuedTotals' => $issuedTotals]);
+        return view('pages.supplies.suppliesforms', ['supplies' => $supplies, 'issuedTotals' => $issuedTotals, 'issuedStockNos' => $issuedStockNos]);
     }
 
     public function getItemDetails(Request $request)
@@ -599,25 +600,23 @@ class SuppliesController extends Controller
     //BARCODE
     public function generateBarcode(Request $request)
     {
-        $item_no = $request->get('stock_no');
-        $supply = Supplies::where('stock_no', $item_no)->first();
+        $stock_no = $request->get('stock_no');
+        $issued = Issued::where('stock_no', $stock_no)->first();
     
-        if (!$supply) {
+        if (!$issued) {
             return response()->json(['error' => 'Item not found'], 404);
         }
     
         // Create an associative array for the supply data
         $data = [
-            'item_no' => $supply->item_no,
-            'description' => $supply->description,
-            'unit' => $supply->unit,
-            'date_issuance' => $supply->date_issuance,
-            'requesting_office' => $supply->requesting_office,
-            'report_no' => $supply->report_no,
-            'ris_no' => $supply->ris_no
+            'stock_no' => $issued->stock_no,
+            'description' => $issued->description,
+            'date_issuance' => $issued->date_issuance,
+            'requesting_office' => $issued->requesting_office,
+            'report_no' => $issued->report_no,
+            'ris_no' => $issued->ris_no
         ];
     
-        // Generate the barcode using a string
         $generator = new BarcodeGeneratorHTML();
         $barcode = $generator->getBarcode($supply->stock_no, $generator::TYPE_CODE_128);
     
@@ -643,7 +642,7 @@ class SuppliesController extends Controller
             'viewport-height' => '100%'
         ]);
     
-        return $pdf->download($supply->stock_no . '_barcode.pdf');
+        return $pdf->download($issued->stock_no . '_barcode.pdf');
     }
 
 }

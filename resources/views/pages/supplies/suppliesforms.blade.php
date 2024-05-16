@@ -321,21 +321,21 @@
             <label style="position: absolute; top: 10px; font-size: 25px; left: 0px; text-align: center; color: #4F74BB;"><strong>Inspection & Acceptance Report</strong></label>
             <a href="{{url('/inspection-acceptance-report')}}" class="btn btn-outline-primary" style="position: absolute; top: 125px; right: 45px;">Generate</a>
         </div>
-
+        <!--
         <div class="specific4">
             <label style="position: absolute; top: 30px; font-size: 25px; left: 0px; text-align: center; color: #4F74BB;"><strong>Generate Barcode</strong></label>
             <form action="/generate-barcode" method="get">
                 <div  class="item_input">
                     <select id="stock_no" name="stock_no" style="width: 100%">
-                        @foreach($supplies as $supply)
-                            <option value="{{ $supply->stock_no }}">{{ $supply->stock_no }}</option>
+                        @foreach($issuedStockNos as $issue)
+                            <option value="{{ $issue }}">{{ $issue }}</option>
                         @endforeach
                     </select><br>
                     <input type="submit" value="Generate Barcode">
                 </div>
             </form>
         </div>
-        <!--
+        
         <div class="specific5">
             <label style="position: absolute; top: 30px; font-size: 25px; left: 0px; text-align: center; color: #4F74BB;"><strong>Report...</strong></label>
             <a href="" class="btn btn-outline-primary" style="position: absolute; top: 125px; right: 45px;">Generate</a>
