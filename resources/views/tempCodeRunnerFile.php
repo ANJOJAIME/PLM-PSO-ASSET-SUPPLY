@@ -1,3 +1,4 @@
+<?php
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,6 +20,43 @@
     background-attachment: fixed;
     background-size: 100% 100%;
     height: 100vh;
+  }
+  .btn1
+  {
+    position: absolute;
+    background-color: #4F74BB;
+    top: 60%;
+    left: 8.3%;
+    font-size: 12px;
+    border: none;
+    height: 40px; 
+    width: 310px;
+    border-radius: 5px;
+    font-size: 15px;
+  }
+  .btn1 a{
+    color: white;
+    text-decoration: none;
+  }
+  .btn1:hover, .btn2:hover{
+    background-color: #2D6B9A;
+  }
+  .btn2
+  {
+    position: absolute;
+    background-color: #4F74BB;
+    top: 50%;
+    left: 8.3z%;
+    font-size: 15px;
+    border: none;
+    height: 40px; 
+    width: 310px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  .btn2 a{
+    color: white; 
+    text-decoration: none;
   }
   .Rectangle3{
     position: absolute;
@@ -62,43 +100,7 @@
     line-height: 36px;
     color: #2D6B9A;
   }
-  .btn1
-  {
-    position: absolute;
-    background-color: #4F74BB;
-    top: 60%;
-    left: 9.5%;
-    font-size: 12px;
-    border: none;
-    height: 40px; 
-    width: 310px;
-    border-radius: 5px;
-    font-size: 15px;
-  }
-  .btn1 a{
-    color: white;
-    text-decoration: none;
-  }
-  .btn1:hover, .btn2:hover{
-    background-color: #2D6B9A;
-  }
-  .btn2
-  {
-    position: absolute;
-    background-color: #4F74BB;
-    top: 50%;
-    left: 9.5%;
-    font-size: 15px;
-    border: none;
-    height: 40px; 
-    width: 310px;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  .btn2 a{
-    color: white; 
-    text-decoration: none;
-  }
+  
 </style>
 
 <body class="plmbg">
@@ -118,8 +120,3 @@
 </body>
 
 </html>
-
-
-
-
-
