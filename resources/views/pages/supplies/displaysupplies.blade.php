@@ -50,8 +50,9 @@
                 position: absolute;
                 left: 300px;
                 top: 180px;
-                max-height: 100%;
-                max-width: 77%;
+                min-height: calc(100vh - 200px); 
+                max-height: calc(100vh - 200px); 
+                max-width: calc(100vw - 350px);
                 overflow-y: auto;
                 overflow-x: auto;
                 border-radius: 15px;
@@ -359,7 +360,7 @@
             <form action="/searchsupply" method="get">
             <div style="display: flex; align-items: center;">
                     <i class="fa fa-search" style="color: #4F74BB; margin-right: 5px;"></i>
-                    <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="description" autocomplete=off placeholder="Search here...">
+                    <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="description" autocomplete=off placeholder="Search here by Item Description...">
                 </div> 
             </form>
         </div>
@@ -428,6 +429,8 @@
                                 $status = 'MID LEVEL';
                             } elseif ($balanceAfter > 100) {
                                 $status = 'HIGH LEVEL';
+                            } elseif ($balanceAfter < 0) {
+                                $status = 'OUT OF STOCK';
                             }
                         @endphp
                         <tr>

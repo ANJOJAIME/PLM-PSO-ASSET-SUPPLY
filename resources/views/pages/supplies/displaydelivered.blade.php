@@ -8,7 +8,8 @@
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <title>PLM PSO | Issued Supplies</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
+        <title>PLM PSO | Delivered Supplies</title>
 
         <style>
             body {
@@ -51,7 +52,7 @@
                 position: absolute;
                 left: 300px;
                 top: 180px; 
-                max-height: calc(200vh - 300px); 
+                max-height: calc(100vh - 200px); 
                 max-width: calc(100vw - 350px);
                 overflow-y: auto;
                 overflow-x: auto;
@@ -310,14 +311,14 @@
         </header>
         <div>
             <h4>
-                <a href="{{url('/adddelivered')}}" class="btn btn-primary"><i class="fa fa-plus-circle"></i><strong> ADD DELIVERED</strong></a>
+                <a href="{{url('/adddelivered')}}" class="btn btn-primary"><i class="bi bi-plus-circle-dotted"></i><strong> ADD DELIVERED</strong></a>
             </h4>
         <div>
         <div class="search-bar" style="position: fixed; top: 80px; left: 300px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 35%; height: 40px; padding: 4.608px 0px 4.608px 9.217px; justify-content: space-between; align-items: center; flex-shrink: 0;">
             <form action="/searchdelivered" method="get" autocomplete="off">
                 <div style="display: flex; align-items: center;">
                     <i class="fa fa-search" style="color: #4F74BB; margin-right: 5px;"></i>
-                    <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="stock_no" placeholder="Search here...">
+                    <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="stock_no" placeholder="Search here by Stock No...">
                 </div>
             </form>
         </div>
@@ -377,20 +378,20 @@
                     <thead>
                         <tr>
                             <th>Stock No.</th>
+                            <th>Item No.</th>
                             <th>Item Description</th>
+                            <th>Unit</th>
                             <th>Delivery Date</th>
                             <th>Actual Delivery Date</th>
                             <th>Acceptance Date</th>
                             <th>Quantity Delivered</th>
                             <th>IAR No.</th>
-                            <th>Item No.</th>
-                            <th>Unit</th>
                             <th>DR No.</th>
                             <th>Check No.</th>
+                            <th>PR No.</th>
                             <th>PO No.</th>
                             <th>PO Date</th>
                             <th>PO Amount</th>
-                            <th>PR No.</th>
                             <th>Price Per Purchase Request</th>
                             <th>BUR</th>
                             <th>Remarks</th>
@@ -401,25 +402,25 @@
                         @foreach($delivered as $delivereddata)
                         <tr>
                             <td>{{$delivereddata->stock_no}}</td>
+                            <td>{{$delivereddata->item_no}}</td>
                             <td>{{$delivereddata->description}}</td>
+                            <td>{{$delivereddata->unit}}</td>
                             <td>{{$delivereddata->delivery_date}}</td>
                             <td>{{$delivereddata->actual_delivery_date}}</td>
                             <td>{{$delivereddata->acceptance_date}}</td>
                             <td>{{$delivereddata->delivered}}</td>
                             <td>{{$delivereddata->iar_no}}</td>
-                            <td>{{$delivereddata->item_no}}</td>
-                            <td>{{$delivereddata->unit}}</td>
                             <td>{{$delivereddata->dr_no}}</td>
                             <td>{{$delivereddata->check_no}}</td>
+                            <td>{{$delivereddata->pr_no}}</td>
                             <td>{{$delivereddata->po_no}}</td>
                             <td>{{$delivereddata->po_date}}</td>
                             <td>{{$delivereddata->po_amount}}</td>
-                            <td>{{$delivereddata->pr_no}}</td>
                             <td>{{$delivereddata->price_per_purchase_request}}</td>
                             <td>{{$delivereddata->bur}}</td>
                             <td>{{$delivereddata->remarks}}</td>
                             <td>
-                                <a href="{{ url('deletesupply/'.$delivereddata->stock_no)}}" class="btn-delete" style="text-decoration: none;" onclick="return confirm('Are you sure you want to delete this data with Stock No. {{$delivereddata->stock_no}} in the delivered?')"><i class="fa fa-trash"></i>Delete</a>
+                                <a href="{{ url('deletesupply/'.$delivereddata->stock_no)}}" class="btn-delete" style="text-decoration: none;" onclick="return confirm('Are you sure you want to delete this data with Stock No. {{$delivereddata->stock_no}} in the delivered?')"><i class="bi bi-trash"></i>Delete</a>
                             </td>
                         </tr>
                         @endforeach

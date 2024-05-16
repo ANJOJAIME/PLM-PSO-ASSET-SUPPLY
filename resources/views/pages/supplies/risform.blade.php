@@ -43,7 +43,22 @@
         margin-top: 25px;
         margin-bottom: 75px;
     }
-
+    .modal-body {
+        background: #E6EDFD;
+    }
+    .modal-header {
+        background: #4F74BB;
+        border-bottom: 2px solid black;
+    }
+    .modal-title {
+        color: white;
+        text-align: center;
+    }
+    .table {
+        border: 1px solid black; 
+        text-align: center;
+        background: white;
+    }
     </style>
 </head>
 <body >
@@ -74,7 +89,7 @@
             <th>Quantity</th>
             <th>Remarks</th>
         </tr>
-        @if(is_array(session('form_data.stock_no')))
+            @if(is_array(session('form_data.stock_no')))
                 @foreach(session('form_data.stock_no') as $index => $stock_no)
                     <tr>
                         <td>{{ $stock_no }}</td>
@@ -126,11 +141,8 @@
         <div class="modal fade" id="PRModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header" style="height: 50px;">
-                        <h5 class="modal-title" id="exampleModalLabel"><strong>Purchase Request Form</strong></h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                    <div class="modal-header" style="height: 60px;">
+                        <h3 class="modal-title" id="exampleModalLabel"><strong>Requisition And Issued Slip</strong></h3>       
                     </div>
                     <div class="modal-body">
                         <form method="POST" action="{{ route('generatePDF1') }}">
@@ -187,7 +199,7 @@
                                     <label for="designation-input"><strong>Designation</strong></label>
                                     <input type="text" class="form-control" id="designation-input" name="designation" autocomplete="off">
                             </div>
-                            <table id="itemsTable" class="table" style="border: 1px solid black; text-align: center;">
+                            <table id="itemsTable" class="table">
                                 <thead>
                                     <tr>
                                         <th>Stock No</th>
@@ -225,7 +237,7 @@
                 var stock_no = $(this).val();
                 var row = $(this).closest('tr');
 
-                $.get('/supplies/unit', {stock_no: stock_no}, function(data) {
+                $.get('/supplies/unit/ris', {stock_no: stock_no}, function(data) {
                     row.find('.unit-input').val(data.unit);
                     row.find('.description-input').val(data.description);
                 });

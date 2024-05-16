@@ -37,8 +37,9 @@ class SuppliesController extends Controller
     {
         $description = $request->input('description');
         $supplies = Supplies::where('description', 'like', "%{$description}%")->get();
+        $notifications = Notification::all();
 
-        return view('pages.supplies.displaysupplies', ['supplies' => $supplies, 'searched_description' => $description]); 
+        return view('pages.supplies.displaysupplies', ['supplies' => $supplies, 'searched_description' => $description, 'notifications' => $notifications]); 
     }
     
     public function deletesupply($stock_no)
@@ -69,8 +70,9 @@ class SuppliesController extends Controller
     {
         $stock_no = $request->input('stock_no');
         $issued = Issued::where('stock_no', 'like', "%{$stock_no}%")->get();
+        $notifications = Notification::all();
 
-        return view('pages.supplies.displayissued', ['issued' => $issued, 'searched_stock_no' => $stock_no]);
+        return view('pages.supplies.displayissued', ['issued' => $issued, 'searched_stock_no' => $stock_no, 'notifications' => $notifications]);
     }
 
     public function addissued()
@@ -147,8 +149,9 @@ class SuppliesController extends Controller
     {
         $stock_no = $request->input('stock_no');
         $delivered = Supplies::where('stock_no', 'like', "%{$stock_no}%")->get();
+        $notifications = Notification::all();
 
-        return view('pages.supplies.displaydelivered', ['delivered' => $delivered, 'searched_stock_no' => $stock_no]);
+        return view('pages.supplies.displaydelivered', ['delivered' => $delivered, 'searched_stock_no' => $stock_no, 'notifications' => $notifications]);
     }
 
     public function adddelivered()
@@ -270,9 +273,19 @@ class SuppliesController extends Controller
     public function displaydepartment()
     {
         $departments = Department::all();
+        $searched_dept = request('department_name');
         $notifications = Notification::all();
     
-        return view('pages.supplies.displaydepartment', ['departments' => $departments, 'notifications' => $notifications]);
+        return view('pages.supplies.displaydepartment', ['departments' => $departments, 'notifications' => $notifications, 'searched_dept' => $searched_dept]);
+    }
+
+    public function departmentsearch(Request $request)
+    {
+        $department_name = $request->input('department_name');
+        $departments = Department::where('department_name', 'like', "%{$department_name}%")->get();
+        $notifications = Notification::all();
+
+        return view('pages.supplies.displaydepartment', ['departments' => $departments, 'searched_dept' => $department_name, 'notifications' => $notifications]);
     }
     
     public function adddepartment()
@@ -360,7 +373,7 @@ class SuppliesController extends Controller
     {
         $delivered = Supplies::onlyTrashed()->where('stock_no', $stock_no)->first();
     
-        $supply->forceDelete();
+        $delivered->forceDelete();
         $notification = new Notification;
         $notification->type = 'Item Permanently Delete';
         $notification->details =  $delivered->stock_no;
@@ -530,6 +543,7 @@ class SuppliesController extends Controller
         $supply = Supplies::all()->where('item_no', $item_no)->first();
         return response()->json(['unit' => $supply->unit, 'description' => $supply->description]);
     }
+
     //REQUISITION AND ISSUE SLIP
     public function RISForm()
     {
@@ -552,8 +566,9 @@ class SuppliesController extends Controller
     {
         $stock_no = $request->get('stock_no');
         $supply = Supplies::all()->where('stock_no', $stock_no)->first();
-        return response()->json(['unit' => $supply->unit, 'description' => $supply->description]);
+        return response()->json(['description' => $supply->description, 'unit' => $supply->unit]);
     }
+
     //INSPECTION AND ACCEPTANCE REPORT
     public function IARForm()
     {
