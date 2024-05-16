@@ -51,8 +51,8 @@
                 position: absolute;
                 left: 300px; /* Adjust as needed */
                 top: 180px; /* Adjust as needed */
-                max-height: 500px; /* Adjust as needed */
-                max-width: 1500px;
+                max-height: calc(100vh - 280px); /* Adjust as needed */
+                max-width: calc(100vw - 320px);
                 overflow-y: auto;
                 overflow-x: auto;
                 border-radius: 15px;
@@ -61,8 +61,8 @@
 
             .table-container table {
                 border-collapse: collapse;
-                width: 1200px;
-                height: 550px;
+                width: 100%;
+                height: 100%;
                 border-radius: 15px;
                 overflow: hidden;
                 table-layout: fixed;
@@ -235,7 +235,7 @@
                 font-size: 30px;
                 z-index: 3; 
                 top: 138px; 
-                left: 300px;"
+                left: 300px;
             }
 
             #profile {
@@ -323,7 +323,7 @@
                 <a href="{{url('/addissued')}}" class="btn btn-primary"><i class="fa fa-plus-circle"></i><strong> ADD ISSUED</strong></a>
             </h4>
         <div>
-        <div class="search-bar" style="position: fixed; top: 80px; left: 300px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 444px; height: 40px; padding: 4.608px 0px 4.608px 9.217px; justify-content: space-between; align-items: center; flex-shrink: 0;">
+        <div class="search-bar" style="position: fixed; top: 80px; left: 300px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 35%; height: 40px; padding: 4.608px 0px 4.608px 9.217px; justify-content: space-between; align-items: center; flex-shrink: 0;">
             <form action="/searchissued" method="get" autocomplete="off">
                 <div style="display: flex; align-items: center;">
                     <i class="fa fa-search" style="color: #4F74BB; margin-right: 5px;"></i>
