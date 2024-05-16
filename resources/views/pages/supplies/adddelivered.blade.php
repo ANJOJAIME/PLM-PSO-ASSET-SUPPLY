@@ -50,7 +50,8 @@
             }
             .card-body{
                 position: fixed;
-                top: 100px;
+                top: 15%;
+                left: 5%;
                 right: 150px;
                 width: 1250px;
                 height: 520px;

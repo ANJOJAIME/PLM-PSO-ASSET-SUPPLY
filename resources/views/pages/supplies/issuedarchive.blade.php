@@ -54,9 +54,8 @@
                 position: absolute;
                 left: 160px;
                 top: 160px;
-                min-height: calc(100vh - 200px); 
-                max-height: calc(100vh - 200px); 
-                max-width: calc(100vw - 350px);
+                max-height: 500px;
+                max-width: 1500px;
                 overflow-y: auto;
                 overflow-x: auto;
                 border-radius: 15px;
@@ -65,8 +64,8 @@
 
             .table-container table {
                 border-collapse: collapse;
-                width: 1200px;
-                height: 550px;
+                width: 100%;
+                height: 100%;
                 border-radius: 15px;
                 overflow: hidden;
                 table-layout: fixed;
