@@ -51,8 +51,8 @@
                 position: absolute;
                 left: 300px; /* Adjust as needed */
                 top: 180px; /* Adjust as needed */
-                max-height: 500px; /* Adjust as needed */
-                max-width: 1500px;
+                max-height: calc(100vh - 280px); /* Adjust as needed */
+                max-width: calc(100vw - 320px);
                 overflow-y: auto;
                 overflow-x: auto;
                 border-radius: 15px;
@@ -61,8 +61,8 @@
 
             .table-container table {
                 border-collapse: collapse;
-                width: 1200px;
-                height: 550px;
+                width: 100%;
+                height: 100%;
                 border-radius: 15px;
                 overflow: hidden;
                 table-layout: fixed;
@@ -235,7 +235,7 @@
                 font-size: 30px;
                 z-index: 3; 
                 top: 138px; 
-                left: 300px;"
+                left: 300px;
             }
 
             #profile {
