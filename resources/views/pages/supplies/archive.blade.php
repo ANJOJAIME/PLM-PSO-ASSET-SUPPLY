@@ -162,7 +162,7 @@
                 font-size: 30px;
                 z-index: 3; 
                 top: 115px; 
-                left: 170px;"
+                left: 170px;
             }
 
             #profile {
