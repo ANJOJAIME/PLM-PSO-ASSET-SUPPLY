@@ -50,7 +50,7 @@
             }
             .card-body{
                 position: fixed;
-                top: 15%;
+                top: 13%;
                 left: 5%;
                 right: 150px;
                 width: 1250px;
@@ -89,10 +89,11 @@
                 flex-shrink: 0;
                 width: 150px; /* adjust as needed */
             }
+            
 
             .btn1-primary {
                 position: fixed;
-                top: 630px;
+                top: 610px;
                 left: 340px;
                 border-radius: 8px;
                 border: 0.5px solid #000;
@@ -109,7 +110,7 @@
 
             .btn-primary{
                 position: fixed;
-                top: 630px;
+                top: 610px;
                 left: 135px;
                 border-radius: 8px;
                 border: 0.5px solid #000;

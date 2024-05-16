@@ -66,8 +66,8 @@
   {
     position: absolute;
     background-color: #4F74BB;
-    top: 60%;
-    left: 9.5%;
+    top: 90%;
+    left: 1.5%;
     font-size: 12px;
     border: none;
     height: 40px; 
@@ -87,7 +87,7 @@
     position: absolute;
     background-color: #4F74BB;
     top: 50%;
-    left: 9.5%;
+    left: 1.5%;
     font-size: 15px;
     border: none;
     height: 40px; 
@@ -103,16 +103,20 @@
 
 <body class="plmbg">
     
-    <div class="Rectangle3"></div>
+    <div class="Rectangle3">
+    
+    </div>
     <img src="/image/PLMLogo.png" alt="plmlogo ">
     <div class="text">
       <h1>PLM Asset<br></h1>
     </div>
     <div class="text2">
       <h1>and Supplies</h1>
-    </div>
-    <div><button class="btn1"><a href="/Asset-login"><strong>Login for PLM Assets</strong></a></button></div>
+      <div><button class="btn1"><a href="/Asset-login"><strong>Login for PLM Assets</strong></a></button></div>
     <div><button class="btn2"><a href="/Supply-login"><strong>Login for PLM Supply</strong></a></button></div>
+    </div>
+    
+    
 
   
 </body>

@@ -51,9 +51,10 @@
             .table-container {
                 position: absolute;
                 left: 300px;
-                top: 180px; 
-                max-height: 500px; 
-                max-width: 1200px;
+                top: 180px;
+                min-height: calc(100vh - 200px); 
+                max-height: calc(100vh - 200px); 
+                max-width: calc(100vw - 350px);
                 overflow-y: auto;
                 overflow-x: auto;
                 border-radius: 15px;
