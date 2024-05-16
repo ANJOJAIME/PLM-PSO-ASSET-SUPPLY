@@ -157,6 +157,8 @@ Route::get('/plm-departments', 'SuppliesController@displaydepartment');
 Route::get('/adddepartment', 'SuppliesController@adddepartment');
 Route::post('/storedepartment', 'SuppliesController@storedepartment');
 Route::get('/deletedepartment/{id}', 'SuppliesController@deletedepartment');
+Route::get('/searchdept', 'SuppliesController@departmentsearch');
+
 
 
 

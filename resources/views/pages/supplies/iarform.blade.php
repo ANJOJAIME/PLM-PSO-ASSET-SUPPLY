@@ -68,7 +68,6 @@
         margin-top: 3.5%;
         margin-left: 65%;
     }
-
     .modal-dialog {
         max-width: 100%;
         width: auto !important;
@@ -79,6 +78,22 @@
         margin: 50px;
         margin-top: 25px;
         margin-bottom: 75px;
+    }
+    .modal-body {
+        background: #E6EDFD;
+    }
+    .modal-header {
+        background: #4F74BB;
+        border-bottom: 2px solid black;
+    }
+    .modal-title {
+        color: white;
+        text-align: center;
+    }
+    .table {
+        border: 1px solid black; 
+        text-align: center;
+        background: white;
     }
     </style>
 </head>
@@ -163,11 +178,8 @@ Req Office: {{ session('form_data.roffice') }}                           Date of
         <div class="modal fade" id="PRModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header" style="height: 50px;">
-                        <h5 class="modal-title" id="exampleModalLabel"><strong>Inspection & Acceptance Report</strong></h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                    <div class="modal-header" style="height: 60px;">
+                        <h3 class="modal-title" id="exampleModalLabel"><strong>Inspection & Acceptance Report</strong></h3>
                     </div>
                     <div class="modal-body">
                         <form method="POST" action="{{ route('generatePDF2') }}">
