@@ -51,10 +51,10 @@
             }
             .table-container {
                 position: absolute;
-                left: 160px;
-                top: 160px;
-                max-height: 500px;
-                max-width: 1500px;
+                left: 150px;
+                top: 180px;
+                max-height: 100%;
+                max-width: 77%;
                 overflow-y: auto;
                 overflow-x: auto;
                 border-radius: 15px;
@@ -63,8 +63,8 @@
 
             .table-container table {
                 border-collapse: collapse;
-                width: 1200px;
-                height: 550px;
+                width: 100%;
+                height: 100%;
                 border-radius: 15px;
                 overflow: hidden;
                 table-layout: fixed;
