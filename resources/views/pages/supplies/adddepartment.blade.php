@@ -107,7 +107,7 @@
             .btn1-primary {
                 position: fixed;
                 top: 520px;
-                left: 550px;
+                left: 450px;
                 border-radius: 8px;
                 border: 0.5px solid #000;
                 background: #D1DFFF;
@@ -123,7 +123,7 @@
             .btn-primary{
                 position: fixed;
                 top: 520px;
-                left: 360px;
+                left: 260px;
                 border-radius: 8px;
                 border: 0.5px solid #000;
                 background: #D1DFFF;

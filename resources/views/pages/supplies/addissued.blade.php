@@ -116,7 +116,7 @@ if (isset($issued) && $issued->stock_no) {
             .btn1-primary {
                 position: fixed;
                 top: 570px;
-                left: 550px;
+                left: 450px;
                 border-radius: 8px;
                 border: 0.5px solid #000;
                 background: #D1DFFF;
@@ -132,13 +132,12 @@ if (isset($issued) && $issued->stock_no) {
             .btn-primary{
                 position: fixed;
                 top: 570px;
-                left: 360px;
+                left: 250px;
                 border-radius: 8px;
                 border: 0.5px solid #000;
                 background: #D1DFFF;
                 width: 170px;
                 height: 38px;
-                flex-shrink: 0;
                 color: black;
             }
             .btn-primary:hover{
