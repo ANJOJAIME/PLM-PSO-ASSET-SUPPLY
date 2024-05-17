@@ -158,8 +158,8 @@
                 position: absolute;
                 left: 0px; /* Adjust as needed */
                 top: 45px;
-                width: 260.877px;
-                height: 1003px;
+                width: 16.5%;
+                height: 100%;
                 flex-shrink: 0;
                 background: #2D349A;
                 z-index: 1;
