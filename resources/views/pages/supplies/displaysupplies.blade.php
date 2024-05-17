@@ -161,7 +161,7 @@
                 position: absolute;
                 left: 0px;
                 top: 45px;
-                width: 16.5%;
+                width: 18%;
                 height: 100%;
                 flex-shrink: 0;
                 background: #2D349A;

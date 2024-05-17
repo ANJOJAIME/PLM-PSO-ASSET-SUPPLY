@@ -11,12 +11,19 @@
         <title>PLM | USER PROFILE</title>
 
         <style>
-            .custom-header{
+             body {
+                font-family: Arial;
+                background-color: #4F74BB;
+                margin: 0;
+                padding: 20px;
+                overflow: hidden;
+            }
+            .custom-header {
                 position: absolute;
-                left: 0;
-                top: 0;
+                left: 0px; /* Adjust as needed */
+                top: 0px;
                 width: 100%;
-                height: 90px;
+                height: 65px;
                 flex-shrink: 0;
                 background: #FFF;
                 border-radius: 0px 0px 12px 12px;
@@ -26,13 +33,33 @@
                 padding: 0 20px;
                 z-index: 2;
             }
+            .side-bar{
+                position: absolute;
+                left: 0px;
+                top: 45px;
+                width: 16.5%;
+                height: 100%;
+                flex-shrink: 0;
+                background: #2D349A;
+                z-index: 1;
+            }
+            .container{
+                position: absolute;
+                left: 5%;
+                top: 100px;
+                width: 80%;
+                height: 100%;
+                flex-shrink: 0;
+                z-index: 1;
+
+            }
         </style>
 
 <body>
         <header class="custom-header">
             <img src="/image/PLMLogo.png" alt="logo">
         </header>
-        
+        <div class="side-bar" style="padding: 10px;"></div>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -76,6 +103,8 @@
             </div>
         </div>
     </div>
+    
 </body>
 </html>
+
 
