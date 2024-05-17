@@ -312,11 +312,11 @@
         </header>
         <div>
             <h4>
-                <a href="{{url('/adddepartment')}}" class="btn btn-primary"><i class="bi bi-plus-circle-dotted"></i><strong> ADD DEPARTMENT</strong></a>
+                <a href="{{url('/asset-adddepartment')}}" class="btn btn-primary"><i class="bi bi-plus-circle-dotted"></i><strong> ADD DEPARTMENT</strong></a>
             </h4>
         <div>
         <div class="search-bar" style="position: fixed; top: 80px; left: 300px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 444px; height: 40px; padding: 4.608px 0px 4.608px 9.217px; justify-content: space-between; align-items: center; flex-shrink: 0;">
-            <form action="/searchdept" method="get" autocomplete="off">
+            <form action="/assets-searchdept" method="get" autocomplete="off">
                 <div style="display: flex; align-items: center;">
                     <i class="fa fa-search" style="color: #4F74BB; margin-right: 5px;"></i>
                     <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="department_name" placeholder="Search here by Department Name...">
@@ -334,33 +334,21 @@
                 <a href="/mainpage" class="logout" style="color: black; background-color: transparent; display: block; text-align: center; padding-right: 10px; font-family: Arial; text-decoration: none">Logout</a>
             </div>
         </div>
-        <div class="notifdropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="notificationButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: transparent">
-                <i class="fa fa-bell">
-                    <span id="notificationBadge" class="badge badge-danger"></span>
-                </i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationButton">
-                @foreach($notifications->reverse() as $notification)
-                    <div class="dropdown-item">
-                        <p>Timestamp: {{ $notification->created_at }}</p>
-                        <p>Action: {{ $notification->type }}</p>
-                        <p>Stock No.: {{ $notification->details }}</p>
-                        <p>Item: {{ $notification->item }}</p>
-                    </div>
-                @endforeach
-            </div>
-        </div>
+        
+        
+        
         <div class="side-bar" style="padding: 10px;">
-            <h2 style="color: white; text-align: right; font-size: 20px; padding-top: 80px; padding-right: 10px"><strong>Supplies Management</strong></h2>
+            <h2 style="color: white; text-align: right; font-size: 20px; padding-top: 80px; padding-right: 10px"><strong>Asset Management</strong></h2>
             <div class="items">
-                <a class="main" href="/supplies-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Main</a>
-                <a class="delivered" href="/delivered-supplies-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivered</a>
-                <a class="issued" href="/issued-supplies-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issued</a>
-                <a class="department" href="/plm-departments" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">PLM Departments</a>
-                <a class="reports&forms" href="supply-forms-and-reports-generation" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Reports and Forms</a>
-                <a class="archives" href="{{ route('pages.supplies.archive') }}" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivered Archive</a>
-                <a class="Issuedarchives" href="{{ route('pages.issued.archive') }}" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issued Archive</a>
+                <a class="main" href="/asset-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Main</a>
+                <a class="delivered" href="/delivery-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery</a>
+                <a class="issuance" href="/issuance-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issuance</a>
+                <a class="purchase_order" href="/purchase-order-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Purchase Order</a>
+                <a class="supplier" href="/suppliers-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Suppliers</a>
+                <a class="department" href="/asset-plm-departments" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">PLM Departments</a>
+                <a class="reports&forms" href="asset-forms-and-reports-generation" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Reports and Forms</a>
+                <a class="dArchive" href="" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery Archive</a>
+                <a class="iArchive" href="" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issued Archive</a>
             </div>
         </div>
         <div class="success-alert" style="position: fixed; top:350px; right:500px; z-index: 4;">
@@ -391,7 +379,7 @@
                                 <td>{{$department->department_head}}</td>
                                 <td>{{$department->contact}}</td>
                                 <td>
-                                <a href="{{ url('deletedepartment/'.$department->id)}}" class="btn-delete" style="text-decoration: none;" onclick="return confirm('Are you sure you want to delete this data with Stock No. {{$department->department_name}} in the delivered?')"><i class="bi bi-trash"></i>Delete</a>
+                                <a href="{{ url('asset-deletedepartment/'.$department->id)}}" class="btn-delete" style="text-decoration: none;" onclick="return confirm('Are you sure you want to delete this data with Stock No. {{$department->department_name}} in the delivered?')"><i class="bi bi-trash"></i>Delete</a>
                                 </td>
                             </tr>
                         @endforeach

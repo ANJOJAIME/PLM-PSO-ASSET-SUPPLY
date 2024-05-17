@@ -50,7 +50,6 @@ Route::get('/addissued', 'SuppliesController@addissued');
 Route::post('/storenewissued', 'SuppliesController@storenewissued');
 Route::get('/deleteissued/{stock_no}', 'SuppliesController@deleteissued');
 
-
 //DELIVERED TABLE
 Route::get('delivered-supplies-view', 'SuppliesController@displaydelivered');
 Route::get('/searchdelivered', 'SuppliesController@deliveredsearch');
@@ -59,11 +58,18 @@ Route::post('/storenewdelivered', 'SuppliesController@storenewdelivered');
 Route::get('/editdelivered/{stock_no}', 'SuppliesController@editdelivered');
 Route::put('/updatedelivered/{stock_no}', 'SuppliesController@updatedelivered');
 
-
 //FORMS
 Route::get('supply-forms-and-reports-generation', 'SuppliesController@forms');
 Route::get('/getItemDetails', 'ItemController@getItemDetails');
 
+//DEPARTMENT
+Route::get('/plm-departments', 'SuppliesController@displaydepartment');
+Route::get('/adddepartment', 'SuppliesController@adddepartment');
+Route::post('/storedepartment', 'SuppliesController@storedepartment');
+Route::get('/deletedepartment/{id}', 'SuppliesController@deletedepartment');
+Route::get('/searchdept', 'SuppliesController@departmentsearch');
+
+//================================================================================================================================================================//
 //ASSETS
 //SUPPLIERS
 Route::get('suppliers-view', 'SupplierController@displaySuppliers');
@@ -83,7 +89,8 @@ Route::get('/searchasset', 'AssetController@search');
 //PURCHASE ORDER
 Route::get('purchase-order-view', 'AssetController@displaypurchaseorder');
 Route::get('/makepurchaseorder', 'AssetController@makePurchaseOrder');
-Route::put('/storepurchaseorder/{item_no}', 'AssetController@storePurchaseOrder');
+Route::post('/storepurchaseorder', 'AssetController@storePurchaseOrder');
+Route::get('/get-description/{itemNo}', 'AssetController@getDescription');
 
 //DELIVERY TABLE
 Route::get('delivery-view', 'AssetController@displaydelivery');
@@ -95,6 +102,14 @@ Route::get('issuance-view', 'AssetController@displayissuance');
 Route::get('/editissuance/{item_no}', 'AssetController@editissuance');
 Route::put('/updateissuance/{item_no}', 'AssetController@updateissuance');
 
+//DEPARTMENT
+Route::get('/asset-plm-departments', 'AssetController@assetdisplaydepartment');
+Route::get('/asset-adddepartment', 'AssetController@assetadddepartment');
+Route::post('/asset-storedepartment', 'AssetController@assetstoredepartment');
+Route::get('/asset-deletedepartment/{id}', 'AssetController@assetdeletedepartment');
+Route::get('/assets-searchdept', 'AssetController@assetdepartmentsearch');
+
+//================================================================================================================================================================//
 //LOGIN ROUTES
 Route::get('/Supply-login', 'PagesController@index');
 Route::get('/Asset-login', 'PagesController@assetindex');
@@ -151,13 +166,6 @@ Route::get('/issued/archive', 'SuppliesController@archiveIssued')->name('pages.i
 
 
 Route::get('/generate-barcode', 'SuppliesController@generateBarcode');
-
-//DEPARTMENT
-Route::get('/plm-departments', 'SuppliesController@displaydepartment');
-Route::get('/adddepartment', 'SuppliesController@adddepartment');
-Route::post('/storedepartment', 'SuppliesController@storedepartment');
-Route::get('/deletedepartment/{id}', 'SuppliesController@deletedepartment');
-Route::get('/searchdept', 'SuppliesController@departmentsearch');
 
 
 

@@ -364,19 +364,17 @@
             <h2 style="color: white; text-align: right; font-size: 20px; padding-top: 80px; padding-right: 10px"><strong>Assets Management</strong></h2>
             <div class="items">
                 <a class="main" href="/asset-view" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Main</a>
-                <a class="issued" href="/purchase-order-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Purchase Order</a>
                 <a class="delivered" href="/delivery-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery</a>
                 <a class="issuance" href="/issuance-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issuance</a>
+                <a class="purchase_order" href="/purchase-order-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Purchase Order</a>
                 <a class="supplier" href="/suppliers-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Suppliers</a>
+                <a class="department" href="/asset-plm-departments" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">PLM Departments</a>
                 <a class="reports&forms" href="asset-forms-and-reports-generation" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Reports and Forms</a>
-                <a class="archives" href="{{ route('pages.supplies.archive') }}" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Archive</a>
+                <a class="dArchive" href="" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery Archive</a>
+                <a class="iArchive" href="" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issued Archive</a>
             </div>
         </div>
-        <div>
-            <h4>
-                <a href="{{url('/addasset')}}" class="btn btn-primary"><strong>ADD ASSET</strong></a>
-            </h4>
-        <div>
+
         <div class="profile">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="profile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: transparent">
                 <i class="fa fa-user"></i>
@@ -416,7 +414,6 @@
                             <th>Category</th>
                             <th>Item Description</th>
                             <th>Details</th>
-                            <th>Action</th>
                         </tr>
                     </thead>
                         @foreach($asset as $assetdata)
@@ -426,10 +423,6 @@
                             <td>{{$assetdata->category}}</td>
                             <td>{{$assetdata->description}}</td>
                             <td>{{$assetdata->details}}</td> 
-                            <td>
-                                <a href="{{url('/editasset/'.$assetdata->pr_no)}}" class="btn btn-edit">Edit</a>
-                                <a href="{{url('/deleteasset/'.$assetdata->pr_no)}}" class="btn btn-delete">Delete</a>
-                            </td>
                         </tr>
                         @endforeach
                     </tbody>
