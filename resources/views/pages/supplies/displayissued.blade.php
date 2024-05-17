@@ -147,7 +147,7 @@
                 position: absolute;
                 left: 0px; /* Adjust as needed */
                 top: 0px;
-                width: 1535px;
+                width: 100%;
                 height: 65px;
                 flex-shrink: 0;
                 background: #FFF;

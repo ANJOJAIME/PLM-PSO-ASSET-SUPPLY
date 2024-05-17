@@ -67,7 +67,7 @@
                 position: absolute;
                 left: 0;
                 top: 0;
-                width: calc(100% - 20px);
+                width: 100%;
                 height: 90px;
                 flex-shrink: 0;
                 background: #FFF;

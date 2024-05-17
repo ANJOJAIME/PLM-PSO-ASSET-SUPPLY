@@ -10,7 +10,29 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
         <title>PLM | USER PROFILE</title>
 
+        <style>
+            .custom-header{
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 90px;
+                flex-shrink: 0;
+                background: #FFF;
+                border-radius: 0px 0px 12px 12px;
+                box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+                display: flex;
+                justify-content: space-between;
+                padding: 0 20px;
+                z-index: 2;
+            }
+        </style>
+
 <body>
+        <header class="custom-header">
+            <img src="/image/PLMLogo.png" alt="logo">
+        </header>
+        
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
