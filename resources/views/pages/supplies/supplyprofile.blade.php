@@ -51,59 +51,154 @@
                 height: 100%;
                 flex-shrink: 0;
                 z-index: 1;
-
             }
+            h2{
+                color: white;
+                text-align: center;
+                font-size: 20px;
+                padding-top: 80px;   
+            }
+            .profile-circle{
+                position: absolute;
+                left: 18%;
+                top: 22%;
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                background: #E6EDFD;
+                z-index: 1;
+            }
+            .btn1{
+                position: absolute;
+                left: 27%;
+                top: 27%;
+                width: 100px;
+                height: 25px;
+                background: #4F74BB;
+                color: white;
+                border-radius: 12.5px;
+                outline: 1px solid white;
+                border: none;
+            }
+            .btn2{
+                position: absolute;
+                left: 35%;
+                top: 27%;
+                width: 100px;
+                height: 25px;
+                background: #4F74BB;
+                color: white;
+                border: none;
+            }
+            .text{
+                position: absolute;
+                left: 19%;
+                top: 24%;
+                color: white;
+                font-size: 16px;
+            }
+            .text2{
+                position: absolute;
+                left: 19%;
+                top: 36%;
+                color: white;
+                font-size: 16px;
+            }
+            .text3{
+                position: absolute;
+                left: 19%;
+                top: 48%;
+                color: white;
+                font-size: 16px;
+            }
+            .btn-primary{
+                position: absolute;
+                top: 500px;
+                left: 250px;
+                border-radius: 8px;
+                border: 0.5px solid #000;
+                background: #D1DFFF;
+                width: 140px;
+                height: 38px;
+                flex-shrink: 0;
+                color: black;
+            }
+            .btn1-primary{
+                position: absolute;
+                top: 500px;
+                left: 400px;
+                border-radius: 8px;
+                border: 0.5px solid #000;
+                background: #D1DFFF;
+                width: 100px;
+                height: 38px;
+                flex-shrink: 0;
+                color: black;
+            }
+            .btn-primary:hover{
+                background-color: blue;
+                color: white;
+                border: none;
+            }
+            .btn1-primary:hover{
+                background-color: red;
+                color: white;
+                border: none;
+            }
+           
         </style>
 
 <body>
         <header class="custom-header">
             <img src="/image/PLMLogo.png" alt="logo">
         </header>
-        <div class="side-bar" style="padding: 10px;"></div>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">User Profile</div>
-
-                    <div class="card-body">
-                        <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
-
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name" value="{{ $user->last_name }}" readonly>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">Email</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ $user->first_name }}" readonly>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">Contact</label>
-
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name" value="{{ $user->last_name }}" readonly>
-                            </div>
-                        </div>
-                        
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <a href="" class="btn btn-primary">Edit Profile</a>
-                            </div>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="side-bar">
+            <h2 ><strong>Settings</strong></h2>
+            <a class="main" href="/supplies-view" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 40px; font-family: Arial">Profile</a>
+            <a class="delivered" href="/delivered-supplies-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 40px; font-family: Arial">Security</a>
         </div>
-    </div>
-    
+        <div class="search-bar" style="position: fixed; top: 80px; left: 250px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 35%; height: 40px; padding: 4.608px 0px 4.608px 9.217px; justify-content: space-between; align-items: center; flex-shrink: 0;">
+            <div style="display: flex; align-items: center;">
+                    <i class="fa fa-search" style="color: #4F74BB; margin-right: 5px;"></i>
+                    <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="description" autocomplete=off placeholder="Search here">
+                </div> 
+            </form>
+        </div>
+        <form action="/update-profile" method="POST">
+            @csrf
+            <h2 class="text">Name</h2>
+            <div class="search-bar" style="position: fixed; top: 40%; left: 250px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 35%; height: 40px; padding: 4.608px ; justify-content: space-between; align-items: center; flex-shrink: 0;">
+                <div style="display: flex; align-items: center;">
+                    <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="name" autocomplete=off placeholder="">
+                </div> 
+            </div>
+            <h2 class="text2">Email</h2>
+            <div class="search-bar" style="position: fixed; top: 52%; left: 250px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 35%; height: 40px; padding: 4.608px ; justify-content: space-between; align-items: center; flex-shrink: 0;">
+                <div style="display: flex; align-items: center;">
+                    <input type="email" style="border: none; background-color: transparent; width: 430px; outline: none;" name="email" autocomplete=off placeholder="">
+                </div> 
+            </div>
+            <h2 class="text3">Contact No.</h2>
+            <div class="search-bar" style="position: fixed; top: 64%; left: 250px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 35%; height: 40px; padding: 4.608px ; justify-content: space-between; align-items: center; flex-shrink: 0;">
+                <div style="display: flex; align-items: center;">
+                    <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="contact" autocomplete=off placeholder="">
+                </div> 
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+        </div>
+        <div>
+            <button class="btn btn1-primary">Cancel</button>
+        </div>
+        <div class="profile-circle"></div>
+        <div><button class="btn1"><strong>Update</strong></a></button></div>
+        <div><button class="btn2"><strong>Remove</strong></a></button></div>
+            
+        
+      
+
 </body>
 </html>
 
