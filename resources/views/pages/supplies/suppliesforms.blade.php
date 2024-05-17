@@ -63,12 +63,12 @@
                 overflow: hidden;
             }
 
-            .custom-header{
+            .custom-header {
                 position: absolute;
-                left: 0;
-                top: 0;
-                width: calc(100% - 20px);
-                height: 90px;
+                left: 0px; /* Adjust as needed */
+                top: 0px;
+                width: 100%;
+                height: 65px;
                 flex-shrink: 0;
                 background: #FFF;
                 border-radius: 0px 0px 12px 12px;
@@ -84,10 +84,8 @@
                 top: 85px;
                 border-radius: 9.574px;
                 background: #EFF0FF;
-                
                 width: 444px;
                 height: 50px;
-                
                 justify-content: space-between;
                 align-items: center;
                 flex-shrink: 0;
@@ -141,7 +139,7 @@
                 position: absolute;
                 left: 0px;
                 top: 0px;
-                width: 1535px;
+                width: 100%;
                 height: 65px;
                 flex-shrink: 0;
                 background: #FFF;
@@ -163,8 +161,8 @@
                 position: absolute;
                 left: 0px;
                 top: 45px;
-                width: 260.877px;
-                height: 1003px;
+                width: 18%;
+                height: 100%;
                 flex-shrink: 0;
                 background: #2D349A;
                 z-index: 1;
@@ -242,9 +240,9 @@
             .linegraph {
                 position: absolute;
                 top: 80px;
-                right: 50px;
-                width: 380px;
-                height: 410px;
+                left: 71%;
+                width: 27.5%;
+                height: 65%;
                 border-radius: 8px;
                 background: #E6EDFD;
                 box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -252,9 +250,9 @@
             .piegraph {
                 position: absolute;
                 top: 80px;
-                right: 500px;
-                width: 300px;
-                height: 275px;
+                left: 700px;
+                width: 20%;
+                height: 40%;
                 display: flex;
                 justify-content: center;
                 align-items: center;

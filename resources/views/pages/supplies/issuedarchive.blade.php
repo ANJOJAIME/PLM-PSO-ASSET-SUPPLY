@@ -24,7 +24,7 @@
                 position: absolute;
                 left: 0;
                 top: 0;
-                width: calc(100% - 20px);
+                width: 100%;
                 height: 90px;
                 flex-shrink: 0;
                 background: #FFF;
@@ -39,7 +39,7 @@
                 position: absolute;
                 left: 0px; /* Adjust as needed */
                 top: 0px;
-                width: 1535px;
+                width: 100%;
                 height: 65px;
                 flex-shrink: 0;
                 background: #FFF;
