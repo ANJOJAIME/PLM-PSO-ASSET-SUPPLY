@@ -7,6 +7,7 @@ use App\Models\Asset;
 use App\Models\Supplier;
 use App\Models\Department;
 use App\Models\PurchaseOrder;
+use App\Models\DeliveredAsset;
 use Barryvdh\DomPDF\Facade\PDF;
 
 class AssetController extends Controller
@@ -100,7 +101,8 @@ class AssetController extends Controller
     public function displaypurchaseorder()
     {
         $orders = PurchaseOrder::all();
-        return view('pages.assets.purchase_order', ['orders' => $orders]);
+        $dasset = DeliveredAsset::all();
+        return view('pages.assets.purchase_order', ['orders' => $orders, 'dasset' => $dasset]);
     }
 
     public function makePurchaseOrder()
@@ -160,45 +162,59 @@ class AssetController extends Controller
     //DELIVERY
     public function displaydelivery()
     {
-        $asset = Asset::where('added', true)->get();
-        return view('pages.assets.displaydelivery', ['asset' => $asset]);
+        $dasset = DeliveredAsset::all();
+        return view('pages.assets.displaydelivery', ['dasset' => $dasset]);
     }
 
-    public function editdelivery($item_no)
+    public function storenew_delivered_asset(Request $request)
     {
-        $asset = Asset::where('item_no', $item_no)->first();   
-        return view('pages.assets.editdelivery', ['asset' => $asset]);
+        $dasset = new DeliveredAsset;
+
+        $validatedData = $request->validate([
+            'd_item_no' => 'required',
+            'd_description' => 'required',
+            'd_unit' => 'required',
+            'd_iar_no' => 'required',
+            'd_supplier' => 'required',
+            'd_pr_no' => 'required',
+            'd_po_no' => 'required',
+            'd_bur_no' => 'required',
+            'd_invoice_no' => 'required',
+            'd_date_invoice' => 'required',
+            'd_qty' => 'required',
+            'd_unit_cost' => 'required',
+            'd_total_cost' => 'required',
+            'd_date_po' => 'required',
+        ]);
+
+        $dasset->d_item_no = $request->input('d_item_no');
+        $dasset->d_description = $request->input('d_description');
+        $dasset->d_unit = $request->input('d_unit');
+        $dasset->d_iar_no = $request->input('d_iar_no');
+        $dasset->d_supplier = $request->input('d_supplier');
+        $dasset->d_pr_no = $request->input('d_pr_no');
+        $dasset->d_po_no = $request->input('d_po_no');
+        $dasset->d_bur_no = $request->input('d_bur_no');
+        $dasset->d_invoice_no = $request->input('d_invoice_no');
+        $dasset->d_date_invoice = $request->input('d_date_invoice');
+        $dasset->d_qty = $request->input('d_qty');
+        $dasset->d_unit_cost = $request->input('d_unit_cost');
+        $dasset->d_total_cost = $request->input('d_total_cost');
+        $dasset->d_date_po = $request->input('d_date_po');
+
+        session()->put('delivery_successful', true);
+        $dasset->save();
+        
+
+        return redirect('/delivery-view')->with('status', 'Delivered Asset Added Successfully!');
     }
 
-    public function updatedelivery(Request $request, $item_no)
+    public function deletedeliveredasset($id)
     {
-        $request->validate([
-            'iar_no' => 'required',
-            'supplier' => 'required',
-            'bur_no' => 'required',
-            'date_po' => 'required',
-            'invoice_no' => 'required',
-            'date_invoice' => 'required',
-            'req_office' => 'required',
-            'unit' => 'required',
-            'delivery_qty' => 'required',
-            'unit_cost' => 'required',
-        ]); //commit
-        $asset = Asset::where('item_no', $item_no)->first();
-        $asset->iar_no = $request->input('iar_no');
-        $asset->supplier = $request->input('supplier');
-        $asset->bur_no = $request->input('bur_no');
-        $asset->date_po = $request->input('date_po');
-        $asset->invoice_no = $request->input('invoice_no');
-        $asset->date_invoice = $request->input('date_invoice');
-        $asset->req_office = $request->input('req_office');
-        $asset->unit = $request->input('unit');
-        $asset->delivery_qty = $request->input('delivery_qty');
-        $asset->unit_cost = $request->input('unit_cost');
+        $dasset = DeliveredAsset::find($id);
+        $dasset->delete();
 
-        $asset->update();
-
-        return redirect('/delivery-view')->with('status', 'Delivery Updated Successfully!');
+        return redirect('/delivery-view')->with('status', 'Delivered Asset Deleted Successfully!');
     }
 
     //ISSUANCE

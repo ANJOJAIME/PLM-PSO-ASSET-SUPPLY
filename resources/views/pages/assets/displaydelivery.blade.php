@@ -410,41 +410,39 @@
                         <tr>
                             <th>Item No.</th>
                             <th>Description</th>
-                            <th>IAR No.</th>
-                            <th>Supplier</th>
-                            <th>PR No.</th>
-                            <th>BUR No.</th>
                             <th>PO No.</th>
                             <th>Date of PO</th>
+                            <th>PR No.</th>
+                            <th>Supplier</th>
+                            <th>Unit</th>
+                            <th>IAR No.</th>
+                            <th>BUR No.</th>
                             <th>Invoice No.</th>
                             <th>Date of Invoice</th>
-                            <th>Requesting Office</th>
-                            <th>Unit</th>
-                            <th>Quantity</th>
-                            <th>Unit Price</th>
-                            <th>Amount</th>
+                            <th>Quantity Delivered</th>
+                            <th>Unit Cost</th>
+                            <th>Total Cost</th>
                             <th>Action</th>
                         </tr>
                     </thead>
-                        @foreach($asset as $assetdata)
+                        @foreach($dasset as $assetdata)
                         <tr>
-                            <td>{{$assetdata->item_no}}</td>
-                            <td>{{$assetdata->description}}</td>
-                            <td>{{$assetdata->iar_no}}</td>
-                            <td>{{$assetdata->supplier}}</td>
-                            <td>{{$assetdata->pr_no}}</td>
-                            <td>{{$assetdata->bur_no}}</td>
-                            <td>{{$assetdata->po_no}}</td>
-                            <td>{{$assetdata->date_po}}</td>
-                            <td>{{$assetdata->invoice_no}}</td>
-                            <td>{{$assetdata->date_invoice}}</td>
-                            <td>{{$assetdata->req_office}}</td>
-                            <td>{{$assetdata->unit}}</td>
-                            <td>{{$assetdata->delivery_qty}}</td>
-                            <td>{{$assetdata->unit_cost}}</td>
-                            <td>{{$assetdata->delivery_qty * $assetdata->unit_cost}}</td>
+                            <td>{{$assetdata->d_item_no}}</td>
+                            <td>{{$assetdata->d_description}}</td>
+                            <td>{{$assetdata->d_po_no}}</td>
+                            <td>{{$assetdata->d_date_po}}</td>
+                            <td>{{$assetdata->d_pr_no}}</td>
+                            <td>{{$assetdata->d_supplier}}</td>
+                            <td>{{$assetdata->d_unit}}</td>
+                            <td>{{$assetdata->d_iar_no}}</td>
+                            <td>{{$assetdata->d_bur_no}}</td>
+                            <td>{{$assetdata->d_invoice_no}}</td>
+                            <td>{{$assetdata->d_date_invoice}}</td>
+                            <td>{{$assetdata->d_qty}}</td>
+                            <td>{{$assetdata->d_unit_cost}}</td>
+                            <td>{{$assetdata->d_total_cost}}</td>
                             <td>
-                                <a href="{{url('/editdelivery/'.$assetdata->item_no)}}" class="btn btn-edit">Edit</a>
+                                <a href="/deletedelivery/{{$assetdata->id}}" class="btn btn-outline-danger">Delete</a>
                             </td>
                         </tr>
                         @endforeach

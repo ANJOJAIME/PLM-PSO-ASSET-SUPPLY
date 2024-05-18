@@ -349,6 +349,39 @@
                 top: 138px; 
                 left: 300px;"
             }
+            .modal-content{
+                position: fixed;
+                top: 100px;
+                right: 370px;
+                width: 900px;
+                height: 580px;
+                flex-shrink: 0;
+                border-radius: 8px;
+                background: #E6EDFD;
+                box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+            }
+            .input-group label {
+                flex-shrink: 0;
+                width: 150px;
+            }
+            .form-control {
+                border-radius: none;
+                width: 250px;
+                height: 31px;
+                border: 0.5px solid #000;
+                background: #D1DFFF;
+            }
+            .form-group1 {
+                position: absolute;
+                top: 10px;
+                left: 500px;
+            }
+            .modal-header {
+                color: black;
+                font-size: 20px;
+                padding: 10px 20px;
+                border-radius: 8px 8px 0px 0px;
+            }
         </style>
     </head>
     <body>
@@ -452,7 +485,9 @@
                             <td>{{$order->unit_cost}}</td>
                             <td>{{ $order->quantity * $order->unit_cost }}</td>
                             <td> 
-                                
+                                <button id="deliveryButton{{$order->id}}" type="button" data-toggle="modal" data-target="#deliveryModal{{$order->id}}">
+                                    Deliver
+                                </button>
                                 <a href="{{url('/deletepurchaseorder/'.$order->id)}}" class="btn btn-delete">Delete</a>
                             </td>
                         </tr>
@@ -461,10 +496,122 @@
                 </table>
             </div>
         </div>
+        <div class="modal fade" id="deliveryModal{{$order->id}}" tabindex="-1" role="dialog" aria-labelledby="deliveryModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deliveryModalLabel"><strong>Confirm Delivery</strong></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="{{url('/storenewdelivery')}}" method="POST">
+                        @csrf
+                        <div class="modal-body">
+                        <div class="form-group">
+                            <div class="form-group row">
+                                <label for="d_item_no" class="col-sm-2 col-form-label"><strong>Item Number</strong></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="d_item_no" value="{{$order->item_no}}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="d_description" class="col-sm-2 col-form-label"><strong>Description</strong></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="d_description" value="{{$order->description}}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="d_po_no" class="col-sm-2 col-form-label"><strong>PO No</strong></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="d_po_no" value="{{$order->po_no}}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="d_date_po" class="col-sm-2 col-form-label"><strong>Date of PO:</strong></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="d_date_po" value="{{$order->updated_at}}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="d_pr_no" class="col-sm-2 col-form-label"><strong>PR No</strong></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="d_pr_no" value="{{$order->pr_no}}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="d_supplier" class="col-sm-2 col-form-label"><strong>Supplier</strong></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="d_supplier" value="{{$order->supplier}}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="d_unit" class="col-sm-2 col-form-label"><strong>Unit</strong></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="d_unit">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="d_iar_no" class="col-sm-2 col-form-label"><strong>IAR No</strong></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="d_iar_no">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group1">
+                            <div class="form-group row">
+                                <label for="d_bur_no" class="col-sm-2 col-form-label"><strong>BUR No</strong></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="d_bur_no">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="d_invoice_no" class="col-sm-2 col-form-label"><strong>Invoice No</strong></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="d_invoice_no">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="d_date_invoice" class="col-sm-2 col-form-label"><strong>Date of Invoice</strong></label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control" name="d_date_invoice">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="d_qty" class="col-sm-2 col-form-label"><strong>Quantity</strong></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="d_qty" value="{{$order->quantity}}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="d_unit_cost" class="col-sm-2 col-form-label"><strong>Unit Cost</strong></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="d_unit_cost" value="{{$order->unit_cost}}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="d_total_cost" class="col-sm-2 col-form-label"><strong>Total Cost</strong></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="d_total_cost" value="{{$order->quantity * $order->unit_cost}}" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="deliveryButton{{$order->id}}" type="submit" class="btn btn-success">
+                                Save
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script>
             $(document).ready(function(){
             $("input[type='submit']").hover(function(){
@@ -525,6 +672,6 @@
                     badge.style.display = 'none';
                 }
             }
-        </script>  
+        </script>
     </body>
 </html>

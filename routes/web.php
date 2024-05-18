@@ -94,8 +94,8 @@ Route::get('/get-description/{itemNo}', 'AssetController@getDescription');
 
 //DELIVERY TABLE
 Route::get('delivery-view', 'AssetController@displaydelivery');
-Route::get('/editdelivery/{item_no}', 'AssetController@editdelivery');
-Route::put('/updatedelivery/{item_no}', 'AssetController@updatedelivery');
+Route::post('/storenewdelivery', 'AssetController@storenew_delivered_asset');
+Route::get('/deletedelivery/{id}', 'AssetController@deletedeliveredasset');
 
 //ISSUANCE TABLE
 Route::get('issuance-view', 'AssetController@displayissuance');
