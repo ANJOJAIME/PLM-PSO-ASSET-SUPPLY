@@ -365,12 +365,14 @@
             <h2 style="color: white; text-align: right; font-size: 20px; padding-top: 80px; padding-right: 10px"><strong>Assets Management</strong></h2>
             <div class="items">
                 <a class="main" href="/asset-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Main</a>
-                <a class="issued" href="purchase-oder-view" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Purchase Order</a>
                 <a class="delivered" href="/delivery-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery</a>
                 <a class="issuance" href="/issuance-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issuance</a>
+                <a class="purchase_order" href="/purchase-order-view" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Purchase Order</a>
                 <a class="supplier" href="/suppliers-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Suppliers</a>
+                <a class="department" href="" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Department</a>
                 <a class="reports&forms" href="asset-forms-and-reports-generation" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Reports and Forms</a>
-                <a class="archives" href="{{ route('pages.supplies.archive') }}" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Archive</a>
+                <a class="dArchive" href="" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery Archive</a>
+                <a class="iArchive" href="" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issued Archive</a>
             </div>
         </div>
         <div class="profile">
@@ -414,45 +416,45 @@
                     <tr>
                             <th>Item No.</th> 
                             <th>Item Description</th>
+                            <th>Unit</th>
                             <th>Purchase Order No.</th>
                             <th>Supplier</th>
-                            <th>Address</th>
-                            <th>Telephone No.</th>
                             <th>TIN No.</th>
-                            <th>Date</th>
+                            <th>Date Purchase Order Created</th>
                             <th>Mode of Procurement</th>
                             <th>PR No.</th>
                             <th>Place of Delivery</th>
                             <th>Date of Delivery</th>
                             <th>Price/Value</th>
                             <th>Payment Term</th>
-                            <th>Unit</th>
                             <th>Quantity</th>
                             <th>Unit Cost</th>
                             <th>Amount</th>
                             <th>Action</th>
                         </tr>
                     </thead>
-                        @foreach($asset as $assetdata)
+                        @foreach($orders as $order)
                         <tr>
-                            <td>{{$assetdata->item_no}}</td>
-                            <td>{{$assetdata->description}}</td>
-                            <td>{{$assetdata->po_no}}</td>
-                            <td>{{$assetdata->supplier}}</td>
-                            <td>{{$assetdata->address}}</td>
-                            <td>{{$assetdata->tel_no}}</td>
-                            <td>{{$assetdata->tin_no}}</td>
-                            <td>{{$assetdata->date}}</td>
-                            <td>{{$assetdata->mode_of_proc}}</td>
-                            <td>{{$assetdata->pr_no}}</td>
-                            <td>{{$assetdata->place_dev}}</td>
-                            <td>{{$assetdata->date_dev}}</td>
-                            <td>{{$assetdata->price_val}}</td>
-                            <td>{{$assetdata->payment_term}}</td>
-                            <td>{{$assetdata->unit}}</td>
-                            <td>{{$assetdata->quantity}}</td>
-                            <td>{{$assetdata->unit_cost}}</td>
-                            <td>{{ $assetdata->quantity * $assetdata->unit_cost }}</td>
+                            <td>{{$order->item_no}}</td>
+                            <td>{{$order->description}}</td>
+                            <td>{{$order->unit}}</td>
+                            <td>{{$order->po_no}}</td>
+                            <td>{{$order->supplier}}</td>
+                            <td>{{$order->tin_no}}</td>
+                            <td>{{$order->updated_at}}</td>
+                            <td>{{$order->mode_of_proc}}</td>
+                            <td>{{$order->pr_no}}</td>
+                            <td>{{$order->place_dev}}</td>
+                            <td>{{$order->date_dev}}</td>
+                            <td>{{$order->price_val}}</td>
+                            <td>{{$order->payment_term}}</td>
+                            <td>{{$order->quantity}}</td>
+                            <td>{{$order->unit_cost}}</td>
+                            <td>{{ $order->quantity * $order->unit_cost }}</td>
+                            <td> 
+                                
+                                <a href="{{url('/deletepurchaseorder/'.$order->id)}}" class="btn btn-delete">Delete</a>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

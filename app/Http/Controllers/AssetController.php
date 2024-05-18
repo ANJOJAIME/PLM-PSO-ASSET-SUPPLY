@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Asset;
 use App\Models\Supplier;
+use App\Models\Department;
+use App\Models\PurchaseOrder;
 use Barryvdh\DomPDF\Facade\PDF;
 
 class AssetController extends Controller
@@ -44,7 +46,7 @@ class AssetController extends Controller
         }
 
         // Use the generated values
-        $asset->item_no = Asset::generateItemNo();
+        //$asset->item_no = Asset::generateItemNo();
         $asset->class_id = Asset::generateClassId();
         $asset->category = $request->input('category');
 
@@ -97,45 +99,62 @@ class AssetController extends Controller
     //PURCHASE ORDER
     public function displaypurchaseorder()
     {
-        $asset = Asset::where('po_added', true)->get();
-        return view('pages.assets.purchase_order', ['asset' => $asset]);
+        $orders = PurchaseOrder::all();
+        return view('pages.assets.purchase_order', ['orders' => $orders]);
     }
 
     public function makePurchaseOrder()
     {
-        $assets = Asset::all();
-        $asset = $assets->first();
+        $orders = PurchaseOrder::all();
         $suppliers = Supplier::all();
 
-        return view('pages.assets.makepurchaseorder', ['assets' => $assets, 'asset' => $asset, 'suppliers' => $suppliers]);
+        return view('pages.assets.makepurchaseorder', ['orders' => $orders, 'suppliers' => $suppliers]);
     }
 
-    public function storePurchaseOrder(Request $request, $pr_no)
+    public function storePurchaseOrder(Request $request)
     {
+        $orders = new PurchaseOrder;
         $validatedData = $request->validate([
             'item_no' => 'required',
-            'supplier' => 'required',
+            'description' => 'required',
+            'supplier',
+            'tin_no' => 'required',
+            'po_no' => 'required',
+            'pr_no' => 'required',
+            'mode_of_proc',
+            'place_dev',
+            'date_dev' => 'required',
+            'price_val' => 'required',
+            'payment_term',
+            'quantity'  => 'required',
+            'unit',
+            'unit_cost' => 'required',
         ]);
         
-        $asset = Asset::where('pr_no', $request->input('pr_no'))->first();
+        $orders->item_no = $request->input('item_no');
+        $orders->description = $request->input('description');
+        $orders->supplier = $request->input('supplier');
+        $orders->tin_no = $request->input('tin_no');
+        $orders->po_no = $request->input('po_no');
+        $orders->pr_no = $request->input('pr_no');
+        $orders->mode_of_proc = $request->input('mode_of_proc');
+        $orders->place_dev = $request->input('place_dev');
+        $orders->date_dev = $request->input('date_dev');
+        $orders->price_val = $request->input('price_val');
+        $orders->payment_term = $request->input('payment_term');
+        $orders->quantity = $request->input('quantity');
+        $orders->unit = $request->input('unit');
+        $orders->unit_cost = $request->input('unit_cost');
 
-        $asset = Asset::find($pr_no);
-        $asset->item_no = $request->input('item_no');
-        $asset->supplier = $request->input('supplier');
-        $asset->tin_no = $request->input('tin_no');
-        $asset->date_po = $request->input('date_po');
-        $asset->mode_of_proc = $request->input('mode_of_proc');
-        $asset->place_of_dev = $request->input('place_of_dev');
-        $asset->date_dev = $request->input('date_dev');
-        $asset->price_val = $request->input('price_val');
-        $asset->payment_term = $request->input('payment_term');
-        $asset->quantity = $request->input('quantity');
-        $asset->unit = $request->input('unit');
-        $asset->unit_cost = $request->input('unit_cost');
-        
-        $asset->update();
+        $orders->save();
 
         return redirect('/purchase-order-view')->with('status', 'Purchase Order Added Successfully!');
+    }
+
+    public function getDescription($itemNo)
+    {
+        $orders = PurchaseOrder::where('item_no', $itemNo)->first();
+        return response()->json(['orders' => $orders]);
     }
 
     //DELIVERY
@@ -222,7 +241,7 @@ class AssetController extends Controller
     //NO. GENERATION
     public function generateItemNo()
     {
-        return response()->json(['item_no' => Asset::generateItemNo()]);
+        return response()->json(['item_no' => PurchaseOrder::generateItemNo()]);
     }
 
     public function generateClassId()
@@ -288,6 +307,57 @@ class AssetController extends Controller
         $asset->forceDelete();
 
         return redirect('/asset-view')->with('status', 'Asset Deleted Permanently!');
+    }
+
+    //DEPARTMENT
+    public function assetdisplaydepartment()
+    {
+        $departments = Department::all();
+        $searched_dept = request('department_name');
+       
+    
+        return view('pages.assets.displaydepartment', ['departments' => $departments, 'searched_dept' => $searched_dept]);
+    }
+
+    public function assetdepartmentsearch(Request $request)
+    {
+        $department_name = $request->input('department_name');
+        $departments = Department::where('department_name', 'like', "%{$department_name}%")->get();
+        
+        return view('pages.assets.displaydepartment', ['departments' => $departments, 'searched_dept' => $department_name]);
+    }
+    
+    public function assetadddepartment()
+    {
+        $departments = Department::all();   
+        return view('pages.assets.adddepartment');
+    }
+
+    public function assetstoredepartment(Request $request)
+    {
+        $department = new Department;
+        
+        $validatedData = $request->validate([
+            'department_name' => 'required',
+            'department_head' => 'required',
+            'contact' => 'required',
+        ]);
+
+        $department->department_name = $request->input('department_name');
+        $department->department_head = $request->input('department_head');
+        $department->contact = $request->input('contact');
+
+        $department->save();
+
+        return redirect('/asset-plm-departments')->with('status', 'Department Added Successfully!');
+    }
+
+    public function assetdeletedepartment($id)
+    {
+        $department = Department::where('id', $id)->first();
+        $department->delete();
+
+        return redirect('/asset-plm-departments')->with('status', 'Department Deleted Successfully!');
     }
 
 }

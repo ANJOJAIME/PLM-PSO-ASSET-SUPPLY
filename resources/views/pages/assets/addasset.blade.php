@@ -192,15 +192,7 @@
                 }
             });
         </script>
-        <script>
-                document.getElementById('generate-item-no').addEventListener('click', function() {
-                    fetch('/generate-item-no')
-                        .then(response => response.json())
-                        .then(data => {
-                            document.getElementById('item_no').value = data.item_no;
-                        });
-                });
-        </script>
+        
         <script>
                 document.getElementById('generate-class-id').addEventListener('click', function() {
                     fetch('/generate-class-id')

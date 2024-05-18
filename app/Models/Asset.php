@@ -67,7 +67,7 @@ class Asset extends Model
 
     public function getKeyName()
     {
-        return 'pr_no';
+        return 'item_no';
     }
     public $incrementing = false;
 

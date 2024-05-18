@@ -49,21 +49,21 @@
             }
             .card-body{
                 position: fixed;
-                top: 150px;
+                top: 120px;
                 right: 300px;
                 width: 900px;
-                height: 400px;
+                height: 500px;
                 flex-shrink: 0;
                 border-radius: 8px;
                 background: #E6EDFD;
                 box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
             }
             .input-group {
-                right: 0px;
+                right: -10px;
                 top: 5px;
                 display: flex;
                 align-items: center;
-                gap: 2px;
+                gap: 0px;
                 justify-content: space-between;
                 margin: 5px 0;
                 width: 380px;
@@ -71,14 +71,14 @@
 
             .input-group1 {
                 position: absolute;
-                right: 15px;
+                right: -20px;
                 top: 65px;
                 display: flex;
                 align-items: center;  
                 justify-content: space-between;
                 margin: 5px 0;
                 width: 500px;
-                gap: -5px;
+                gap: 0px;
                 flex-direction: column;
             }
 
@@ -94,7 +94,7 @@
 
             .btn1-primary {
                 position: fixed;
-                top: 580px;
+                top: 640px;
                 left: 550px;
                 border-radius: 8px;
                 border: 0.5px solid #000;
@@ -111,7 +111,7 @@
 
             .btn-primary{
                 position: fixed;
-                top: 580px;
+                top: 640px;
                 left: 350px;
                 border-radius: 8px;
                 border: 0.5px solid #000;
@@ -137,22 +137,41 @@
                     <div class="card">
                         <div class="card-body">
                             <h1><strong>Make Purchase Order</strong></h1>
-                            <form action="{{url('/storepurchaseorder/'.$asset->item_no)}}" class="form-body" method="POST" autocomplete="off">
+                            <form action="{{url('/storepurchaseorder')}}" class="form-body" method="POST" autocomplete="off">
                                 @csrf 
-                                @method ('PUT') 
                                 <div class="input-group">
                                     <div class="input-group">
                                         <label for="item_no"><strong>Item No:</strong></label>
-                                        <select name="item_no" id="item_no" style="width: 275px; height: 32px; background-color: rgba(209,223,255,255); border: 0.5px solid #000; border-radius: 2px; padding-left: 12px; color: rgba(86,93,103,255)">
+                                        <select name="item_no" id="item_no_select" style="width: 275px; height: 32px; background-color: rgba(209,223,255,255); border: 0.5px solid #000; border-radius: 2px; padding-left: 12px; color: rgba(86,93,103,255)"  class="form-control @error('item_no') is-invalid @enderror">
                                             <option value="">Select Item No.</option>
-                                            @foreach($assets as $item)
-                                                @if(!is_null($item->item_no))
-                                                    <option value="{{ $item->item_no }}">{{ $item->item_no }}</option>
+                                            @foreach($orders as $order)
+                                                @if(!is_null($order->item_no))
+                                                    <option value="{{ $order->item_no }}">{{ $order->item_no }}</option>
                                                 @endif
                                             @endforeach
                                         </select>
+                                        <div class="input-group"style="width: 275px; height: 32px; left: 105px;">
+                                            <input type="text" id="item_no" name="item_no" class="form-control @error('item_no') is-invalid @enderror">
+                                            <button id="generate-item-no" type="button">Generate Item No</button>
+                                            @error('item_no')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
-
+                                    <div class="input-group">
+                                        <label for="description"><strong>Description:</strong></label>
+                                        <input type="text" id="description" name="description" class="form-control @error('description') is-invalid @enderror">
+                                        @error('description')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="unit"><strong>Unit:</strong></label>
+                                        <input type="text" name="unit" class="form-control @error('unit') is-invalid @enderror">
+                                        @error('unit')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                     <div class="input-group">
                                         <label for="supplier"><strong>Supplier:</strong></label>
                                         <select name="supplier" style="width: 275px; height: 32px; background-color: rgba(209,223,255,255); border: 0.5px solid #000; border-radius: 2px; padding-left: 12px; color: rgba(86,93,103,255)">
@@ -164,7 +183,20 @@
                                             @endforeach
                                         </select>
                                     </div>
-
+                                    <div class="input-group">
+                                        <label for="po_no"><strong>Purchase Order No.:</strong></label>
+                                        <input type="text" name="po_no" class="form-control @error('po_no') is-invalid @enderror">
+                                        @error('po_no')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="pr_no"><strong>Purchase Request No.:</strong></label>
+                                        <input type="text" name="pr_no" class="form-control @error('pr_no') is-invalid @enderror">
+                                        @error('pr_no')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                     <div class="input-group">
                                         <label for="tin_no"><strong>TIN No.:</strong></label>
                                         <input type="text" name="tin_no" class="form-control @error('tin_no') is-invalid @enderror">
@@ -172,15 +204,9 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-                        
-                                    <div class="input-group">
-                                        <label for="date"><strong>Date:</strong></label>
-                                        <input type="date" name="date" class="form-control @error('date') is-invalid @enderror">
-                                        @error('date')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
+                                </div>
 
+                                <div class="input-group1">
                                     <div class="input-group">
                                         <label for="mode_of_proc"><strong>Mode of Procuremnt:</strong></label>
                                         <input type="text" name="mode_of_proc" class="form-control @error('mode_of_proc') is-invalid @enderror">
@@ -188,7 +214,6 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-
                                     <div class="input-group">
                                         <label for="place_dev"><strong>Place of Delivery:</strong></label>
                                         <input type="text" name="place_dev" class="form-control @error('place_dev') is-invalid @enderror">
@@ -196,9 +221,6 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                </div>
-
-                                <div class="input-group1">
                                     <div class="input-group">
                                         <label for="date_dev"><strong>Date of Delivery:</strong></label>
                                         <input type="date" name="date_dev" class="form-control @error('date_dev') is-invalid @enderror">
@@ -229,15 +251,6 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-
-                                    <div class="input-group">
-                                        <label for="unit"><strong>Unit:</strong></label>
-                                        <input type="text" name="unit" class="form-control @error('unit') is-invalid @enderror">
-                                        @error('unit')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
                                     <div class="input-group">
                                         <label for="unit_cost"><strong>Unit Cost:</strong></label>
                                         <input type="number" name="unit_cost" class="form-control @error('unit_cost') is-invalid @enderror">
@@ -377,16 +390,83 @@
                 }
             });
         </script>
+        
+        <!--Disabling the fields of Item No-->
         <script>
-            document.getElementById('item_no').addEventListener('change', function() {
-                var itemNo = this.value;
-
-                fetch('/get-description/' + itemNo)
-                    .then(response => response.text())
-                    .then(description => {
-                        document.getElementById('description').value = description;
-                    });
+            document.addEventListener('DOMContentLoaded', function() {
+                const select = document.querySelector('#item_no_select');
+                const input = document.querySelector('#item_no');
+                const button = document.querySelector('#generate-item-no');
+        
+                select.addEventListener('change', function() {
+                    if (this.value !== "") {
+                        input.disabled = true;
+                    } else {
+                        input.disabled = false;
+                    }
+                });
+        
+                input.addEventListener('input', function() {
+                    if (this.value !== "") {
+                        select.disabled = true;
+                    } else {
+                        select.disabled = false;
+                    }
+                });
+        
+                button.addEventListener('click', function() {
+                    if (input.value !== "") {
+                        select.disabled = true;
+                    } else {
+                        select.disabled = false;
+                    }
+                    if (select.value !== "") {
+                        input.disabled = true;
+                    } else {
+                        input.disabled = false;
+                    }
+                });
             });
+        </script>
+        <!--Fetching the description of the Item No-->
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const item_no_select = document.getElementById('item_no_select');
+                const item_no_input = document.getElementById('item_no');
+                const description = document.getElementById('description');
+        
+                function setDescription() {
+                    // Get the item_no value from either the select dropdown or the input field
+                    const itemNo = item_no_select.value ? item_no_select.value : item_no_input.value;
+        
+                    fetch('/get-description/' + itemNo)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.orders && data.orders.description) {
+                                description.value = data.orders.description;
+                            } else {
+                                console.log('Description not found in response', data);
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                }
+        
+                // Set the description when the page loads
+                setDescription();
+        
+                // Update the description when the selected item changes
+                item_no_select.addEventListener('change', setDescription);
+                item_no_input.addEventListener('input', setDescription);
+            });
+        </script>
+        <script>
+                document.getElementById('generate-item-no').addEventListener('click', function() {
+                    fetch('/generate-item-no')
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('item_no').value = data.item_no;
+                        });
+                });
         </script>
     </body>
 </html>
