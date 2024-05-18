@@ -250,8 +250,8 @@
             .piegraph {
                 position: absolute;
                 top: 80px;
-                left: 700px;
-                width: 20%;
+                left: 695px;
+                width: 18%;
                 height: 40%;
                 display: flex;
                 justify-content: center;

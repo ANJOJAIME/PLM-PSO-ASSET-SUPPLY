@@ -166,27 +166,34 @@
         </div>
         <form action="/update-profile" method="POST">
             @csrf
+            <div>
             <h2 class="text">Name</h2>
             <div class="search-bar" style="position: fixed; top: 40%; left: 250px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 35%; height: 40px; padding: 4.608px ; justify-content: space-between; align-items: center; flex-shrink: 0;">
                 <div style="display: flex; align-items: center;">
-                    <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="name" autocomplete=off placeholder="">
+                <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="name" autocomplete=off placeholder="">
                 </div> 
             </div>
+            </div>
+            <div>
             <h2 class="text2">Email</h2>
             <div class="search-bar" style="position: fixed; top: 52%; left: 250px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 35%; height: 40px; padding: 4.608px ; justify-content: space-between; align-items: center; flex-shrink: 0;">
                 <div style="display: flex; align-items: center;">
-                    <input type="email" style="border: none; background-color: transparent; width: 430px; outline: none;" name="email" autocomplete=off placeholder="">
+                <input type="email" style="border: none; background-color: transparent; width: 430px; outline: none;" name="email" autocomplete=off placeholder="">
                 </div> 
             </div>
+            </div>
+            <div>
             <h2 class="text3">Contact No.</h2>
             <div class="search-bar" style="position: fixed; top: 64%; left: 250px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 35%; height: 40px; padding: 4.608px ; justify-content: space-between; align-items: center; flex-shrink: 0;">
                 <div style="display: flex; align-items: center;">
-                    <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="contact" autocomplete=off placeholder="">
+                <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="contact" autocomplete=off placeholder="">
                 </div> 
             </div>
-            <div>
-                <button type="submit" class="btn btn-primary">Save Changes</button>
             </div>
+            <div>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
         </form>
         </div>
         <div>
