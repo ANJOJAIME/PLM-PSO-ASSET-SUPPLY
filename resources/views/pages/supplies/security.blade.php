@@ -8,7 +8,7 @@
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-        <title>PLM | USER PROFILE</title>
+        <title>PLM | SECURITY</title>
 
         <style>
              body {
@@ -58,16 +58,6 @@
                 font-size: 20px;
                 padding-top: 80px;   
             }
-            .profile-circle{
-                position: absolute;
-                left: 18%;
-                top: 22%;
-                width: 80px;
-                height: 80px;
-                border-radius: 50%;
-                background: #E6EDFD;
-                z-index: 1;
-            }
             .btn1{
                 position: absolute;
                 left: 27%;
@@ -93,27 +83,27 @@
             .text{
                 position: absolute;
                 left: 19%;
-                top: 24%;
+                top: 5%;
                 color: white;
                 font-size: 16px;
             }
             .text2{
                 position: absolute;
                 left: 19%;
-                top: 36%;
+                top: 17%;
                 color: white;
                 font-size: 16px;
             }
             .text3{
                 position: absolute;
                 left: 19%;
-                top: 48%;
+                top: 29%;
                 color: white;
                 font-size: 16px;
             }
             .btn-primary{
                 position: absolute;
-                top: 500px;
+                top: 370px;
                 left: 250px;
                 border-radius: 8px;
                 border: 0.5px solid #000;
@@ -125,7 +115,7 @@
             }
             .btn1-primary{
                 position: absolute;
-                top: 500px;
+                top: 370px;
                 left: 400px;
                 border-radius: 8px;
                 border: 0.5px solid #000;
@@ -157,34 +147,27 @@
             <a class="main" href="/supplies-view" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 40px; font-family: Arial">Profile</a>
             <a class="delivered" href="/delivered-supplies-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 40px; font-family: Arial">Security</a>
         </div>
-        <div class="search-bar" style="position: fixed; top: 80px; left: 250px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 35%; height: 40px; padding: 4.608px 0px 4.608px 9.217px; justify-content: space-between; align-items: center; flex-shrink: 0;">
-            <div style="display: flex; align-items: center;">
-                    <i class="fa fa-search" style="color: #4F74BB; margin-right: 5px;"></i>
-                    <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="description" autocomplete=off placeholder="Search here">
-                </div> 
-            </form>
-        </div>
         <form action="/update-profile" method="POST">
             @csrf
             <div>
-            <h2 class="text">Name</h2>
-            <div class="search-bar" style="position: fixed; top: 40%; left: 250px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 35%; height: 40px; padding: 4.608px ; justify-content: space-between; align-items: center; flex-shrink: 0;">
+            <h2 class="text">Username</h2>
+            <div class="search-bar" style="position: fixed; top: 21%; left: 250px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 25%; height: 40px; padding: 4.608px ; justify-content: space-between; align-items: center; flex-shrink: 0;">
                 <div style="display: flex; align-items: center;">
                 <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="name" autocomplete=off placeholder="">
                 </div> 
             </div>
             </div>
             <div>
-            <h2 class="text2">Email</h2>
-            <div class="search-bar" style="position: fixed; top: 52%; left: 250px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 35%; height: 40px; padding: 4.608px ; justify-content: space-between; align-items: center; flex-shrink: 0;">
+            <h2 class="text2">New Password</h2>
+            <div class="search-bar" style="position: fixed; top: 33%; left: 250px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 25%; height: 40px; padding: 4.608px ; justify-content: space-between; align-items: center; flex-shrink: 0;">
                 <div style="display: flex; align-items: center;">
                 <input type="email" style="border: none; background-color: transparent; width: 430px; outline: none;" name="email" autocomplete=off placeholder="">
                 </div> 
             </div>
             </div>
             <div>
-            <h2 class="text3">Contact No.</h2>
-            <div class="search-bar" style="position: fixed; top: 64%; left: 250px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 35%; height: 40px; padding: 4.608px ; justify-content: space-between; align-items: center; flex-shrink: 0;">
+            <h2 class="text3">Confirm New Password</h2>
+            <div class="search-bar" style="position: fixed; top: 45%; left: 250px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 25%; height: 40px; padding: 4.608px ; justify-content: space-between; align-items: center; flex-shrink: 0;">
                 <div style="display: flex; align-items: center;">
                 <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="contact" autocomplete=off placeholder="">
                 </div> 
@@ -199,12 +182,11 @@
         <div>
             <button class="btn btn1-primary">Cancel</button>
         </div>
-        <div class="profile-circle"></div>
-        <div><button class="btn1"><strong>Update</strong></a></button></div>
-        <div><button class="btn2"><strong>Remove</strong></a></button></div>
             
         
       
 
 </body>
 </html>
+
+
