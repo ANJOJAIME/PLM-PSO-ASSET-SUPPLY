@@ -52,8 +52,9 @@
                 position: absolute;
                 left: 300px;
                 top: 180px;
-                max-height: 500px;
-                max-width: 1500px;
+                min-height: calc(100vh - 200px); 
+                max-height: calc(100vh - 200px); 
+                max-width: calc(100vw - 350px);
                 overflow-y: auto;
                 overflow-x: auto;
                 border-radius: 15px;
@@ -62,8 +63,8 @@
 
             .table-container table {
                 border-collapse: collapse;
-                width: 1200px;
-                height: 550px;
+                width: 100%;
+                height: 100%;
                 border-radius: 15px;
                 overflow: hidden;
                 table-layout: fixed;
@@ -106,7 +107,7 @@
             .notifdropdown {
                 position: absolute;
                 top: 10px;
-                left: 500px;
+                left: 21%;
                 z-index: 2;
             }
             .btn-outline-warning {
@@ -178,8 +179,8 @@
                 position: absolute;
                 left: 0px;
                 top: 45px;
-                width: 260.877px;
-                height: 1003px;
+                width: 18%;
+                height: 100%;
                 flex-shrink: 0;
                 background: #2D349A;
                 z-index: 1;
@@ -355,7 +356,7 @@
         <header class="custom-header">
             <img src="/image/PLMLogo.png" alt="logo">
         </header>
-        <div class="search-bar" style="position: fixed; top: 80px; left: 300px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 444px; height: 40px; padding: 4.608px 0px 4.608px 9.217px; justify-content: space-between; align-items: center; flex-shrink: 0;">
+        <div class="search-bar" style="position: fixed; top: 80px; left: 300px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 35%; height: 40px; padding: 4.608px 0px 4.608px 9.217px; justify-content: space-between; align-items: center; flex-shrink: 0;">
             <form action="/searchsupply" method="get">
                 <input type="text" class="search" name="stock_no" placeholder="Search here..." autocomplete="off"> 
             </form>
