@@ -259,13 +259,13 @@
             .notifdropdown {
                 position: absolute;
                 top: 10px;
-                left: 21%;
+                left: 85%;
                 z-index: 2;
             }
             #notificationButton {
                 position: absolute;
                 top: 10px;
-                left: 940px;
+              
                 background-color: blue;
                 color: white;
                 padding: 5px 5px;
