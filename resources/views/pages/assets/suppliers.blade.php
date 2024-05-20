@@ -347,7 +347,7 @@
                 font-size: 30px;
                 z-index: 3; 
                 top: 138px; 
-                left: 300px;"
+                left: 300px;
             }
         </style>
     </head>
