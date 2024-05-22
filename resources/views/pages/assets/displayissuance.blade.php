@@ -409,12 +409,14 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>PAR No.</th>
                             <th>Item Description</th>
-                            <th>Date Acquired</th>
+                            <th>PAR No.</th>
                             <th>Property No</th>
                             <th>Unit</th>
-                            <th>Quantity</th>
+                            <th>Requesting Office</th>
+                            <th>Date Issuance Report Created</th>
+                            <th>Date Acquired</th>
+                            <th>Quantity Issued</th>
                             <th>Unit Value</th>
                             <th>Total Value</th>
                             <th>Action</th>
@@ -422,14 +424,15 @@
                     </thead>
                         @foreach($asset as $assetdata)
                         <tr>
-                            <td>{{$assetdata->par_no}}</td>
-                            <td>{{$assetdata->description}}</td>
-                            <td>{{$assetdata->date_acquired}}</td>
-                            <td>{{$assetdata->property_no}}</td>
-                            <td>{{$assetdata->unit}}</td>
-                            <td>{{$assetdata->issue_qty}}</td>
-                            <td>{{$assetdata->unit_cost}}</td>
-                            <td>{{$assetdata->issue_qty * $assetdata->unit_cost}}</td>
+                            <td>{{$assetdata->i_description}}</td>
+                            <td>{{$assetdata->i_par_no}}</td>
+                            <td>{{$assetdata->i_property_no}}</td>
+                            <td>{{$assetdata->i_unit}}</td>
+                            <td>{{$assetdata->i_req_office}}</td>
+                            <td>{{$assetdata->i_date_acquired}}</td>
+                            <td>{{$assetdata->i_quantity}}</td>
+                            <td>{{$assetdata->i_unit_value}}</td>
+                            <td>{{$assetdata->i_quantity * $assetdata->i_unit_value}}</td>
                             <td>
                                 <a href="{{url('/editissuance/'.$assetdata->item_no)}}" class="btn btn-edit">Edit</a>
                             </td>

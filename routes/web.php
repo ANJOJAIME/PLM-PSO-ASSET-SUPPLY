@@ -91,6 +91,7 @@ Route::get('purchase-order-view', 'AssetController@displaypurchaseorder');
 Route::get('/makepurchaseorder', 'AssetController@makePurchaseOrder');
 Route::post('/storepurchaseorder', 'AssetController@storePurchaseOrder');
 Route::get('/get-description/{itemNo}', 'AssetController@getDescription');
+Route::get('/delete-purchase-order/{id}', 'AssetController@deletePurchaseOrder');
 
 //DELIVERY TABLE
 Route::get('delivery-view', 'AssetController@displaydelivery');
@@ -99,6 +100,7 @@ Route::get('/deletedelivery/{id}', 'AssetController@deletedeliveredasset');
 
 //ISSUANCE TABLE
 Route::get('issuance-view', 'AssetController@displayissuance');
+Route::post('/storenewissuance', 'AssetController@storenew_issued_asset');
 Route::get('/editissuance/{item_no}', 'AssetController@editissuance');
 Route::put('/updateissuance/{item_no}', 'AssetController@updateissuance');
 

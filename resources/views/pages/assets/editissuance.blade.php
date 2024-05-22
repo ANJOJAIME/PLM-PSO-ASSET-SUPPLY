@@ -126,7 +126,7 @@
                                     <div class="input-group">
                                         <label for="par_no"><strong>PAR No:</strong></label>
                                         <input type="text" id="par_no" name="par_no" value="{{ old('par_no', $asset->par_no) }}" class="form-control" >
-                                        <button id="generate-par-no" type="button">Generate PAR No</button>
+                                        
                                     </div>
                                     <div class="input-group">
                                         <label for="description"><strong>Item Description:</strong></label>
@@ -217,14 +217,6 @@
                     });
             });
         </script>
-        <script>
-            document.getElementById('generate-par-no').addEventListener('click', function() {
-                fetch('/generate-par-no')
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('par_no').value = data.par_no;
-                    });
-            });
-        </script>
+        
     </body>
 </html>

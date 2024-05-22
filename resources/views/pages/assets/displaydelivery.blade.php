@@ -8,7 +8,7 @@
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-        <title>PLM | Assets Main</title>
+        <title>PLM | Assets Delivery</title>
         <style>
             body {
                 font-family: Arial;
@@ -369,7 +369,7 @@
                 <a class="issuance" href="/issuance-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issuance</a>
                 <a class="purchase_order" href="/purchase-order-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Purchase Order</a>
                 <a class="supplier" href="/suppliers-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Suppliers</a>
-                <a class="department" href="/asset-plm-departments" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Department</a>
+                <a class="department" href="/asset-plm-departments" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">PLM Departments</a>
                 <a class="reports&forms" href="asset-forms-and-reports-generation" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Reports and Forms</a>
                 <a class="dArchive" href="" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery Archive</a>
                 <a class="iArchive" href="" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issued Archive</a>
@@ -443,6 +443,9 @@
                             <td>{{$assetdata->d_unit_cost}}</td>
                             <td>{{$assetdata->d_total_cost}}</td>
                             <td>
+                                <button id="deliveryButton{{$assetdata->id}}" type="button" data-toggle="modal" data-target="#deliveryModal{{$assetdata->id}}">
+                                    Issue
+                                </button>
                                 <a href="/deletedelivery/{{$assetdata->id}}" class="btn btn-outline-danger">Delete</a>
                             </td>
                         </tr>
@@ -451,7 +454,96 @@
                 </table>
             </div>
         </div>
-
+        <div class="modal fade" id="deliveryModal{{$assetdata->id}}" tabindex="-1" role="dialog" aria-labelledby="deliveryModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deliveryModalLabel"><strong>Issue An Item</strong></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="{{url('/storenewissuance')}}" method="POST">
+                        @csrf
+                        <div class="modal-body">
+                        <div class="form-group">
+                            <div class="form-group row">
+                                <label for="i_description" class="col-sm-2 col-form-label m-label"><strong>Description</strong></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="i_description" value="{{$assetdata->d_description}}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="i_par_no" class="col-sm-2 col-form-label m-label"><strong>PAR No</strong></label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" name="i_par_no" id="i_par_no">
+                                </div>
+                                <div>
+                                    <button id="generate-par-no" type="button">Generate PAR No</button>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="i_property_no" class="col-sm-2 col-form-label m-label"><strong>Property No</strong></label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" name="i_property_no" id="i_property_no">
+                                </div>
+                                <div>
+                                    <button id="generate-property-no" type="button">Generate Property No</button>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="i_unit" class="col-sm-2 col-form-label m-label"><strong>Unit</strong></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="i_unit">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                        <label for="i_req_office"><strong>Requesting Office</strong></label>
+                                            <select name="i_req_office" class="form-control @error('i_req_office') is-invalid @enderror">
+                                                <option value="">Select Requesting Office</option>
+                                                @foreach($departments as $department)
+                                                    <option value="{{ $department->department_name }}"
+                                                            {{ $asset->i_req_office ?? '' == $department->department_name ? 'selected' : '' }}>
+                                                        {{ $department->department_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        @error('requesting_office')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                            </div>
+                            <div class="form-group row">
+                                <label for="i_date_acquired" class="col-sm-2 col-form-label m-label"><strong>Date Acquiered</strong></label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control" name="i_date_acquired">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="i_quantity" class="col-sm-2 col-form-label m-label"><strong>Quantity</strong></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="i_quantity">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="i_unit_cost" class="col-sm-2 col-form-label m-label"><strong>Unit Cost</strong></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="i_unit_cost" value="{{$assetdata->d_unit_cost}}" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="modalDeliveryButton{{$assetdata->id}}" type="submit" class="btn btn-success">
+                                Save
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
@@ -506,6 +598,26 @@
                     badge.style.display = 'none';
                 }
             }
-        </script>  
+        </script>
+
+        <script>
+            document.getElementById('generate-par-no').addEventListener('click', function() {
+                fetch('/generate-par-no')
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('i_par_no').value = data.i_par_no;
+                    });
+            });
+        </script>
+
+        <script>
+            document.getElementById('generate-property-no').addEventListener('click', function() {
+                fetch('/generate-property-no')
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('i_property_no').value = data.i_property_no;
+                    });
+            });
+        </script>
     </body>
 </html>

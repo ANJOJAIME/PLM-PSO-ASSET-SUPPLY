@@ -362,7 +362,7 @@
             }
             .input-group label {
                 flex-shrink: 0;
-                width: 150px;
+                width: 50px;
             }
             .form-control {
                 border-radius: none;
@@ -375,6 +375,10 @@
                 position: absolute;
                 top: 10px;
                 left: 500px;
+            }
+            .m-label {
+                
+                width: 100px;
             }
             .modal-header {
                 color: black;
@@ -402,7 +406,7 @@
                 <a class="issuance" href="/issuance-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issuance</a>
                 <a class="purchase_order" href="/purchase-order-view" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Purchase Order</a>
                 <a class="supplier" href="/suppliers-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Suppliers</a>
-                <a class="department" href="" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Department</a>
+                <a class="department" href="" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">PLM Departments</a>
                 <a class="reports&forms" href="asset-forms-and-reports-generation" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Reports and Forms</a>
                 <a class="dArchive" href="" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery Archive</a>
                 <a class="iArchive" href="" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issued Archive</a>
@@ -488,7 +492,7 @@
                                 <button id="deliveryButton{{$order->id}}" type="button" data-toggle="modal" data-target="#deliveryModal{{$order->id}}">
                                     Deliver
                                 </button>
-                                <a href="{{url('/deletepurchaseorder/'.$order->id)}}" class="btn btn-delete">Delete</a>
+                                <a href="{{url('/delete-purchase-order/'.$order->id)}}" class="btn btn-delete">Delete</a>
                             </td>
                         </tr>
                         @endforeach
@@ -510,49 +514,49 @@
                         <div class="modal-body">
                         <div class="form-group">
                             <div class="form-group row">
-                                <label for="d_item_no" class="col-sm-2 col-form-label"><strong>Item Number</strong></label>
+                                <label for="d_item_no" class="col-sm-2 col-form-label m-label"><strong>Item Number</strong></label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" name="d_item_no" value="{{$order->item_no}}" readonly>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="d_description" class="col-sm-2 col-form-label"><strong>Description</strong></label>
+                                <label for="d_description" class="col-sm-2 col-form-label m-label"><strong>Description</strong></label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" name="d_description" value="{{$order->description}}" readonly>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="d_po_no" class="col-sm-2 col-form-label"><strong>PO No</strong></label>
+                                <label for="d_po_no" class="col-sm-2 col-form-label m-label"><strong>PO No</strong></label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" name="d_po_no" value="{{$order->po_no}}" readonly>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="d_date_po" class="col-sm-2 col-form-label"><strong>Date of PO:</strong></label>
+                                <label for="d_date_po" class="col-sm-2 col-form-label m-label"><strong>Date of PO:</strong></label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" name="d_date_po" value="{{$order->updated_at}}" readonly>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="d_pr_no" class="col-sm-2 col-form-label"><strong>PR No</strong></label>
+                                <label for="d_pr_no" class="col-sm-2 col-form-label m-label"><strong>PR No</strong></label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" name="d_pr_no" value="{{$order->pr_no}}" readonly>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="d_supplier" class="col-sm-2 col-form-label"><strong>Supplier</strong></label>
+                                <label for="d_supplier" class="col-sm-2 col-form-label m-label"><strong>Supplier</strong></label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" name="d_supplier" value="{{$order->supplier}}" readonly>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="d_unit" class="col-sm-2 col-form-label"><strong>Unit</strong></label>
+                                <label for="d_unit" class="col-sm-2 col-form-label m-label"><strong>Unit</strong></label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" name="d_unit">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="d_iar_no" class="col-sm-2 col-form-label"><strong>IAR No</strong></label>
+                                <label for="d_iar_no" class="col-sm-2 col-form-label m-label"><strong>IAR No</strong></label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" name="d_iar_no">
                                 </div>
@@ -560,44 +564,50 @@
                         </div>
                         <div class="form-group1">
                             <div class="form-group row">
-                                <label for="d_bur_no" class="col-sm-2 col-form-label"><strong>BUR No</strong></label>
+                                <label for="d_bur_no" class="col-sm-2 col-form-label m-label"><strong>BUR No</strong></label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" name="d_bur_no">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="d_invoice_no" class="col-sm-2 col-form-label"><strong>Invoice No</strong></label>
+                                <label for="d_invoice_no" class="col-sm-2 col-form-label m-label"><strong>Invoice No</strong></label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" name="d_invoice_no">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="d_date_invoice" class="col-sm-2 col-form-label"><strong>Date of Invoice</strong></label>
+                                <label for="d_date_invoice" class="col-sm-2 col-form-label m-label"><strong>Date of Invoice</strong></label>
                                 <div class="col-sm-10">
                                     <input type="date" class="form-control" name="d_date_invoice">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="d_qty" class="col-sm-2 col-form-label"><strong>Quantity</strong></label>
+                                <label for="d_qty" class="col-sm-2 col-form-label m-label"><strong>Quantity</strong></label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" name="d_qty" value="{{$order->quantity}}" readonly>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="confirmCheck" required>
+                                        <label class="form-check-label" for="confirmCheck">
+                                            <i>Confirmed if delivered items are correct<i>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="d_unit_cost" class="col-sm-2 col-form-label"><strong>Unit Cost</strong></label>
+                                <label for="d_unit_cost" class="col-sm-2 col-form-label m-label"><strong>Unit Cost</strong></label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" name="d_unit_cost" value="{{$order->unit_cost}}" readonly>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="d_total_cost" class="col-sm-2 col-form-label"><strong>Total Cost</strong></label>
+                                <label for="d_total_cost" class="col-sm-2 col-form-label m-label"><strong>Total Cost</strong></label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" name="d_total_cost" value="{{$order->quantity * $order->unit_cost}}" readonly>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button id="deliveryButton{{$order->id}}" type="submit" class="btn btn-success">
+                            <button id="modalDeliveryButton{{$order->id}}" type="submit" class="btn btn-success">
                                 Save
                             </button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -672,6 +682,16 @@
                     badge.style.display = 'none';
                 }
             }
+        </script>
+        <script>
+        $(document).ready(function() {
+            $('form').on('submit', function(e) {
+                if (!$('#confirmCheck').is(':checked')) {
+                    e.preventDefault();
+                    alert('Please confirm before submitting the form.');
+                }
+            });
+        });
         </script>
     </body>
 </html>

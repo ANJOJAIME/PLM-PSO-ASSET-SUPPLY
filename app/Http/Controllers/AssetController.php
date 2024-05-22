@@ -8,6 +8,7 @@ use App\Models\Supplier;
 use App\Models\Department;
 use App\Models\PurchaseOrder;
 use App\Models\DeliveredAsset;
+use App\Models\IssuedAsset;
 use Barryvdh\DomPDF\Facade\PDF;
 
 class AssetController extends Controller
@@ -153,6 +154,14 @@ class AssetController extends Controller
         return redirect('/purchase-order-view')->with('status', 'Purchase Order Added Successfully!');
     }
 
+    public function deletePurchaseOrder($id)
+    {
+        $orders = PurchaseOrder::find($id);
+        $orders->delete();
+
+        return redirect('/purchase-order-view')->with('status', 'Purchase Order Deleted Successfully!');
+    }
+
     public function getDescription($itemNo)
     {
         $orders = PurchaseOrder::where('item_no', $itemNo)->first();
@@ -163,7 +172,9 @@ class AssetController extends Controller
     public function displaydelivery()
     {
         $dasset = DeliveredAsset::all();
-        return view('pages.assets.displaydelivery', ['dasset' => $dasset]);
+        $iasset = IssuedAsset::all();
+        $departments = Department::all();
+        return view('pages.assets.displaydelivery', ['dasset' => $dasset, 'iasset' => $iasset, 'departments' => $departments]);
     }
 
     public function storenew_delivered_asset(Request $request)
@@ -204,7 +215,6 @@ class AssetController extends Controller
 
         session()->put('delivery_successful', true);
         $dasset->save();
-        
 
         return redirect('/delivery-view')->with('status', 'Delivered Asset Added Successfully!');
     }
@@ -220,8 +230,36 @@ class AssetController extends Controller
     //ISSUANCE
     public function displayissuance()
     {
-        $asset = Asset::where('added', true)->get();
+        $asset = IssuedAsset::all();
         return view('pages.assets.displayissuance', ['asset' => $asset]);
+    }
+
+    public function storenew_issued_asset(Request $request)
+    {
+        $asset = new IssuedAsset;
+        $validatedData = $request->validate([
+            'i_par_no'=> 'required',
+            'i_description'=>'required',
+            'i_date_acquired'=>'required',
+            'i_property_no'=>'required',
+            'i_req_office'=>'required',
+            'i_unit'=>'required',
+            'i_quantity'=>'required',
+            'i_unit_value'=>'required',
+        ]);
+        
+        $asset->i_par_no = $request->input('i_par_no');
+        $asset->i_description = $request->input('i_description');
+        $asset->i_date_acquired = $request->input('i_date_acquired');
+        $asset->i_property_no = $request->input('i_property_no');
+        $asset->i_req_office = $request->input('i_req_office');
+        $asset->i_unit = $request->input('i_unit');
+        $asset->i_quantity = $request->input('i_quantity');
+        $asset->i_unit_value = $request->input('i_unit_value');
+        
+        $asset->save();
+
+        return redirect('/issuance-view')->with('status', 'Issuance Added Successfully!');
     }
 
     public function editissuance($item_no)
@@ -272,12 +310,12 @@ class AssetController extends Controller
 
     public function generatePropertyNo()
     {
-        return response()->json(['property_no' => Asset::generatePropertyNo()]);
+        return response()->json(['i_property_no' => IssuedAsset::generatePropertyNo()]);
     }
 
     public function generateParNo()
     {
-        return response()->json(['par_no' => Asset::generateParNo()]);
+        return response()->json(['i_par_no' => IssuedAsset::generateParNo()]);
     }
 
     //FORMS
