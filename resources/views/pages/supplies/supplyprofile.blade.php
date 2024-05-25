@@ -141,23 +141,26 @@
         <form action="/update-profile" method="POST">
             @csrf
             <div class="form-group">
-                <label class="name">Name</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name">
+            <label class="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name">
             </div>
             <div class="form-group">
-                <label class="email">Email</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email">
+            <label class="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email">
             </div>
             <div class="form-group">
-                <label class="contact">Contact No.</label>
-                <input type="text" class="form-control" id="contact" name="contact" placeholder="Enter your contact number">
+            <label class="contact">Contact No.</label>
+            <input type="text" class="form-control" id="contact" name="contact" placeholder="Enter your contact number">
             </div>
-            <button type="submit" class="btn btn-success">Save Changes</button>
-            <button type="submit" class="btn btn-danger">Cancel</button>
+            <button type="submit" class="btn btn-success" onclick="return confirm('Are you sure you want to save changes?')">Save Changes</button>
+            <a href="/user-profile" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel?')">Cancel</a>
+        </form>
+        </form>
         </form>
     </div>
     <div class="profile-circle"></div>
     <div><button class="btn1"><strong>Update</strong></button></div>
     <div><button class="btn2"><strong>Remove</strong></button></div>
+</body>
 </body>
 </html>
