@@ -32,19 +32,7 @@
                 padding: 0 20px;
                 z-index: 2;
             }
-            .side-bar {
-                position: absolute;
-                left: 0;
-                top: 85px;
-                border-radius: 9.574px;
-                background: #EFF0FF;
-                width: 444px;
-                height: 50px;
-                justify-content: space-between;
-                align-items: center;
-                flex-shrink: 0;
-            }
-
+           
             .table-container {
                 position: absolute;
                 left: 300px;

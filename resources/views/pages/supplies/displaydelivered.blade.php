@@ -51,7 +51,8 @@
             .table-container {
                 position: absolute;
                 left: 300px;
-                top: 180px; 
+                top: 180px;
+                min-height: calc(100vh - 200px); 
                 max-height: calc(100vh - 200px); 
                 max-width: calc(100vw - 350px);
                 overflow-y: auto;
@@ -66,14 +67,14 @@
                 height: 100%;
                 border-radius: 15px;
                 overflow: hidden;
-                table-layout: fixed;  
+                table-layout: fixed;
+                
             }
 
             .table-container th, .table-container td {
                 text-align: center;
                 padding: 8px;
                 border: 1px solid #ddd;
-                width: 80px;
             }
 
             .table-container td{
@@ -85,16 +86,6 @@
                 position: sticky;
                 background-color: #e6edfd;
                 font-weight: bold;
-            }
-
-            .table-container tbody tr:nth-child(odd) {
-                background-color: white;
-            }
-            .table-container tbody tr:nth-child(even) {
-                background-color: #f8f9fc;
-            }
-            .table-container tbody tr:hover {
-                background-color: #dfe0e3;
             }
 
             .dropdown {
