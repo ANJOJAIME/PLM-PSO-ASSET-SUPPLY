@@ -18,12 +18,12 @@
                 overflow: hidden;
             }
 
-            .custom-header{
+            .custom-header {
                 position: absolute;
-                left: 0;
-                top: 0;
-                width: calc(100% - 20px);
-                height: 90px;
+                left: 0px; /* Adjust as needed */
+                top: 0px;
+                width: 100%;
+                height: 65px;
                 flex-shrink: 0;
                 background: #FFF;
                 border-radius: 0px 0px 12px 12px;
@@ -33,27 +33,14 @@
                 padding: 0 20px;
                 z-index: 2;
             }
-            .side-bar {
-                position: absolute;
-                left: 0;
-                top: 85px;
-                border-radius: 9.574px;
-                background: #EFF0FF;
-                
-                width: 444px;
-                height: 50px;
-                
-                justify-content: space-between;
-                align-items: center;
-                flex-shrink: 0;
-            }
-
+            
             .table-container {
                 position: absolute;
                 left: 300px;
                 top: 180px;
-                max-height: 500px;
-                max-width: 1210px;
+                min-height: calc(100vh - 200px); 
+                max-height: calc(100vh - 200px); 
+                max-width: calc(100vw - 350px);
                 overflow-y: auto;
                 overflow-x: auto;
                 border-radius: 15px;
@@ -62,10 +49,10 @@
 
             .table-container table {
                 border-collapse: collapse;
-                width: 1200px;
-                height: 550px;
+                width: 100%;
+                height: 100%;
                 border-radius: 15px;
-                overflow: auto;
+                overflow: hidden;
                 table-layout: fixed;
                 
             }
@@ -74,7 +61,6 @@
                 text-align: center;
                 padding: 8px;
                 border: 1px solid #ddd;
-                width: 100px;
             }
 
             .table-container td{
@@ -88,16 +74,6 @@
                 font-weight: bold;
             }
 
-            .table-container tbody tr:nth-child(odd) {
-                background-color: white;
-            }
-            .table-container tbody tr:nth-child(even) {
-                background-color: #f8f9fc;
-            }
-            .table-container tbody tr:hover {
-                background-color: #dfe0e3;
-            }
-
             .dropdown {
                 position: absolute;
                 top: 10px;
@@ -107,7 +83,7 @@
             .notifdropdown {
                 position: absolute;
                 top: 10px;
-                left: 500px;
+                left: 85%;
                 z-index: 2;
             }
             .btn-outline-warning {
@@ -129,7 +105,7 @@
                 text-align: center;
                 border:none;
                 top: 100px;
-                right: 220px;
+                right: 50px;
                 height: 40px;
                 padding-top: 10px;
                 border-radius: 4px;
@@ -153,21 +129,7 @@
                 right: 35px;
                 border-radius: 8px;
             }
-            .custom-header {
-                position: absolute;
-                left: 0px;
-                top: 0px;
-                width: 1535px;
-                height: 65px;
-                flex-shrink: 0;
-                background: #FFF;
-                border-radius: 0px 0px 12px 12px;
-                box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-                display: flex;
-                justify-content: space-between;
-                padding: 0 20px;
-                z-index: 2;
-            }
+        
             img {
                 position: absolute;
                 width: 260px;
@@ -179,8 +141,8 @@
                 position: absolute;
                 left: 0px;
                 top: 45px;
-                width: 260.877px;
-                height: 1003px;
+                width: 18%;
+                height: 100%;
                 flex-shrink: 0;
                 background: #2D349A;
                 z-index: 1;
@@ -270,7 +232,6 @@
             #notificationButton {
                 position: absolute;
                 top: 10px;
-                left: 940px;
                 background-color: blue;
                 color: white;
                 padding: 5px 5px;
@@ -363,7 +324,10 @@
             .input-group label {
                 flex-shrink: 0;
                 width: 50px;
+                
             }
+            
+            
             .form-control {
                 border-radius: none;
                 width: 250px;
@@ -393,7 +357,7 @@
         <header class="custom-header">
             <img src="/image/PLMLogo.png" alt="logo">
         </header>
-        <div class="search-bar" style="position: fixed; top: 80px; left: 300px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 444px; height: 40px; padding: 4.608px 0px 4.608px 9.217px; justify-content: space-between; align-items: center; flex-shrink: 0;">
+        <div class="search-bar" style="position: fixed; top: 80px; left: 300px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 35%; height: 40px; padding: 4.608px 0px 4.608px 9.217px; justify-content: space-between; align-items: center; flex-shrink: 0;">
             <form action="/searchsupply" method="get">
                 <input type="text" class="search" name="stock_no" placeholder="Search here..." autocomplete="off"> 
             </form>

@@ -28,8 +28,8 @@
                 position: absolute;
                 left: 0px; /* Adjust as needed */
                 top: 0px;
-                width: 1535px;
-                height: 75px;
+                width: 100%;
+                height: 65px;
                 flex-shrink: 0;
                 background: #FFF;
                 border-radius: 0px 0px 12px 12px;
