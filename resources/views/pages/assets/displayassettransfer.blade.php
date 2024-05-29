@@ -352,7 +352,7 @@
         </style>
     </head>
     <body>
-        <h1 class="label"><strong>Assets :Delivery</strong></h1>
+        <h1 class="label"><strong>Assets Transfer</strong></h1>
         <header class="custom-header">
             <img src="/image/PLMLogo.png" alt="logo">
         </header>
@@ -365,9 +365,10 @@
             <h2 style="color: white; text-align: right; font-size: 20px; padding-top: 80px; padding-right: 10px"><strong>Assets Management</strong></h2>
             <div class="items">
                 <a class="main" href="/asset-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Main</a>
-                <a class="delivered" href="/delivery-view" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery</a>
+                <a class="delivered" href="/delivery-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery</a>
                 <a class="issuance" href="/issuance-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issuance</a>
                 <a class="purchase_order" href="/purchase-order-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Purchase Order</a>
+                <a class="asset_transfer" href="/asset-transfer-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Asset Transfer</a>
                 <a class="supplier" href="/suppliers-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Suppliers</a>
                 <a class="department" href="/asset-plm-departments" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">PLM Departments</a>
                 <a class="reports&forms" href="asset-forms-and-reports-generation" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Reports and Forms</a>
@@ -409,44 +410,31 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Item No.</th>
-                            <th>Description</th>
-                            <th>PO No.</th>
-                            <th>Date of PO</th>
-                            <th>PR No.</th>
-                            <th>Supplier</th>
-                            <th>Unit</th>
-                            <th>IAR No.</th>
-                            <th>BUR No.</th>
-                            <th>Invoice No.</th>
-                            <th>Date of Invoice</th>
-                            <th>Quantity Delivered</th>
-                            <th>Unit Cost</th>
-                            <th>Total Cost</th>
+                            <th>ARE No</th>
+                            <th>Received From</th>
+                            <th>Received By</th>
+                            <th>Received From Office</th>
+                            <th>Used In Office</th>
+                            <th>Date Received</th>
+                            <th>End User</th>
+                            <th>New ARE No</th>
+                            <th>PRS No</th>
                             <th>Action</th>
                         </tr>
                     </thead>
-                        @foreach($dasset as $assetdata)
+                        @foreach($transfer as $transferdata)
                         <tr>
-                            <td>{{$assetdata->d_item_no}}</td>
-                            <td>{{$assetdata->d_description}}</td>
-                            <td>{{$assetdata->d_po_no}}</td>
-                            <td>{{$assetdata->d_date_po}}</td>
-                            <td>{{$assetdata->d_pr_no}}</td>
-                            <td>{{$assetdata->d_supplier}}</td>
-                            <td>{{$assetdata->d_unit}}</td>
-                            <td>{{$assetdata->d_iar_no}}</td>
-                            <td>{{$assetdata->d_bur_no}}</td>
-                            <td>{{$assetdata->d_invoice_no}}</td>
-                            <td>{{$assetdata->d_date_invoice}}</td>
-                            <td>{{$assetdata->d_qty}}</td>
-                            <td>{{$assetdata->d_unit_cost}}</td>
-                            <td>{{$assetdata->d_total_cost}}</td>
+                            <td>{{$transferdata->are_no}}</td>
+                            <td>{{$transferdata->received_from}}</td>
+                            <td>{{$transferdata->received_by}}</td>
+                            <td>{{$transferdata->received_from_office}}</td>
+                            <td>{{$transferdata->used_in_office}}</td>
+                            <td>{{$transferdata->date_received}}</td>
+                            <td>{{$transferdata->end_user}}</td>
+                            <td>{{$transferdata->new_are_no}}</td>
+                            <td>{{$transferdata->prs_no}}</td>
                             <td>
-                                <button id="deliveryButton{{$assetdata->id}}" type="button" data-toggle="modal" data-target="#deliveryModal{{$assetdata->id}}">
-                                    Issue
-                                </button>
-                                <a href="/deletedelivery/{{$assetdata->id}}" class="btn btn-outline-danger">Delete</a>
+                                <a href="/deletedelivery/{{$transferdata->id}}" class="btn btn-outline-danger">Delete</a>
                             </td>
                         </tr>
                         @endforeach
@@ -454,93 +442,85 @@
                 </table>
             </div>
         </div>
-        @foreach($dasset as $assetdata)
-        <div class="modal fade" id="deliveryModal{{$assetdata->id}}" tabindex="-1" role="dialog" aria-labelledby="deliveryModalLabel" aria-hidden="true">
+        <button id="asset_transfer_button" type="button" data-toggle="modal" data-target="#asset_transfer_modal" class="btn btn-primary">
+            Make Asset Transfer
+        </button>
+        <div class="modal fade" id="asset_transfer_modal" tabindex="-1" role="dialog" aria-labelledby="deliveryModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="deliveryModalLabel"><strong>Issue An Item</strong></h5>
+                        <h5 class="modal-title" id="deliveryModalLabel"><strong>Asset Transfer</strong></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="{{url('/istorenewissuance')}}" method="POST">
+                    <form action="{{url('/makenewtransfer')}}" method="POST">
                         @csrf
                         <div class="modal-body">
                             <div class="form-group">
-                                <div class="form-group row">
-                                    <label for="i_description" class="col-sm-2 col-form-label m-label"><strong>Description</strong></label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="i_description" value="{{$assetdata->d_description}}" readonly>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="i_par_no" class="col-sm-2 col-form-label m-label"><strong>PAR No</strong></label>
-                                    <div class="col-sm-6">
-                                        <input type="text" class="form-control" name="i_par_no" id="i_par_no">
-                                    </div>
-                                    <div>
-                                        <button id="generate-par-no" type="button">Generate PAR No</button>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="i_property_no" class="col-sm-2 col-form-label m-label"><strong>Property No</strong></label>
-                                    <div class="col-sm-6">
-                                        <input type="text" class="form-control" name="i_property_no" id="i_property_no">
-                                    </div>
-                                    <div>
-                                        <button id="generate-property-no" type="button">Generate Property No</button>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="i_unit" class="col-sm-2 col-form-label m-label"><strong>Unit</strong></label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="i_unit">
-                                    </div>
-                                </div>
-                                <div class="input-group">
-                                    <label for="i_req_office"><strong>Requesting Office</strong></label>
-                                    <select name="i_req_office" class="form-control @error('i_req_office') is-invalid @enderror">
-                                        <option value="">Select Requesting Office</option>
+                                <label for="are_no">ARE No</label>
+                                <input type="text" class="form-control" id="are_no" name="are_no" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="received_from">Received From</label>
+                                <input type="text" class="form-control" id="received_from" name="received_from" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="received_by">Received By</label>
+                                <input type="text" class="form-control" id="received_by" name="received_by" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="received_from_office">Received From Office</label>
+                                    <select name="received_from_office" class="form-control @error('received_from_office') is-invalid @enderror">
+                                        <option value="">Select Office</option>
                                         @foreach($departments as $department)
                                             <option value="{{ $department->department_name }}"
-                                                {{ $asset->i_req_office ?? '' == $department->department_name ? 'selected' : '' }}>
+                                                {{ $asset->received_from_office ?? '' == $department->department_name ? 'selected' : '' }}>
                                                 {{ $department->department_name }}
                                             </option>
                                         @endforeach
                                     </select>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="i_date_acquired" class="col-sm-2 col-form-label m-label"><strong>Date Acquired</strong></label>
-                                    <div class="col-sm-10">
-                                        <input type="date" class="form-control" name="i_date_acquired">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="i_quantity" class="col-sm-2 col-form-label m-label"><strong>Quantity</strong></label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="i_quantity">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="i_unit_value" class="col-sm-2 col-form-label m-label"><strong>Unit Cost</strong></label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="i_unit_value" value="{{$assetdata->d_unit_cost}}" readonly>
-                                    </div>
-                                </div>
                             </div>
-                            <div class="modal-footer">
-                                <button id="modalDeliveryButton{{$assetdata->id}}" type="submit" class="btn btn-success">
-                                    Save
-                                </button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <div class="form-group">
+                                <label for="used_in_office">Used In Office</label>
+                                <select name="used_in_office" class="form-control @error('used_in_office') is-invalid @enderror">
+                                        <option value="">Select Office</option>
+                                        @foreach($departments as $department)
+                                            <option value="{{ $department->department_name }}"
+                                                {{ $asset->used_in_office ?? '' == $department->department_name ? 'selected' : '' }}>
+                                                {{ $department->department_name }}
+                                            </option>
+                                        @endforeach
+                                </select>
                             </div>
+                            <div class="form-group">
+                                <label for="date_received">Date Received</label>
+                                <input type="date" class="form-control" id="date_received" name="date_received" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="end_user">End User</label>
+                                <input type="text" class="form-control" id="end_user" name="end_user" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="new_are_no">New ARE No</label>
+                                <input type="text" class="form-control" id="new_are_no" name="new_are_no" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="prs_no">PRS No</label>
+                                <input type="text" class="form-control" id="prs_no" name="prs_no" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">
+                                Save
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-        @endforeach
+
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
@@ -597,26 +577,6 @@
                     badge.style.display = 'none';
                 }
             }
-        </script>
-
-        <script>
-            document.getElementById('generate-par-no').addEventListener('click', function() {
-                fetch('/generate-par-no')
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('i_par_no').value = data.i_par_no;
-                    });
-            });
-        </script>
-
-        <script>
-            document.getElementById('generate-property-no').addEventListener('click', function() {
-                fetch('/generate-property-no')
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('i_property_no').value = data.i_property_no;
-                    });
-            });
         </script>
     </body>
 </html>

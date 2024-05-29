@@ -9,6 +9,7 @@ use App\Models\Department;
 use App\Models\PurchaseOrder;
 use App\Models\DeliveredAsset;
 use App\Models\IssuedAsset;
+use App\Models\AssetTransfer;
 use Barryvdh\DomPDF\Facade\PDF;
 
 class AssetController extends Controller
@@ -261,6 +262,44 @@ class AssetController extends Controller
         $iasset->save();
 
         return redirect('/issuance-view')->with('status', 'Issuance Added Successfully!');
+    }
+
+    //ASSET TRANSFER
+    public function displayassettransfer()
+    {
+        $transfer = AssetTransfer::all();
+        $departments = Department::all();
+        return view('pages.assets.displayassettransfer', ['transfer' => $transfer, 'departments' => $departments]);
+    }
+
+    public function makenewassettransfer(Request $request)
+    {
+        $transfer = new AssetTransfer;
+
+        $validatedData = $request->validate([
+            'are_no' => 'required',
+            'received_from' => 'required',
+            'received_by' => 'required',
+            'received_from_office' => 'required',
+            'used_in_office' => 'required',
+            'date_received' => 'required',
+            'end_user' => 'required',
+            'new_are_no' => 'required',
+            'prs_no' => 'required',
+        ]);
+
+        $transfer->are_no = $request->input('are_no');
+        $transfer->received_from = $request->input('received_from');
+        $transfer->received_by = $request->input('received_by');
+        $transfer->received_from_office = $request->input('received_from_office');
+        $transfer->used_in_office = $request->input('used_in_office');
+        $transfer->date_received = $request->input('date_received');
+        $transfer->end_user = $request->input('end_user');
+        $transfer->new_are_no = $request->input('new_are_no');
+        $transfer->prs_no = $request->input('prs_no');
+
+        $transfer->save();
+        return redirect('/asset-transfer-view')->with('status', 'Asset Transfer Added Successfully!');
     }
 
 

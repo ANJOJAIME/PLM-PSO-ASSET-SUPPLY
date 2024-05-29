@@ -101,8 +101,10 @@ Route::get('/deletedelivery/{id}', 'AssetController@deletedeliveredasset');
 //ISSUANCE TABLE
 Route::get('issuance-view', 'AssetController@displayissuance');
 Route::post('/istorenewissuance', 'AssetController@storenew_issued_asset');
-//Route::get('/editissuance/{item_no}', 'AssetController@editissuance');
-//Route::put('/updateissuance/{item_no}', 'AssetController@updateissuance');
+
+//ASSET TRANSFER
+Route::get('asset-transfer-view', 'AssetController@displayassettransfer');
+Route::post('/makenewtransfer', 'AssetController@makenewassettransfer');
 
 //DEPARTMENT
 Route::get('/asset-plm-departments', 'AssetController@assetdisplaydepartment');
