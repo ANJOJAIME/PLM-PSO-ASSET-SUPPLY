@@ -80,61 +80,17 @@
                 color: white;
                 border: none;
             }
-            .text{
-                position: absolute;
-                left: 19%;
-                top: 5%;
+            .name{
                 color: white;
-                font-size: 16px;
             }
-            .text2{
-                position: absolute;
-                left: 19%;
-                top: 17%;
+            .email{
                 color: white;
-                font-size: 16px;
             }
-            .text3{
-                position: absolute;
-                left: 19%;
-                top: 29%;
+            .contact{
                 color: white;
-                font-size: 16px;
             }
-            .btn-primary{
-                position: absolute;
-                top: 370px;
-                left: 250px;
-                border-radius: 8px;
-                border: 0.5px solid #000;
-                background: #D1DFFF;
-                width: 140px;
-                height: 38px;
-                flex-shrink: 0;
-                color: black;
-            }
-            .btn1-primary{
-                position: absolute;
-                top: 370px;
-                left: 400px;
-                border-radius: 8px;
-                border: 0.5px solid #000;
-                background: #D1DFFF;
-                width: 100px;
-                height: 38px;
-                flex-shrink: 0;
-                color: black;
-            }
-            .btn-primary:hover{
-                background-color: blue;
-                color: white;
-                border: none;
-            }
-            .btn1-primary:hover{
-                background-color: red;
-                color: white;
-                border: none;
-            }
+            
+
            
         </style>
 
@@ -147,42 +103,25 @@
             <a class="main" href="/supplies-view" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 40px; font-family: Arial">Profile</a>
             <a class="delivered" href="/delivered-supplies-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 40px; font-family: Arial">Security</a>
         </div>
+        <div class="card" style="position: fixed; top: 15%; left: 230px; width: 25%; background-color: #4F74BB; padding: 20px; border-radius: 10px; border: none;">
         <form action="/update-profile" method="POST">
             @csrf
-            <div>
-            <h2 class="text">Username</h2>
-            <div class="search-bar" style="position: fixed; top: 21%; left: 250px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 25%; height: 40px; padding: 4.608px ; justify-content: space-between; align-items: center; flex-shrink: 0;">
-                <div style="display: flex; align-items: center;">
-                <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="name" autocomplete=off placeholder="">
-                </div> 
+            <div class="form-group">
+            <label class="name">Old Password</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter your old password">
             </div>
+            <div class="form-group">
+            <label class="email">New Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your new password">
             </div>
-            <div>
-            <h2 class="text2">New Password</h2>
-            <div class="search-bar" style="position: fixed; top: 33%; left: 250px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 25%; height: 40px; padding: 4.608px ; justify-content: space-between; align-items: center; flex-shrink: 0;">
-                <div style="display: flex; align-items: center;">
-                <input type="email" style="border: none; background-color: transparent; width: 430px; outline: none;" name="email" autocomplete=off placeholder="">
-                </div> 
+            <div class="form-group">
+            <label class="contact">Confirm New Password</label>
+            <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm your new password">
             </div>
-            </div>
-            <div>
-            <h2 class="text3">Confirm New Password</h2>
-            <div class="search-bar" style="position: fixed; top: 45%; left: 250px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 25%; height: 40px; padding: 4.608px ; justify-content: space-between; align-items: center; flex-shrink: 0;">
-                <div style="display: flex; align-items: center;">
-                <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="contact" autocomplete=off placeholder="">
-                </div> 
-            </div>
-            </div>
-            <div>
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-            </div>
+            <button type="submit" class="btn btn-success" onclick="return confirm('Are you sure you want to save changes?')">Save Changes</button>
+            <a href="/user-profile" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel?')">Cancel</a>
         </form>
-        </form>
-        </div>
-        <div>
-            <button class="btn btn1-primary">Cancel</button>
-        </div>
-            
+    </div>
         
       
 
