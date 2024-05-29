@@ -454,6 +454,7 @@
                 </table>
             </div>
         </div>
+        @foreach($dasset as $assetdata)
         <div class="modal fade" id="deliveryModal{{$assetdata->id}}" tabindex="-1" role="dialog" aria-labelledby="deliveryModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -463,91 +464,94 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="{{url('/storenewissuance')}}" method="POST">
+                    <form action="{{url('/istorenewissuance')}}" method="POST">
                         @csrf
                         <div class="modal-body">
-                        <div class="form-group">
-                            <div class="form-group row">
-                                <label for="i_description" class="col-sm-2 col-form-label m-label"><strong>Description</strong></label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="i_description" value="{{$assetdata->d_description}}" readonly>
+                            <div class="form-group">
+                                <div class="form-group row">
+                                    <label for="i_description" class="col-sm-2 col-form-label m-label"><strong>Description</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="i_description" value="{{$assetdata->d_description}}" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="i_par_no" class="col-sm-2 col-form-label m-label"><strong>PAR No</strong></label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" name="i_par_no" id="i_par_no">
+                                    </div>
+                                    <div>
+                                        <button id="generate-par-no" type="button">Generate PAR No</button>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="i_property_no" class="col-sm-2 col-form-label m-label"><strong>Property No</strong></label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" name="i_property_no" id="i_property_no">
+                                    </div>
+                                    <div>
+                                        <button id="generate-property-no" type="button">Generate Property No</button>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="i_unit" class="col-sm-2 col-form-label m-label"><strong>Unit</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="i_unit">
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label for="i_req_office"><strong>Requesting Office</strong></label>
+                                    <select name="i_req_office" class="form-control @error('i_req_office') is-invalid @enderror">
+                                        <option value="">Select Requesting Office</option>
+                                        @foreach($departments as $department)
+                                            <option value="{{ $department->department_name }}"
+                                                {{ $asset->i_req_office ?? '' == $department->department_name ? 'selected' : '' }}>
+                                                {{ $department->department_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('requesting_office')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="form-group row">
+                                    <label for="i_date_acquired" class="col-sm-2 col-form-label m-label"><strong>Date Acquired</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="date" class="form-control" name="i_date_acquired">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="i_quantity" class="col-sm-2 col-form-label m-label"><strong>Quantity</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="i_quantity">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="i_unit_value" class="col-sm-2 col-form-label m-label"><strong>Unit Cost</strong></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="i_unit_value" value="{{$assetdata->d_unit_cost}}" readonly>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label for="i_par_no" class="col-sm-2 col-form-label m-label"><strong>PAR No</strong></label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" name="i_par_no" id="i_par_no">
-                                </div>
-                                <div>
-                                    <button id="generate-par-no" type="button">Generate PAR No</button>
-                                </div>
+                            <div class="modal-footer">
+                                <button id="modalDeliveryButton{{$assetdata->id}}" type="submit" class="btn btn-success">
+                                    Save
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
-                            <div class="form-group row">
-                                <label for="i_property_no" class="col-sm-2 col-form-label m-label"><strong>Property No</strong></label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" name="i_property_no" id="i_property_no">
-                                </div>
-                                <div>
-                                    <button id="generate-property-no" type="button">Generate Property No</button>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="i_unit" class="col-sm-2 col-form-label m-label"><strong>Unit</strong></label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="i_unit">
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                        <label for="i_req_office"><strong>Requesting Office</strong></label>
-                                            <select name="i_req_office" class="form-control @error('i_req_office') is-invalid @enderror">
-                                                <option value="">Select Requesting Office</option>
-                                                @foreach($departments as $department)
-                                                    <option value="{{ $department->department_name }}"
-                                                            {{ $asset->i_req_office ?? '' == $department->department_name ? 'selected' : '' }}>
-                                                        {{ $department->department_name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        @error('requesting_office')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                            </div>
-                            <div class="form-group row">
-                                <label for="i_date_acquired" class="col-sm-2 col-form-label m-label"><strong>Date Acquiered</strong></label>
-                                <div class="col-sm-10">
-                                    <input type="date" class="form-control" name="i_date_acquired">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="i_quantity" class="col-sm-2 col-form-label m-label"><strong>Quantity</strong></label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="i_quantity">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="i_unit_cost" class="col-sm-2 col-form-label m-label"><strong>Unit Cost</strong></label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="i_unit_cost" value="{{$assetdata->d_unit_cost}}" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button id="modalDeliveryButton{{$assetdata->id}}" type="submit" class="btn btn-success">
-                                Save
-                            </button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-        
+        @endforeach
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script>
             $(document).ready(function(){
             $("input[type='submit']").hover(function(){

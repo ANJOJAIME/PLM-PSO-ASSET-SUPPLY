@@ -100,9 +100,9 @@ Route::get('/deletedelivery/{id}', 'AssetController@deletedeliveredasset');
 
 //ISSUANCE TABLE
 Route::get('issuance-view', 'AssetController@displayissuance');
-Route::post('/storenewissuance', 'AssetController@storenew_issued_asset');
-Route::get('/editissuance/{item_no}', 'AssetController@editissuance');
-Route::put('/updateissuance/{item_no}', 'AssetController@updateissuance');
+Route::post('/istorenewissuance', 'AssetController@storenew_issued_asset');
+//Route::get('/editissuance/{item_no}', 'AssetController@editissuance');
+//Route::put('/updateissuance/{item_no}', 'AssetController@updateissuance');
 
 //DEPARTMENT
 Route::get('/asset-plm-departments', 'AssetController@assetdisplaydepartment');

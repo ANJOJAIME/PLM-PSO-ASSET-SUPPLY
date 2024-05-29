@@ -422,17 +422,18 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                        @foreach($asset as $assetdata)
+                        @foreach($iasset as $assetdata)
                         <tr>
                             <td>{{$assetdata->i_description}}</td>
                             <td>{{$assetdata->i_par_no}}</td>
                             <td>{{$assetdata->i_property_no}}</td>
                             <td>{{$assetdata->i_unit}}</td>
                             <td>{{$assetdata->i_req_office}}</td>
+                            <td>{{$assetdata->created_at}}</td>
                             <td>{{$assetdata->i_date_acquired}}</td>
                             <td>{{$assetdata->i_quantity}}</td>
                             <td>{{$assetdata->i_unit_value}}</td>
-                            <td>{{$assetdata->i_quantity * $assetdata->i_unit_value}}</td>
+                            <td>{{$assetdata->i_total_value}}</td>
                             <td>
                                 <a href="{{url('/editissuance/'.$assetdata->item_no)}}" class="btn btn-edit">Edit</a>
                             </td>

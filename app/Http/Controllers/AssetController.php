@@ -16,7 +16,7 @@ class AssetController extends Controller
     //MAIN TABLE
     public function displayasset()
     {
-        $asset = Asset::where('added', true)->get();
+        $asset = Asset::all();
         //$notifications = Notification::all();
 
         return view('pages.assets.displayassets', ['asset' => $asset]); //'notifications' => $notifications]);
@@ -213,7 +213,6 @@ class AssetController extends Controller
         $dasset->d_total_cost = $request->input('d_total_cost');
         $dasset->d_date_po = $request->input('d_date_po');
 
-        session()->put('delivery_successful', true);
         $dasset->save();
 
         return redirect('/delivery-view')->with('status', 'Delivered Asset Added Successfully!');
@@ -230,13 +229,13 @@ class AssetController extends Controller
     //ISSUANCE
     public function displayissuance()
     {
-        $asset = IssuedAsset::all();
-        return view('pages.assets.displayissuance', ['asset' => $asset]);
+        $iasset = IssuedAsset::all();
+        return view('pages.assets.displayissuance', ['iasset' => $iasset]);
     }
 
     public function storenew_issued_asset(Request $request)
     {
-        $asset = new IssuedAsset;
+        $iasset = new IssuedAsset;
         $validatedData = $request->validate([
             'i_par_no'=> 'required',
             'i_description'=>'required',
@@ -247,48 +246,21 @@ class AssetController extends Controller
             'i_quantity'=>'required',
             'i_unit_value'=>'required',
         ]);
+
+        $iasset->i_par_no = $request->input('i_par_no');
+        $iasset->i_description = $request->input('i_description');
+        $iasset->i_date_acquired = $request->input('i_date_acquired');
+        $iasset->i_property_no = $request->input('i_property_no');
+        $iasset->i_req_office = $request->input('i_req_office');
+        $iasset->i_unit = $request->input('i_unit');
+        $iasset->i_quantity = $request->input('i_quantity');
+        $iasset->i_unit_value = $request->input('i_unit_value');
+        $iasset->i_total_value = $iasset->i_quantity * $iasset->i_unit_value;
+
         
-        $asset->i_par_no = $request->input('i_par_no');
-        $asset->i_description = $request->input('i_description');
-        $asset->i_date_acquired = $request->input('i_date_acquired');
-        $asset->i_property_no = $request->input('i_property_no');
-        $asset->i_req_office = $request->input('i_req_office');
-        $asset->i_unit = $request->input('i_unit');
-        $asset->i_quantity = $request->input('i_quantity');
-        $asset->i_unit_value = $request->input('i_unit_value');
-        
-        $asset->save();
+        $iasset->save();
 
         return redirect('/issuance-view')->with('status', 'Issuance Added Successfully!');
-    }
-
-    public function editissuance($item_no)
-    {
-        $asset = Asset::where('item_no', $item_no)->first();
-        return view('pages.assets.editissuance', ['asset' => $asset]);
-    }
-
-    public function updateissuance(Request $request, $item_no)
-    {
-        $request->validate([
-            'par_no' => 'required',
-            'date_acquired' => 'required',
-            'property_no' => 'required',
-            'unit' => 'required',
-            'issue_qty' => 'required',
-            
-        ]);
-        $asset = Asset::where('item_no', $item_no)->first();
-        $asset->par_no = $request->input('par_no');
-        $asset->date_acquired = $request->input('date_acquired');
-        $asset->property_no = $request->input('property_no');
-        $asset->unit = $request->input('unit');
-        $asset->issue_qty = $request->input('issue_qty');
-    
-
-        $asset->update();
-
-        return redirect('/issuance-view')->with('status', 'Issuance Updated Successfully!');
     }
 
 
