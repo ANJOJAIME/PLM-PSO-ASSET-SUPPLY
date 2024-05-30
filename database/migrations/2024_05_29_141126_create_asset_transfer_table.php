@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('end_user')->nullable();
             $table->string('new_are_no')->nullable();
             $table->string('prs_no')->nullable();
+            $table->softDeletes();
         });
     }
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class IssuedAsset extends Model
 {
@@ -25,6 +26,7 @@ class IssuedAsset extends Model
     {
         return 'id';
     }
+    use SoftDeletes;
 
     public static function generateParNo()
     {

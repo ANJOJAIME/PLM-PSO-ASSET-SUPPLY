@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AssetTransfer extends Model
 {
@@ -26,5 +27,21 @@ class AssetTransfer extends Model
     public function getKeyName()
     {
         return 'id';
+    }
+    use SoftDeletes;
+
+    public static function generatePrsNo()
+    {
+        $year = date('Y');
+        $lastPrsNo = self::where('prs_no', 'like', $year.'-%')->orderBy('prs_no', 'desc')->first();
+
+        if ($lastPrsNo) {
+            $number = intval(substr($lastPrsNo->prs_no, 5)) + 1;
+        } else {
+            $number = 1;
+        }
+        $number = str_pad($number, 4, '0', STR_PAD_LEFT);
+
+        return $year . '-' . $number;
     }
 }

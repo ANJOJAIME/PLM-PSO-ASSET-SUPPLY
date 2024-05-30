@@ -160,7 +160,7 @@ class AssetController extends Controller
         $orders = PurchaseOrder::find($id);
         $orders->delete();
 
-        return redirect('/purchase-order-view')->with('status', 'Purchase Order Deleted Successfully!');
+        return redirect('/purchase-order-view')->with('status', 'Purchase Order Deleted Successfully! Item can be recovered in archive...');
     }
 
     public function getDescription($itemNo)
@@ -224,7 +224,7 @@ class AssetController extends Controller
         $dasset = DeliveredAsset::find($id);
         $dasset->delete();
 
-        return redirect('/delivery-view')->with('status', 'Delivered Asset Deleted Successfully!');
+        return redirect('/delivery-view')->with('status', 'Delivered Asset Deleted Successfully! Item can be recovered in archive...');
     }
 
     //ISSUANCE
@@ -257,11 +257,17 @@ class AssetController extends Controller
         $iasset->i_quantity = $request->input('i_quantity');
         $iasset->i_unit_value = $request->input('i_unit_value');
         $iasset->i_total_value = $iasset->i_quantity * $iasset->i_unit_value;
-
-        
         $iasset->save();
 
         return redirect('/issuance-view')->with('status', 'Issuance Added Successfully!');
+    }
+
+    public function delete_issued_asset($id)
+    {
+        $iasset = IssuedAsset::find($id);
+        $iasset->delete();
+
+        return redirect('/issuance-view')->with('status', 'Issued Asset Deleted Successfully! Item can be recovered in archive...');
     }
 
     //ASSET TRANSFER
@@ -329,6 +335,11 @@ class AssetController extends Controller
         return response()->json(['i_par_no' => IssuedAsset::generateParNo()]);
     }
 
+    public function generatePrsNo()
+    {
+        return response()->json(['prs_no' => AssetTransfer::generatePrsNo()]);
+    }
+
     //FORMS
     public function assetsforms()
     {
@@ -352,28 +363,74 @@ class AssetController extends Controller
     
 
     //ARCHIVE CONTROLLER
-    public function archive()
+    //PURCHASE ORDER
+    public function po_archive()
     {
-        $asset = Asset::onlyTrashed()->get();
-        return view('pages.assets.asset_archive', ['asset' => $asset]);
+        $orders = PurchaseOrder::onlyTrashed()->get();
+        return view('pages.assets.po_archive', ['orders' => $orders]);
     }
 
-    public function recover($item_no)
+    public function po_recover($id)
     {
-        $asset = Asset::withTrashed()->find($item_no);
-        $asset->restore();
+        $orders = PurchaseOrder::withTrashed()->find($id);
+        $orders->restore();
 
-        return redirect('/asset-view')->with('status', 'Asset Recovered Successfully!');
+        return redirect('/purchase-order-view')->with('status', 'Purchase Order Recovered Successfully!');
     }
 
-    public function forceDelete($item_no)
+    public function po_forceDelete($id)
     {
-        $asset = Asset::withTrashed()->find($item_no);
-        $asset->forceDelete();
+        $orders = PurchaseOrder::withTrashed()->find($id);
+        $orders->forceDelete();
 
-        return redirect('/asset-view')->with('status', 'Asset Deleted Permanently!');
+        return redirect('/purchase-order-view')->with('status', 'Purchase Order Deleted Permanently!');
     }
 
+    //DELIVERED ASSET
+    public function del_archive()
+    {
+        $dasset = DeliveredAsset::onlyTrashed()->get();
+        return view('pages.assets.del_archive', ['dasset' => $dasset]);
+    }
+
+    public function del_recover($id)
+    {
+        $dasset = DeliveredAsset::withTrashed()->find($id);
+        $dasset->restore();
+
+        return redirect('/delivery-view')->with('status', 'Delivered Asset Recovered Successfully!');
+    }
+
+    public function del_forceDelete($id)
+    {
+        $dasset = DeliveredAsset::withTrashed()->find($id);
+        $dasset->forceDelete();
+
+        return redirect('/delivery-view')->with('status', 'Delivered Asset Deleted Permanently!');
+    }
+
+    //ISSUED ASSET
+    public function iss_archive()
+    {
+        $iasset = IssuedAsset::onlyTrashed()->get();
+        return view('pages.assets.iss_archive', ['iasset' => $iasset]);
+    }
+
+    public function iss_recover($id)
+    {
+        $iasset = IssuedAsset::withTrashed()->find($id);
+        $iasset->restore();
+
+        return redirect('/issuance-view')->with('status', 'Issued Asset Recovered Successfully!');
+    }
+
+    public function iss_forceDelete($id)
+    {
+        $iasset = IssuedAsset::withTrashed()->find($id);
+        $iasset->forceDelete();
+
+        return redirect('/issuance-view')->with('status', 'Issued Asset Deleted Permanently!');
+    }
     //DEPARTMENT
     public function assetdisplaydepartment()
     {

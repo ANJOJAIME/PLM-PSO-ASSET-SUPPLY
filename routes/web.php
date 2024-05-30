@@ -41,6 +41,7 @@ Route::get('/generate-class-id', [AssetController::class, 'generateClassId']);
 Route::get('/generate-asset-iar-no', [AssetController::class, 'generateAssetIARNo']);
 Route::get('/generate-property-no', [AssetController::class, 'generatePropertyNo']);
 Route::get('/generate-par-no', [AssetController::class, 'generateParNo']);
+Route::get('/generate-prs-no', [AssetController::class, 'generatePrsNo']);
 
 //ISSUED TABLE
 Route::get('issued-supplies-view', 'SuppliesController@displayissued');
@@ -101,9 +102,10 @@ Route::get('/deletedelivery/{id}', 'AssetController@deletedeliveredasset');
 //ISSUANCE TABLE
 Route::get('issuance-view', 'AssetController@displayissuance');
 Route::post('/istorenewissuance', 'AssetController@storenew_issued_asset');
+Route::get('/deleteissuance/{id}', 'AssetController@delete_issued_asset');
 
 //ASSET TRANSFER
-Route::get('asset-transfer-view', 'AssetController@displayassettransfer');
+Route::get('/asset-transfer-view', 'AssetController@displayassettransfer');
 Route::post('/makenewtransfer', 'AssetController@makenewassettransfer');
 
 //DEPARTMENT
@@ -167,6 +169,22 @@ Route::get('/assets/archive', 'AssetController@archive')->name('pages.assets.arc
 Route::get('/issued/archive/{stock_no}/recover', 'SuppliesController@recoverIssued')->name('pages.issued.recover');
 Route::delete('/issued/archive/{stock_no}/forceDelete', 'SuppliesController@forceDeleteIssued')->name('pages.issued.forceDelete');
 Route::get('/issued/archive', 'SuppliesController@archiveIssued')->name('pages.issued.archive');
+
+//ASSET
+//PURCHASE ORDER
+Route::get('/purchase-order/archive/{id}/recover', 'AssetController@po_recover')->name('pages.purchase_order.recover');
+Route::delete('/purchase-order/archive/{id}/forceDelete', 'AssetController@po_forceDelete')->name('pages.purchase_order.forceDelete');
+Route::get('/purchase-order/archive', 'AssetController@po_archive')->name('pages.purchase_order.archive');
+
+//DELIVERY
+Route::get('/delivery/archive/{id}/recover', 'AssetController@del_recover')->name('pages.delivery.recover');
+Route::delete('/delivery/archive/{id}/forceDelete', 'AssetController@del_forceDelete')->name('pages.delivery.forceDelete');
+Route::get('/delivery/archive', 'AssetController@del_archive')->name('pages.delivery.archive');
+
+//ISSUANCE
+Route::get('/issuance/archive/{id}/recover', 'AssetController@iss_recover')->name('pages.issuance.recover');
+Route::delete('/issuance/archive/{id}/forceDelete', 'AssetController@iss_forceDelete')->name('pages.issuance.forceDelete');
+Route::get('/issuance/archive', 'AssetController@iss_archive')->name('pages.issuance.archive');
 
 
 Route::get('/generate-barcode', 'SuppliesController@generateBarcode');

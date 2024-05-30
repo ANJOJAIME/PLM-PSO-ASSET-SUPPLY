@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('i_unit_value');
             $table->string('i_total_value');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

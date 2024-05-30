@@ -165,32 +165,32 @@
         </style>
 
     <body>
-        <div class="label"><strong>Archived Supplies</strong></div>
+        <div class="label"><strong>Archived Purchase Orders</strong></div>
         <header class="custom-header">
             <img src="/image/PLMLogo.png" alt="logo">
         </header>
-        <h1>Archived Asset</h1>
-        <a href="{{url('/supplies-view')}}" class="btn btn-primary"><strong>Back to Main</strong></a>
+        <h1>Archived Purchase Orders</h1>
+        <a href="{{url('/purchase-order-view')}}" class="btn btn-primary"><strong>Back to Main</strong></a>
         <div class="container">
             <div class="table-container">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>Item No</th>
-                            <th>Class ID</th>
-                            <th>Category</th>
                             <th>Description</th>
-                            <th>Details</th>
+                            <th>Purchase Order No</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($supplies as $supply)
+                        @foreach ($orders as $order)
                             <tr>
-                                <td>{{ $supply->stock_no }}</td>
-                                <td>{{ $supply->description }}</td>
+                                <td>{{ $order->item_no }}</td>
+                                <td>{{ $order->description }}</td>
+                                <td>{{ $order->po_no }}</td>
                                 <td>
-                                    <a href="{{ route('pages.supplies.recover', ['stock_no' => $supply->stock_no]) }}" class="btn-recover">Recover</a>
-                                    <form method="POST" action="{{ route('pages.supplies.forceDelete', ['stock_no' => $supply->stock_no]) }}">
+                                    <a href="{{ route('pages.purchase_order.recover', ['id' => $order->id]) }}" class="btn-recover">Recover</a>
+                                    <form method="POST" action="{{ route('pages.purchase_order.forceDelete', ['id' => $order->id]) }}">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn-delete">Permanently Delete</button>

@@ -368,12 +368,13 @@
                 <a class="delivered" href="/delivery-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery</a>
                 <a class="issuance" href="/issuance-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issuance</a>
                 <a class="purchase_order" href="/purchase-order-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Purchase Order</a>
-                <a class="asset_transfer" href="/asset-transfer-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Asset Transfer</a>
+                <a class="assets_transer" href="/asset-transfer-view" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Asset Transfer</a>
                 <a class="supplier" href="/suppliers-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Suppliers</a>
                 <a class="department" href="/asset-plm-departments" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">PLM Departments</a>
                 <a class="reports&forms" href="asset-forms-and-reports-generation" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Reports and Forms</a>
-                <a class="dArchive" href="" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery Archive</a>
-                <a class="iArchive" href="" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issued Archive</a>
+                <a class="po_archive" href="/purchase-order/archive" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Purchase Order Archive</a>
+                <a class="dArchive" href="/delivery/archive" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery Archive</a>
+                <a class="iArchive" href="/issuance/archive" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issued Archive</a>
             </div>
         </div>
         <div class="profile">
@@ -458,19 +459,19 @@
                         @csrf
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="are_no">ARE No</label>
+                                <label for="are_no"><strong>ARE No</strong></label>
                                 <input type="text" class="form-control" id="are_no" name="are_no" required>
                             </div>
                             <div class="form-group">
-                                <label for="received_from">Received From</label>
+                                <label for="received_from"><strong>Received From</strong></label>
                                 <input type="text" class="form-control" id="received_from" name="received_from" required>
                             </div>
                             <div class="form-group">
-                                <label for="received_by">Received By</label>
+                                <label for="received_by"><strong>Received By</strong></label>
                                 <input type="text" class="form-control" id="received_by" name="received_by" required>
                             </div>
                             <div class="form-group">
-                                <label for="received_from_office">Received From Office</label>
+                                <label for="received_from_office"><strong>Received From Office</strong></label>
                                     <select name="received_from_office" class="form-control @error('received_from_office') is-invalid @enderror">
                                         <option value="">Select Office</option>
                                         @foreach($departments as $department)
@@ -482,7 +483,7 @@
                                     </select>
                             </div>
                             <div class="form-group">
-                                <label for="used_in_office">Used In Office</label>
+                                <label for="used_in_office"><strong>Used In Office</strong></label>
                                 <select name="used_in_office" class="form-control @error('used_in_office') is-invalid @enderror">
                                         <option value="">Select Office</option>
                                         @foreach($departments as $department)
@@ -494,20 +495,23 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="date_received">Date Received</label>
+                                <label for="date_received"><strong>Date Received</strong></label>
                                 <input type="date" class="form-control" id="date_received" name="date_received" required>
                             </div>
                             <div class="form-group">
-                                <label for="end_user">End User</label>
+                                <label for="end_user"><strong>End Userv</label>
                                 <input type="text" class="form-control" id="end_user" name="end_user" required>
                             </div>
                             <div class="form-group">
-                                <label for="new_are_no">New ARE No</label>
+                                <label for="new_are_no"><strong>New ARE No</strong></label>
                                 <input type="text" class="form-control" id="new_are_no" name="new_are_no" required>
                             </div>
                             <div class="form-group">
-                                <label for="prs_no">PRS No</label>
+                                <label for="prs_no"><strong>PRS No</strong></label>
                                 <input type="text" class="form-control" id="prs_no" name="prs_no" required>
+                            </div>
+                            <div>
+                                <button id="generate-prs-no" type="button">Generate PRS No</button>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -577,6 +581,15 @@
                     badge.style.display = 'none';
                 }
             }
+        </script>
+        <script>
+            document.getElementById('generate-prs-no').addEventListener('click', function() {
+                fetch('/generate-prs-no')
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('prs_no').value = data.prs_no;
+                    });
+            });
         </script>
     </body>
 </html>

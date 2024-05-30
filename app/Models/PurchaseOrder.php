@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PurchaseOrder extends Model
 {
@@ -25,6 +26,8 @@ class PurchaseOrder extends Model
     ];
 
     protected $table = 'purchase_order';
+    protected $primaryKey = 'id';
+    use SoftDeletes;
 
     public static function generateItemNo()
     {

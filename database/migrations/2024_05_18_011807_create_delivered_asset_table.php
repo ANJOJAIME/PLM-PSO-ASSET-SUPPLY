@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('d_total_cost');
             $table->id();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
