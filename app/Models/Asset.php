@@ -149,4 +149,6 @@ class Asset extends Model
 
         return $year . '-' . $number;
     }
+
+    
 }

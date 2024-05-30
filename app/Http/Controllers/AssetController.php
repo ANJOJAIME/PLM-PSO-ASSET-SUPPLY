@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Asset;
 use App\Models\Supplier;
 use App\Models\Department;
 use App\Models\PurchaseOrder;
 use App\Models\DeliveredAsset;
 use App\Models\IssuedAsset;
 use App\Models\AssetTransfer;
+use App\Models\Notification;
 use Barryvdh\DomPDF\Facade\PDF;
 
 class AssetController extends Controller
@@ -17,86 +17,19 @@ class AssetController extends Controller
     //MAIN TABLE
     public function displayasset()
     {
-        $asset = Asset::all();
-        //$notifications = Notification::all();
+        $asset = IssuedAsset::select('i_description')
+                    ->groupBy('i_description')
+                    ->get();
 
-        return view('pages.assets.displayassets', ['asset' => $asset]); //'notifications' => $notifications]);
-    }
+        $issuedAssetTotals = IssuedAsset::select('i_description', \DB::raw('SUM(i_quantity) as i_total_quantity'))
+                            ->groupBy('i_description')
+                            ->pluck('i_total_quantity', 'i_description');
 
-    public function addasset()
-    {
-        $assets = Asset::all();
-        $asset = $assets->first();
+        $deliveredAssetTotals = DeliveredAsset::select('d_description', \DB::raw('SUM(d_qty) as d_totalDelivered'))
+                            ->groupBy('d_description')
+                            ->pluck('d_totalDelivered', 'd_description');
 
-        return view('pages.assets.addasset', ['assets' => $assets, 'asset' => $asset]);
-    }
-
-    public function storenewasset(Request $request)
-    {
-        $validatedData = $request->validate([
-            'pr_no' => 'required',
-            'category' => 'required',
-        ]);
-        
-        $asset = Asset::where('pr_no', $request->input('pr_no'))->first();
-
-        if ($asset) {
-            $asset->added = true;
-        } else {
-            $asset = new Asset;
-            $asset->pr_no = $request->input('pr_no');
-            $asset->added = true;
-        }
-
-        // Use the generated values
-        //$asset->item_no = Asset::generateItemNo();
-        $asset->class_id = Asset::generateClassId();
-        $asset->category = $request->input('category');
-
-        $asset->save();
-
-        return redirect('asset-view')->with('status', 'Asset Added Successfully!');
-    }
-
-    public function editasset($pr_no)
-    {
-        $asset = Asset::where('pr_no', $pr_no)->first();
-        return view('pages.assets.editasset', ['asset' => $asset]);
-    }
-
-    public function updateasset(Request $request, $pr_no)
-    {
-            $request->validate([
-                'item_no' => 'required',
-                'class_id' => 'required',
-                'category' => 'required',
-                'details',
-            ]);
-        $asset = Asset::find($pr_no);
-        $asset->item_no = $request->input('item_no');
-        $asset->class_id = $request->input('class_id');
-        $asset->category = $request->input('category');
-        $asset->details = $request->input('details');
-        $asset->update();
-
-        return redirect('/asset-view')->with('status', 'Asset Updated Successfully!');
-    }
-
-    public function deleteasset($item_no)
-    {
-        $asset = Asset::find($item_no);
-        $asset->delete();
-
-        return redirect('/asset-view')->with('status', 'Asset Deleted Successfully!');
-    }
-
-    public function search(Request $request)
-    {
-        $item_no = $request->input('item_no');
-        $asset = Asset::where('item_no', 'like', "%{$item_no}%")->get();
-        //$notifications = Notification::all(); Fetch all notifications
-
-        return view('pages.assets.displayassets', ['asset' => $asset,  'searched_item_no' => $item_no]); // Pass both supplies and notifications to the view
+        return view('pages.assets.displayassets', ['asset' => $asset, 'issuedAssetTotals' => $issuedAssetTotals, 'deliveredAssetTotals' => $deliveredAssetTotals]);
     }
 
     //PURCHASE ORDER
@@ -133,6 +66,7 @@ class AssetController extends Controller
             'quantity'  => 'required',
             'unit',
             'unit_cost' => 'required',
+            'is_delivered',
         ]);
         
         $orders->item_no = $request->input('item_no');
@@ -148,7 +82,7 @@ class AssetController extends Controller
         $orders->payment_term = $request->input('payment_term');
         $orders->quantity = $request->input('quantity');
         $orders->unit = $request->input('unit');
-        $orders->unit_cost = $request->input('unit_cost');
+        $orders->unit_cost = $request->input('unit_cost');  
 
         $orders->save();
 
@@ -172,10 +106,17 @@ class AssetController extends Controller
     //DELIVERY
     public function displaydelivery()
     {
+        $issuedAssetTotals = IssuedAsset::select('i_description', \DB::raw('SUM(i_quantity) as i_total_quantity'))
+                            ->groupBy('i_description')
+                            ->pluck('i_total_quantity', 'i_description');
+
+        $deliveredAssetTotals = DeliveredAsset::select('d_description', \DB::raw('SUM(d_qty) as d_totalDelivered'))
+                            ->groupBy('d_description')
+                            ->pluck('d_totalDelivered', 'd_description');
         $dasset = DeliveredAsset::all();
         $iasset = IssuedAsset::all();
         $departments = Department::all();
-        return view('pages.assets.displaydelivery', ['dasset' => $dasset, 'iasset' => $iasset, 'departments' => $departments]);
+        return view('pages.assets.displaydelivery', ['dasset' => $dasset, 'iasset' => $iasset, 'departments' => $departments, 'issuedAssetTotals' => $issuedAssetTotals, 'deliveredAssetTotals' => $deliveredAssetTotals]);
     }
 
     public function storenew_delivered_asset(Request $request)
@@ -215,6 +156,11 @@ class AssetController extends Controller
         $dasset->d_date_po = $request->input('d_date_po');
 
         $dasset->save();
+        $order = PurchaseOrder::where('po_no', $dasset->d_po_no)->first();
+        if ($order) {
+            $order->is_delivered = true;
+            $order->save();
+        }
 
         return redirect('/delivery-view')->with('status', 'Delivered Asset Added Successfully!');
     }
@@ -223,6 +169,11 @@ class AssetController extends Controller
     {
         $dasset = DeliveredAsset::find($id);
         $dasset->delete();
+        $order = PurchaseOrder::where('po_no', $dasset->d_po_no)->first();
+        if ($order) {
+            $order->is_delivered = false;
+            $order->save();
+        }
 
         return redirect('/delivery-view')->with('status', 'Delivered Asset Deleted Successfully! Item can be recovered in archive...');
     }
@@ -322,7 +273,7 @@ class AssetController extends Controller
 
     public function generateAssetIARNo()
     {
-        return response()->json(['iar_no' => Asset::generateAssetIARNo()]);
+        return response()->json(['d_iar_no' => DeliveredAsset::generateAssetIARNo()]);
     }
 
     public function generatePropertyNo()
@@ -341,25 +292,10 @@ class AssetController extends Controller
     }
 
     //FORMS
-    public function assetsforms()
-    {
-        $asset = Asset::all();
-        return view('pages.assets.assetsforms', ['asset' => $asset]);
-    }
+    
 
     //GENERAL
-    public function assetPDF()     //displayPDF()
-    {
-        $asset = Asset::all();
-        return view('pages.assets.assets', ['asset' => $asset]);
-    }
-
-    public function downloadAssets()     //downloadPDF()
-    {
-        $asset = Asset::where('added', true)->get();
-        $pdf = PDF::loadView('pages.assets.assets', ['asset' => $asset])->setPaper('a4', 'landscape');
-        return $pdf->download('General Report Assets.pdf');
-    }
+    
     
 
     //ARCHIVE CONTROLLER
@@ -397,6 +333,11 @@ class AssetController extends Controller
     {
         $dasset = DeliveredAsset::withTrashed()->find($id);
         $dasset->restore();
+        $order = PurchaseOrder::where('po_no', $dasset->d_po_no)->first();
+        if ($order) {
+            $order->is_delivered = true;
+            $order->save();
+        }
 
         return redirect('/delivery-view')->with('status', 'Delivered Asset Recovered Successfully!');
     }

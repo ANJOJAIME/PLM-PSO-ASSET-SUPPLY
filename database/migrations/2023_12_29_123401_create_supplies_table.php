@@ -20,26 +20,6 @@ return new class extends Migration
             $table->integer('issued')->nullable();
             $table->integer('balance_after')->nullable();
             $table->string('status')->nullable();
-
-            $table->date('date_issuance')->nullable();
-            $table->string('requesting_office')->nullable();
-            $table->string('report_no')->nullable();
-            $table->string('ris_no')->nullable();
-
-            $table->date('delivery_date')->nullable();
-            $table->date('actual_delivery_date')->nullable();
-            $table->date('acceptance_date')->nullable();
-            $table->string('iar_no')->nullable();
-            $table->integer('item_no')->nullable();
-            $table->string('dr_no')->nullable();
-            $table->string('check_no')->nullable();
-            $table->string('po_no')->nullable();
-            $table->date('po_date')->nullable();
-            $table->float('po_amount')->nullable();
-            $table->string('pr_no')->nullable();
-            $table->float('price_per_purchase_request')->nullable();
-            $table->string('bur')->nullable();
-            $table->string('remarks')->nullable();
             $table->timestamps();
         });
         DB::unprepared('

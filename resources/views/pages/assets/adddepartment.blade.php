@@ -165,7 +165,7 @@
                                         @enderror
                                     </div>
                                     <div class="input-group">
-                                        <label for="department_head"><strong>Department Head:</strong></label>
+                                        <label for="department_head"><strong>Department In-charge:</strong></label>
                                         <input type="text" name="department_head" class="form-control @error('department_head') is-invalid @enderror">
                                         @error('department_head')
                                             <span class="invalid-feedback" role="alert">

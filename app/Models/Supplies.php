@@ -56,26 +56,18 @@ class Supplies extends Model
             $supply->stock_no = self::generateStockNo();
         });
     }
+
     public static function generateIARNo()
     {
         $date = now();
-        $year = $date->format('y');
-        $month = $date->format('m');
-        // Get all iar_no values, including soft deleted items
-        $iarNos = self::withTrashed()->pluck('iar_no')->toArray();
-
-        // Extract the last 4 digits of each iar_no and get the maximum value
+        $year = $date->format('Y'); // Get the four-digit year
+        $month = $date->format('m'); // Get the two-digit month
         $maxNumber = 0;
-        foreach ($iarNos as $iarNo) {
-            $number = intval(substr($iarNo, -4));
-            if ($number > $maxNumber) {
-                $maxNumber = $number;
-            }
-        }
-        // Increment the number
         $number = str_pad($maxNumber + 1, 4, '0', STR_PAD_LEFT);
+
         return "S{$year}-{$month}-{$number}";
     }
+
 
     public static function generateStockNo()
     {

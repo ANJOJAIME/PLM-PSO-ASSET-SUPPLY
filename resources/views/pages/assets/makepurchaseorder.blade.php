@@ -229,8 +229,8 @@
                                         @enderror
                                     </div>
                                     <div class="input-group">
-                                        <label for="price_val"><strong>Price:</strong></label>
-                                        <input type="number" name="price_val" class="form-control @error('price_val') is-invalid @enderror">
+                                        <label for="price_val"><strong>Price Value:</strong></label>
+                                        <input type="text" name="price_val" class="form-control @error('price_val') is-invalid @enderror">
                                         @error('price_val')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror

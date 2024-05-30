@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('quantity');
             $table->string('unit');
             $table->string('unit_cost');
+            $table->boolean('is_delivered')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

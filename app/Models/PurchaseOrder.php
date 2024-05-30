@@ -23,6 +23,7 @@ class PurchaseOrder extends Model
         'quantity',
         'unit',
         'unit_cost',
+        'is_delivered',
     ];
 
     protected $table = 'purchase_order';

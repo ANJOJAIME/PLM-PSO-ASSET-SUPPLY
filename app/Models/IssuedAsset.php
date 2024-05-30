@@ -34,7 +34,7 @@ class IssuedAsset extends Model
         $lastParNo = self::where('i_par_no', 'like', $year.'-%')->orderBy('i_par_no', 'desc')->first();
 
         if ($lastParNo) {
-            $number = intval(substr($lastParNo->iar_no, 5)) + 1;
+            $number = intval(substr($lastParNo->i_par_no, 5)) + 1;
         } else {
             $number = 1;
         }
@@ -49,7 +49,7 @@ class IssuedAsset extends Model
         $lastPropertyNo = self::where('i_property_no', 'like', $year.'-%')->orderBy('i_property_no', 'desc')->first();
 
         if ($lastPropertyNo) {
-            $parts = explode('-', $lastPropertyNo->property_no);
+            $parts = explode('-', $lastPropertyNo->i_property_no);
             $middleNumber = intval($parts[1]) + 1;
             $lastNumber = intval($parts[2]) + 1;
         } else {

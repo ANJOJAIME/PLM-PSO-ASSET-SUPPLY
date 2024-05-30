@@ -190,7 +190,7 @@
                                     </div> 
                                     <div class="input-group">
                                         <label for="iar_no"><strong>IAR No.:</strong></label>
-                                        <input type="text" id="iar_no" name='iar_no' class="form-control @error('iar_no') is-invalid @enderror">
+                                        <input type="text" id="iar_no" name='v' class="form-control @error('iar_no') is-invalid @enderror">
                                         <button id="generate-iar-no" type="button">Generate IAR No</button>
                                         @error('iar_no')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -248,7 +248,6 @@
                                     <div class="input-group"> 
                                         <label for="pr_no"><strong>PR No.:</strong></label>
                                         <input type="text" id="pr_no" name="pr_no" class="form-control @error('pr_no') is-invalid @enderror">
-                                        <button id="generate-pr-no" type="button">Generate PR No</button>
                                         @error('pr_no')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -351,29 +350,20 @@
                 });
         </script>
         <script>
-                document.getElementById('generate-iar-no').addEventListener('click', function() {
-                    fetch('/generate-iar-no')
-                        .then(response => response.json())
-                        .then(data => {
-                            document.getElementById('iar_no').value = data.iar_no;
-                        });
-                });
-            </script>
+            document.getElementById('generate-iar-no').addEventListener('click', function() {
+                fetch('/generate-supplis-iar-no')
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('iar_no').value = data.iar_no;
+                    });
+            });
+        </script>
             <script>
             document.getElementById('generate-item-no').addEventListener('click', function() {
                     fetch('/generate-item-no')
                         .then(response => response.json())
                         .then(data => {
                             document.getElementById('item_no').value = data.item_no;
-                        });
-                });
-            </script>
-            <script>
-                document.getElementById('generate-pr-no').addEventListener('click', function() {
-                    fetch('/generate-pr-no')
-                        .then(response => response.json())
-                        .then(data => {
-                            document.getElementById('pr_no').value = data.pr_no;
                         });
                 });
             </script>
@@ -392,7 +382,6 @@
                 });
             });
             </script>
-
             <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const descriptionSelect = document.getElementById('description_select');

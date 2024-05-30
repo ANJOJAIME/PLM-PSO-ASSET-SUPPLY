@@ -455,8 +455,8 @@
                             <td>{{$order->unit_cost}}</td>
                             <td>{{ $order->quantity * $order->unit_cost }}</td>
                             <td> 
-                                <button id="deliveryButton{{$order->id}}" type="button" data-toggle="modal" data-target="#deliveryModal{{$order->id}}">
-                                    Deliver
+                                <button id="deliveryButton{{$order->id}}" type="button" data-toggle="modal" data-target="#deliveryModal{{$order->id}}" {{ $order->is_delivered ? 'disabled' : '' }}>
+                                    {{ $order->is_delivered ? 'Delivered' : 'Deliver' }}
                                 </button>
                                 <a href="{{url('/delete-purchase-order/'.$order->id)}}" class="btn btn-delete">Delete</a>
                             </td>
@@ -519,13 +519,14 @@
                             <div class="form-group row">
                                 <label for="d_unit" class="col-sm-2 col-form-label m-label"><strong>Unit</strong></label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="d_unit">
+                                    <input type="text" class="form-control" name="d_unit" value="{{$order->unit}}" readonly>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="d_iar_no" class="col-sm-2 col-form-label m-label"><strong>IAR No</strong></label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="d_iar_no">
+                                    <input type="text" class="form-control" name="d_iar_no" id="d_iar_no">
+                                    <button id="generate-asset-iar-no" type="button">Generate IAR No</button>
                                 </div>
                             </div>
                         </div>
@@ -660,6 +661,15 @@
                 }
             });
         });
+        </script>
+        <script>
+            document.getElementById('generate-asset-iar-no').addEventListener('click', function() {
+                fetch('/generate-asset-iar-no')
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('d_iar_no').value = data.d_iar_no;
+                    });
+            });
         </script>
     </body>
 </html>

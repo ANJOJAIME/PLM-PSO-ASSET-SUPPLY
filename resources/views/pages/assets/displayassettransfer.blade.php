@@ -485,15 +485,15 @@
                                 <input type="date" class="form-control" id="date_received" name="date_received" required>
                             </div>
                             <div class="form-group">
-                                <label for="end_user"><strong>End Userv</label>
+                                <label for="end_user"><strong>End User</label>
                                 <input type="text" class="form-control" id="end_user" name="end_user" required>
                             </div>
                             <div class="form-group">
-                                <label for="new_are_no"><strong>New ARE No</strong></label>
+                                <label for="new_are_no">New ARE No</label>
                                 <input type="text" class="form-control" id="new_are_no" name="new_are_no" required>
                             </div>
                             <div class="form-group">
-                                <label for="prs_no"><strong>PRS No</strong></label>
+                                <label for="prs_no">PRS No</label>
                                 <input type="text" class="form-control" id="prs_no" name="prs_no" required>
                             </div>
                             <div>

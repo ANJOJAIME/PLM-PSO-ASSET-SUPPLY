@@ -395,21 +395,37 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Item No.</th>
-                            <th>Classification ID</th>
-                            <th>Category</th>
-                            <th>Item Description</th>
-                            <th>Details</th>
+                            <th>Description</th>
+                            <th>Quantity Delivered</th>
+                            <th>Quantity Issued</th>
+                            <th>Balance After</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
+                 
                         @foreach($asset as $assetdata)
-                        <tr>
-                            <td>{{$assetdata->item_no}}</td>
-                            <td>{{$assetdata->class_id}}</td>
-                            <td>{{$assetdata->category}}</td>
-                            <td>{{$assetdata->description}}</td>
-                            <td>{{$assetdata->details}}</td> 
-                        </tr>
+                            @php
+                                $issuedTotal = $issuedAssetTotals[$assetdata->i_description] ?? 0;
+                                $deliveredTotal = $deliveredAssetTotals[$assetdata->i_description] ?? 0;
+                                $balanceAfter = $deliveredTotal - $issuedTotal;
+                                $status = 'No value yet'; // Default status
+                                if ($balanceAfter <= 50 && $balanceAfter >= 1) {
+                                    $status = 'LOW LEVEL';
+                                } elseif ($balanceAfter > 50 && $balanceAfter <= 100) {
+                                    $status = 'MID LEVEL';
+                                } elseif ($balanceAfter > 100) {
+                                    $status = 'HIGH LEVEL';
+                                } elseif ($balanceAfter <= 0) {
+                                    $status = 'OUT OF STOCK';
+                                }
+                            @endphp
+                            <tr>
+                                <td>{{$assetdata->i_description}}</td>
+                                <td>{{$deliveredTotal}}</td>
+                                <td>{{$issuedTotal}}</td>
+                                <td>{{$balanceAfter}}</td>
+                                <td>{{$status}}</td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>

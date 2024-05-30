@@ -7,17 +7,41 @@
     $currentYear = date('Y');
 
     foreach ($months as $index => $month) {
-        $delivered = \App\Models\Asset::whereMonth('updated_at', $index + 1)
-                                         ->whereYear('updated_at', $currentYear)
-                                         ->sum('delivery_qty');
+    $delivered = \App\Models\Supplies::whereMonth('updated_at', $index + 1)
+                                     ->whereYear('updated_at', $currentYear)
+                                     ->sum('delivered');
 
-        $issued = \App\Models\Asset::whereMonth('updated_at', $index + 1)
-                                       ->whereYear('updated_at', $currentYear)
-                                       ->sum('issue_qty');
+    $issued = \App\Models\Issued::whereMonth('updated_at', $index + 1) // Changed model reference to Issued
+                                 ->whereYear('updated_at', $currentYear)
+                                 ->sum('quantity_issued'); // Assuming the field is named 'quantity_issued'
 
-        $deliveredData[] = (int)$delivered;
-        $issuedData[] = (int)$issued;
+    $deliveredData[] = (int)$delivered;
+    $issuedData[] = (int)$issued;
     }
+
+    $supplies = \App\Models\Supplies::all();
+    $highLevel = 0;
+    $midLevel = 0;
+    $lowLevel = 0;
+    $noValue = 0;
+
+    foreach ($supplies as $suppliesdata) {
+        $issuedTotal = $issuedTotals[$suppliesdata->description] ?? 0;
+        $balanceAfter = $suppliesdata->totalDelivered - $issuedTotal;
+
+        if (is_null($balanceAfter) || is_null($suppliesdata->status)) {
+            $noValue++;
+        } else if ($balanceAfter > 100) {
+            $highLevel++;
+        } else if ($balanceAfter > 50 && $balanceAfter <= 100) {
+            $midLevel++;
+        } else if ($balanceAfter <= 50 && $balanceAfter > 1) {
+            $lowLevel++;
+        }
+    }
+
+    $statusData = [$highLevel, $midLevel, $lowLevel, $noValue];
+
 @endphp
 
     <head>
@@ -39,12 +63,12 @@
                 overflow: hidden;
             }
 
-            .custom-header{
+            .custom-header {
                 position: absolute;
-                left: 0;
-                top: 0;
-                width: calc(100% - 20px);
-                height: 90px;
+                left: 0px; /* Adjust as needed */
+                top: 0px;
+                width: 100%;
+                height: 65px;
                 flex-shrink: 0;
                 background: #FFF;
                 border-radius: 0px 0px 12px 12px;
@@ -60,10 +84,8 @@
                 top: 85px;
                 border-radius: 9.574px;
                 background: #EFF0FF;
-                
                 width: 444px;
                 height: 50px;
-                
                 justify-content: space-between;
                 align-items: center;
                 flex-shrink: 0;
@@ -117,7 +139,7 @@
                 position: absolute;
                 left: 0px;
                 top: 0px;
-                width: 1535px;
+                width: 100%;
                 height: 65px;
                 flex-shrink: 0;
                 background: #FFF;
@@ -139,8 +161,8 @@
                 position: absolute;
                 left: 0px;
                 top: 45px;
-                width: 260.877px;
-                height: 1003px;
+                width: 18%;
+                height: 100%;
                 flex-shrink: 0;
                 background: #2D349A;
                 z-index: 1;
@@ -218,9 +240,9 @@
             .linegraph {
                 position: absolute;
                 top: 80px;
-                right: 50px;
-                width: 380px;
-                height: 410px;
+                left: 71%;
+                width: 27.5%;
+                height: 65%;
                 border-radius: 8px;
                 background: #E6EDFD;
                 box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -228,9 +250,9 @@
             .piegraph {
                 position: absolute;
                 top: 80px;
-                right: 500px;
-                width: 300px;
-                height: 275px;
+                left: 695px;
+                width: 18%;
+                height: 40%;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -255,6 +277,13 @@
             .form-group {
                 margin-bottom: 1rem;
             }
+
+            .item_input {
+                position: absolute;
+                top: 100px;
+                padding: 5px;
+                margin-bottom: 2px;
+            }
             
         </style>
     </head>
@@ -263,21 +292,25 @@
             <img src="/image/PLMLogo.png" alt="logo">
         </header>
         <div class="side-bar" style="padding: 10px;">
-            <h2 style="color: white; text-align: right; font-size: 20px; padding-top: 80px; padding-right: 10px"><strong>Asset Management</strong></h2>
+            <h2 style="color: white; text-align: right; font-size: 20px; padding-top: 80px; padding-right: 10px"><strong>Supplies Management</strong></h2>
             <div class="items">
                 <a class="main" href="/asset-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Main</a>
-                <a class="issued" href="/purchase-order-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Purchase Order</a>
-                <a class="delivered" href="/delivery-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery</a>
+                <a class="delivered" href="/delivery-view" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery</a>
                 <a class="issuance" href="/issuance-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issuance</a>
-                <a class="reports&forms" href="asset-forms-and-reports-generation" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Reports and Forms</a>
-                <a class="archives" href="{{ route('pages.supplies.archive') }}" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Archive</a>
+                <a class="purchase_order" href="/purchase-order-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Purchase Order</a>
+                <a class="assets_transer" href="/asset-transfer-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Asset Transfer</a>
+                <a class="supplier" href="/suppliers-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Suppliers</a>
+                <a class="department" href="/asset-plm-departments" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">PLM Departments</a>
+                <a class="reports&forms" href="asset-forms-and-reports-generation" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Reports and Forms</a>
+                <a class="po_archive" href="/purchase-order/archive" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Purchase Order Archive</a>
+                <a class="dArchive" href="/delivery/archive" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery Archive</a>
+                <a class="iArchive" href="/issuance/archive" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issued Archive</a>
             </div>
         </div>
         <div class="general">
             <label style="position: absolute; top: 30px; font-size: 25px; left: 0px; text-align: center; color: #4F74BB;"><strong>General Report</strong></label>
-            <a href="{{url('/assets-pdf')}}" class="btn btn-outline-primary" style="position: absolute; top: 125px; right: 45px;">Generate</a>
+            <a href="{{url('/supplies-pdf')}}" class="btn btn-outline-primary" style="position: absolute; top: 125px; right: 45px;">Generate</a>
         </div>
-        <!--
         <div class="specific1">
             <label style="position: absolute; top: 30px; font-size: 25px; left: 0px; text-align: center; color: #4F74BB;"><strong>Purchase Request</strong></label>
             <a class="btn btn-outline-primary" style="position: absolute; top: 125px; right: 45px;" href="{{url('/purchase-request-form')}}">Generate</a>
@@ -290,18 +323,28 @@
             <label style="position: absolute; top: 10px; font-size: 25px; left: 0px; text-align: center; color: #4F74BB;"><strong>Inspection & Acceptance Report</strong></label>
             <a href="{{url('/inspection-acceptance-report')}}" class="btn btn-outline-primary" style="position: absolute; top: 125px; right: 45px;">Generate</a>
         </div>
-        
+
         <div class="specific4">
-            <label style="position: absolute; top: 30px; font-size: 25px; left: 0px; text-align: center; color: #4F74BB;"><strong>Report...</strong></label>
-            <a href="" class="btn btn-outline-primary" style="position: absolute; top: 125px; right: 45px;">Generate</a>
+            <label style="position: absolute; top: 30px; font-size: 25px; left: 0px; text-align: center; color: #4F74BB;"><strong>Generate Barcode</strong></label>
+            <form action="/generate-barcode" method="get">
+                <div  class="item_input">
+                    <select id="stock_no" name="stock_no" style="width: 100%">
+                        @foreach($issuedStockNos as $issue)
+                            <option value="{{ $issue }}">{{ $issue }}</option>
+                        @endforeach
+                    </select><br>
+                    <input type="submit" value="Generate Barcode">
+                </div>
+            </form>
         </div>
+        
         <div class="specific5">
             <label style="position: absolute; top: 30px; font-size: 25px; left: 0px; text-align: center; color: #4F74BB;"><strong>Report...</strong></label>
             <a href="" class="btn btn-outline-primary" style="position: absolute; top: 125px; right: 45px;">Generate</a>
         </div>
-        -->
+
         <div class="linegraph">
-            <h6 style="text-align: center;"><strong>Delivery and Issuance Summary</strong></h6>
+            <h6 style="text-align: center;"><strong>Delivered and Issued Summary</strong></h6>
         <canvas id="myChart"></canvas>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
@@ -311,13 +354,13 @@
             data: {
                 labels: @json($months),
                 datasets: [{
-                    label: 'Delivery',
+                    label: 'Delivered',
                     data: @json($deliveredData),
                     borderColor: 'rgba(75, 192, 192, 1)',
                     fill: false
                 }, 
                 {
-                    label: 'Issuance',
+                    label: 'Issued',
                     data: @json($issuedData),
                     borderColor: 'rgba(255, 99, 132, 1)',
                     fill: false
@@ -336,7 +379,29 @@
                         }
                         });
         </script>
-    
+    </div>
+    <div class="piegraph">
+        <h6 style="text-align: center;"><strong>Supply Status Summary</strong></h6>
+        <canvas id="myPieChart"></canvas>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            var ctx = document.getElementById('myPieChart').getContext('2d');
+            var myPieChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['High Level', 'Low Level', 'No Value'],
+                    datasets: [{
+                        data: @json($statusData),
+                        backgroundColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)', 'rgba(255, 205, 86, 1)']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    aspectRatio: .6
+                }
+            });
+        </script>
     </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

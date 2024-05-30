@@ -31,7 +31,7 @@ Route::get('/searchsupply', 'SuppliesController@search');
 Route::get('/supplies/issued-summary', 'SuppliesController@displayIssuedSummary')->name('supplies.issued_summary');
 
 //No. Auto-generations
-Route::get('/generate-iar-no', [SuppliesController::class, 'generateIARNo']);
+Route::get('/generate-supplis-iar-no', [SuppliesController::class, 'generateIARNo']);
 Route::get('/generate-stock-no', [SuppliesController::class, 'generateStockNo']);
 Route::get('/generate-item-no', [SuppliesController::class, 'generateItemNo']);
 Route::get('/generate-pr-no', [SuppliesController::class, 'generatePrNo']);
@@ -115,6 +115,11 @@ Route::post('/asset-storedepartment', 'AssetController@assetstoredepartment');
 Route::get('/asset-deletedepartment/{id}', 'AssetController@assetdeletedepartment');
 Route::get('/assets-searchdept', 'AssetController@assetdepartmentsearch');
 
+//ASSET FORMS
+Route::get('asset-forms-and-reports-generation', 'AssetController@assetforms');
+Route::get('/assets-pdf', 'AssetController@downloadAssets');
+Route::get('/assetpdf-view', 'AssetController@assetPDF');
+
 //================================================================================================================================================================//
 //LOGIN ROUTES
 Route::get('/Supply-login', 'PagesController@index');
@@ -136,11 +141,6 @@ Route::get('/user-profile', 'SuppliesController@displayprofile');
 
 Route::get('/supplies/unit', 'SuppliesController@getUnit');
 Route::get('/supplies/unit/ris', 'SuppliesController@getUnit1');
-
-//ASSET FORMS
-Route::get('asset-forms-and-reports-generation', 'AssetController@assetsforms');
-Route::get('/assets-pdf', 'AssetController@downloadAssets');
-Route::get('/assetpdf-view', 'AssetController@assetPDF');
 
 //PDF
 Route::get('/pdf-view', 'SuppliesController@displayPDF');

@@ -379,7 +379,7 @@
                     <thead>
                         <tr>
                             <th>Department</th>
-                            <th>Department Dean</th>
+                            <th>Department In-charge</th>
                             <th>Email</th>
                             <th>Action</th>
                         </tr>

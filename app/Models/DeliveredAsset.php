@@ -32,4 +32,24 @@ class DeliveredAsset extends Model
         return 'id';
     }
     use SoftDeletes;
+
+    public function getTotalDeliveredAttribute()
+    {
+        return DeliveredAsset::where('d_description', $this->d_description)->sum('d_qty');
+    }
+
+    public static function generateAssetIARNo()
+    {
+        $year = date('Y');
+        $lastIarNo = self::where('d_iar_no', 'like', $year.'-%')->orderBy('d_iar_no', 'desc')->first();
+
+        if ($lastIarNo) {
+            $number = intval(substr($lastIarNo->d_iar_no, 5)) + 1;
+        } else {
+            $number = 1;
+        }
+        $number = str_pad($number, 4, '0', STR_PAD_LEFT);
+
+        return $year . '-' . $number;
+    }
 }

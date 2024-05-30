@@ -15,11 +15,13 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->date('date_issuance');
+            $table->string('description');
             $table->string('stock_no');
             $table->string('report_no');
             $table->string('requesting_office');
             $table->integer('quantity_issued');
             $table->string('ris_no');
+            $table->softDeletes();
         });
     }
 

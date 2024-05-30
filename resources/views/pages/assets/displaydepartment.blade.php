@@ -324,7 +324,7 @@
         
         
         <div class="side-bar" style="padding: 10px;">
-            <h2 style="color: white; text-align: right; font-size: 20px; padding-top: 80px; padding-right: 10px"><strong>Asset Management</strong></h2>
+            <h2 style="color: white; text-align: right; font-size: 20px; padding-top: 80px; padding-right: 10px"><strong>Assets Management</strong></h2>
             <div class="items">
                 <a class="main" href="/asset-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Main</a>
                 <a class="delivered" href="/delivery-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery</a>
@@ -355,7 +355,7 @@
                     <thead>
                         <tr>
                             <th>Department</th>
-                            <th>Department Dean</th>
+                            <th>Department In-charge</th>
                             <th>Email</th>
                             <th>Action</th>
                         </tr>

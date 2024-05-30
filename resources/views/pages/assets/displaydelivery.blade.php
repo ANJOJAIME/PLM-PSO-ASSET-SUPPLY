@@ -468,39 +468,36 @@
                     </div>
                     <form action="{{url('/istorenewissuance')}}" method="POST">
                         @csrf
+                        @foreach($iasset as $asset)
+                            @php
+                                $issuedTotal = $issuedAssetTotals[$asset->i_description] ?? 0;
+                                $deliveredTotal = $deliveredAssetTotals[$asset->i_description] ?? 0;
+                                $balanceAfter = $deliveredTotal - $issuedTotal;
+                            @endphp
+                        @endforeach
                         <div class="modal-body">
                             <div class="form-group">
-                                <div class="form-group row">
-                                    <label for="i_description" class="col-sm-2 col-form-label m-label"><strong>Description</strong></label>
-                                    <div class="col-sm-10">
+                                <div class="form-group">
+                                    <label for="i_description"><strong>Description</strong></label>
                                         <input type="text" class="form-control" name="i_description" value="{{$assetdata->d_description}}" readonly>
-                                    </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label for="i_par_no" class="col-sm-2 col-form-label m-label"><strong>PAR No</strong></label>
-                                    <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="i_par_no"><strong>PAR No</strong></label>
                                         <input type="text" class="form-control" name="i_par_no" id="i_par_no">
-                                    </div>
-                                    <div>
                                         <button id="generate-par-no" type="button">Generate PAR No</button>
-                                    </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label for="i_property_no" class="col-sm-2 col-form-label m-label"><strong>Property No</strong></label>
-                                    <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="i_property_no"><strong>Property No</strong></label>
                                         <input type="text" class="form-control" name="i_property_no" id="i_property_no">
-                                    </div>
                                     <div>
                                         <button id="generate-property-no" type="button">Generate Property No</button>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label for="i_unit" class="col-sm-2 col-form-label m-label"><strong>Unit</strong></label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="i_unit">
-                                    </div>
+                                <div class="form-group">
+                                    <label for="i_unit"><strong>Unit</strong></label>
+                                    <input type="text" class="form-control" name="i_unit" value="{{$assetdata->d_unit}}" readonly>
                                 </div>
-                                <div class="input-group">
+                                <div class="form-group">
                                     <label for="i_req_office"><strong>Requesting Office</strong></label>
                                     <select name="i_req_office" class="form-control @error('i_req_office') is-invalid @enderror">
                                         <option value="">Select Requesting Office</option>
@@ -512,23 +509,17 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="form-group row">
-                                    <label for="i_date_acquired" class="col-sm-2 col-form-label m-label"><strong>Date Acquired</strong></label>
-                                    <div class="col-sm-10">
-                                        <input type="date" class="form-control" name="i_date_acquired">
-                                    </div>
+                                <div class="form-group">
+                                    <label for="i_date_acquired"><strong>Date Acquired</strong></label>
+                                    <input type="date" class="form-control" name="i_date_acquired">
                                 </div>
-                                <div class="form-group row">
-                                    <label for="i_quantity" class="col-sm-2 col-form-label m-label"><strong>Quantity</strong></label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="i_quantity">
-                                    </div>
+                                <div class="form-group">                        
+                                    <label for="i_quantity"><strong>Quantity </strong>(Available Stock: {{ $balanceAfter ?? $deliveredAssetTotals->sum() }})</label>
+                                    <input type="number" class="form-control" name="i_quantity">
                                 </div>
-                                <div class="form-group row">
-                                    <label for="i_unit_value" class="col-sm-2 col-form-label m-label"><strong>Unit Cost</strong></label>
-                                    <div class="col-sm-10">
+                                <div class="form-group">
+                                    <label for="i_unit_value"><strong>Unit Cost</strong></label>
                                         <input type="text" class="form-control" name="i_unit_value" value="{{$assetdata->d_unit_cost}}" readonly>
-                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -600,7 +591,6 @@
                 }
             }
         </script>
-
         <script>
             document.getElementById('generate-par-no').addEventListener('click', function() {
                 fetch('/generate-par-no')

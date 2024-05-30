@@ -22,10 +22,10 @@ return new class extends Migration
             $table->string('d_bur_no');
             $table->string('d_invoice_no');
             $table->date('d_date_invoice');
-            $table->string('d_requesting_office');
             $table->string('d_qty');
             $table->string('d_unit_cost');
             $table->string('d_total_cost');
+            $table->date('d_date_po');
             $table->id();
             $table->timestamps();
             $table->softDeletes();

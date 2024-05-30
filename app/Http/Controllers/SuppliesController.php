@@ -16,10 +16,6 @@ use Picqer\Barcode\BarcodeGeneratorHTML;
 class SuppliesController extends Controller
 {
     //MAIN TABLE
-    public function calendar()
-    {
-        return view('pages.supplies.calendar');
-    }
     public function displaysupplies()
     {
         $supplies = Supplies::select('description', 'unit')
@@ -40,20 +36,6 @@ class SuppliesController extends Controller
         $notifications = Notification::all();
 
         return view('pages.supplies.displaysupplies', ['supplies' => $supplies, 'searched_description' => $description, 'notifications' => $notifications]); 
-    }
-    
-    public function deletesupply($stock_no)
-    {
-        $delivered = Supplies::where('stock_no', $stock_no)->first();
-        $delivered->delete();
-
-        $notification = new Notification;
-        $notification->type = 'Delete';
-        $notification->details =  $delivered->stock_no;
-        $notification->item =  $delivered->description;
-        $notification->save();
-        
-        return redirect('/delivered-supplies-view')->with('status', 'Supply Deleted Successfully! Item can be recovered in archive...');
     }
 
     //ISSUED TABLE
@@ -191,7 +173,6 @@ class SuppliesController extends Controller
         $supply->actual_delivery_date = $request->input('actual_delivery_date');
         $supply->acceptance_date = $request->input('acceptance_date');
         $supply->delivered = $request->input('delivered');
-        $supply->iar_no = $request->input('iar_no');
         $supply->dr_no = $request->input('dr_no');
         $supply->unit = $request->input('unit');
         $supply->check_no = $request->input('check_no');
@@ -199,13 +180,11 @@ class SuppliesController extends Controller
         $supply->po_date = $request->input('po_date');
         $supply->po_amount = $request->input('po_amount');
         $supply->price_per_purchase_request = $request->input('price_per_purchase_request');
-        
         $supply->bur = $request->input('bur');
         $supply->remarks = $request->input('remarks');
         $supply->stock_no = Supplies::generateStockNo();
         $supply->item_no = Supplies::generateItemNo();
         $supply->iar_no = Supplies::generateIARNo();
-        $supply->pr_no = Supplies::generatePrNo();
 
         $supply->save();
 
@@ -446,11 +425,6 @@ class SuppliesController extends Controller
     public function generateItemNo()
     {
         return response()->json(['item_no' => Supplies::generateItemNo()]);
-    }
-
-    public function generatePrNo()
-    {
-        return response()->json(['pr_no' => Supplies::generatePrNo()]);
     }
 
     //USER PROFILE

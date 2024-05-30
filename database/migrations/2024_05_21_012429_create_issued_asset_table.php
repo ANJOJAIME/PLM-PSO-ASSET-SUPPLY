@@ -22,6 +22,10 @@ return new class extends Migration
             $table->string('i_quantity');
             $table->string('i_unit_value');
             $table->string('i_total_value');
+            $table->string('i_location');
+            $table->string('i_location_id');
+            $table->string('i_site');
+            $table->string('i_site_id');
             $table->timestamps();
             $table->softDeletes();
         });
