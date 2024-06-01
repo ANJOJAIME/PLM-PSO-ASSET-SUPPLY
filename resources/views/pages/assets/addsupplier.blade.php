@@ -70,7 +70,42 @@
 
             .input-group label {
                 flex-shrink: 0;
-                width: 120px;
+                width: 150px;
+                
+            }
+            .input-group label {
+                flex-shrink: 0;
+                width: 150px; /* adjust as needed */
+            }
+            
+            @media (max-width: 1200px) {
+                .card-body {
+                    right: 200px;
+                    width: 600px;
+                }
+                .input-group {
+                    width: 400px;
+                }
+            }
+            
+            @media (max-width: 992px) {
+                .card-body {
+                    right: 100px;
+                    width: 400px;
+                }
+                .input-group {
+                    width: 300px;
+                }
+            }
+            
+            @media (max-width: 768px) {
+                .card-body {
+                    right: 50px;
+                    width: 300px;
+                }
+                .input-group {
+                    width: 200px;
+                }
             }
             
             .btn-danger {

@@ -18,12 +18,12 @@
                 overflow: hidden;
             }
 
-            .custom-header{
+            .custom-header {
                 position: absolute;
-                left: 0;
-                top: 0;
-                width: calc(100% - 20px);
-                height: 90px;
+                left: 0px; /* Adjust as needed */
+                top: 0px;
+                width: 100%;
+                height: 65px;
                 flex-shrink: 0;
                 background: #FFF;
                 border-radius: 0px 0px 12px 12px;
@@ -153,21 +153,7 @@
                 right: 35px;
                 border-radius: 8px;
             }
-            .custom-header {
-                position: absolute;
-                left: 0px;
-                top: 0px;
-                width: 1535px;
-                height: 65px;
-                flex-shrink: 0;
-                background: #FFF;
-                border-radius: 0px 0px 12px 12px;
-                box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-                display: flex;
-                justify-content: space-between;
-                padding: 0 20px;
-                z-index: 2;
-            }
+            
             img {
                 position: absolute;
                 width: 260px;

@@ -21,24 +21,9 @@
 
             .custom-header {
                 position: absolute;
-                left: 0;
-                top: 0;
-                width: calc(100% - 20px);
-                height: 90px;
-                flex-shrink: 0;
-                background: #FFF;
-                border-radius: 0px 0px 12px 12px;
-                box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-                display: flex;
-                justify-content: space-between;
-                padding: 0 20px;
-                z-index: 2;
-            }
-            .custom-header {
-                position: absolute;
                 left: 0px; /* Adjust as needed */
                 top: 0px;
-                width: 1535px;
+                width: 100%;
                 height: 65px;
                 flex-shrink: 0;
                 background: #FFF;
@@ -49,12 +34,13 @@
                 padding: 0 20px;
                 z-index: 2;
             }
+           
             .table-container {
                 position: absolute;
-                left: 160px;
+                left: 11%;
                 top: 160px;
-                max-height: 500px;
-                max-width: 1500px;
+                height: 70%;
+                width: 80%;
                 overflow-y: auto;
                 overflow-x: auto;
                 border-radius: 15px;
@@ -63,8 +49,8 @@
 
             .table-container table {
                 border-collapse: collapse;
-                width: 1200px;
-                height: 550px;
+                width: 100%;
+                height: 100%;
                 border-radius: 15px;
                 overflow: hidden;
                 table-layout: fixed;
