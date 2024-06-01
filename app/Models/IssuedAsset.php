@@ -20,6 +20,10 @@ class IssuedAsset extends Model
         'i_quantity',
         'i_unit_value',
         'i_total_value',
+        'i_location',
+        'i_location_id',
+        'i_site',
+        'i_site_id',
     ];
 
     public function getKeyName()

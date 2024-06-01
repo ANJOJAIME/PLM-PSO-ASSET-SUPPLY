@@ -327,14 +327,6 @@
         <header class="custom-header">
             <img src="/image/PLMLogo.png" alt="logo">
         </header>
-        <div class="search-bar" style="position: fixed; top: 80px; left: 300px; border-radius: 9.574px; background: #EFF0FF; display: flex; width: 35%; height: 40px; padding: 4.608px 0px 4.608px 9.217px; justify-content: space-between; align-items: center; flex-shrink: 0;">
-            <form action="/searchsupply" method="get">
-            <div style="display: flex; align-items: center;">
-                    <i class="fa fa-search" style="color: #4F74BB; margin-right: 5px;"></i>
-                    <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="description" autocomplete=off placeholder="Search here by Item Description...">
-                </div> 
-            </form>
-        </div>
         <div class="side-bar" style="padding: 10px;">
             <h2 style="color: white; text-align: right; font-size: 20px; padding-top: 80px; padding-right: 10px"><strong>Supplies Management</strong></h2>
             <div class="items">
@@ -343,7 +335,7 @@
                 <a class="issued" href="/issued-supplies-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issued</a>
                 <a class="department" href="/plm-departments" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">PLM Departments</a>
                 <a class="reports&forms" href="supply-forms-and-reports-generation" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Reports and Forms</a>
-                <a class="archives" href="{{ route('pages.supplies.archive') }}" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivered Archive</a>
+                <a class="archives" href="{{ route('pages.delivered.archive') }}" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivered Archive</a>
                 <a class="Issuedarchives" href="{{ route('pages.issued.archive') }}" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issued Archive</a>
             </div>
         </div>
@@ -381,7 +373,6 @@
                     <thead>
                         <tr>
                             <th>Item Description</th>
-                            <th>Unit</th>
                             <th>Delivered</th>
                             <th>Quantity Issued</th>
                             <th>Balance After</th>
@@ -389,10 +380,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($supplies as $suppliesdata)
+                       
+                    @foreach($supplies as $suppliesdata)
                         @php
                             $issuedTotal = $issuedTotals[$suppliesdata->description] ?? 0;
-                            $balanceAfter = $suppliesdata->totalDelivered - $issuedTotal;
+                            $deliveredTotal = $totalDelivered[$suppliesdata->description] ?? 0;
+
+                            $balanceAfter = $deliveredTotal - $issuedTotal;
                             $status = 'No value yet'; // Default status
                             if ($balanceAfter <= 50 && $balanceAfter > 1) {
                                 $status = 'LOW LEVEL';
@@ -400,14 +394,13 @@
                                 $status = 'MID LEVEL';
                             } elseif ($balanceAfter > 100) {
                                 $status = 'HIGH LEVEL';
-                            } elseif ($balanceAfter < 0) {
+                            } elseif ($balanceAfter <= 0) {
                                 $status = 'OUT OF STOCK';
                             }
                         @endphp
                         <tr>
                             <td>{{$suppliesdata->description}}</td>
-                            <td>{{$suppliesdata->unit}}</td>
-                            <td>{{$suppliesdata->totalDelivered}}</td>
+                            <td>{{$deliveredTotal}}</td>
                             <td>{{ $issuedTotal }}</td>
                             <td>{{ $balanceAfter }}</td>
                             <td>{{ $status }}</td>

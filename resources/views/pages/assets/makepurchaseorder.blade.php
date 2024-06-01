@@ -167,14 +167,14 @@
                                     </div>
                                     <div class="input-group">
                                         <label for="unit"><strong>Unit:</strong></label>
-                                        <input type="text" name="unit" class="form-control @error('unit') is-invalid @enderror">
+                                        <input type="text" id="unit" name="unit" class="form-control @error('unit') is-invalid @enderror">
                                         @error('unit')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="input-group">
                                         <label for="supplier"><strong>Supplier:</strong></label>
-                                        <select name="supplier" style="width: 275px; height: 32px; background-color: rgba(209,223,255,255); border: 0.5px solid #000; border-radius: 2px; padding-left: 12px; color: rgba(86,93,103,255)">
+                                        <select id="supplier" name="supplier" style="width: 275px; height: 32px; background-color: rgba(209,223,255,255); border: 0.5px solid #000; border-radius: 2px; padding-left: 12px; color: rgba(86,93,103,255)">
                                             <option value="">Select Supplier</option>
                                             @foreach($suppliers as $item)
                                                 @if(!is_null($item->name))
@@ -209,28 +209,14 @@
                                 <div class="input-group1">
                                     <div class="input-group">
                                         <label for="mode_of_proc"><strong>Mode of Procuremnt:</strong></label>
-                                        <input type="text" name="mode_of_proc" class="form-control @error('mode_of_proc') is-invalid @enderror">
+                                        <input type="text" id="mode_of_proc" name="mode_of_proc" class="form-control @error('mode_of_proc') is-invalid @enderror">
                                         @error('mode_of_proc')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="input-group">
-                                        <label for="place_dev"><strong>Place of Delivery:</strong></label>
-                                        <input type="text" name="place_dev" class="form-control @error('place_dev') is-invalid @enderror">
-                                        @error('place_dev')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="input-group">
-                                        <label for="date_dev"><strong>Date of Delivery:</strong></label>
-                                        <input type="date" name="date_dev" class="form-control @error('date_dev') is-invalid @enderror">
-                                        @error('date_dev')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="input-group">
                                         <label for="price_val"><strong>Price Value:</strong></label>
-                                        <input type="text" name="price_val" class="form-control @error('price_val') is-invalid @enderror">
+                                        <input type="text" id="price_val" name="price_val" class="form-control @error('price_val') is-invalid @enderror">
                                         @error('price_val')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -238,7 +224,7 @@
 
                                     <div class="input-group">
                                         <label for="payment_term"><strong>Payment Term:</strong></label>
-                                        <input type="text" name="payment_term" class="form-control @error('payment_term') is-invalid @enderror">
+                                        <input type="text" id="payment_term" name="payment_term" class="form-control @error('payment_term') is-invalid @enderror">
                                         @error('payment_term')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -253,7 +239,7 @@
                                     </div>
                                     <div class="input-group">
                                         <label for="unit_cost"><strong>Unit Cost:</strong></label>
-                                        <input type="number" name="unit_cost" class="form-control @error('unit_cost') is-invalid @enderror">
+                                        <input type="number" id="unit_cost" name="unit_cost" class="form-control @error('unit_cost') is-invalid @enderror">
                                         @error('unit_cost')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -310,14 +296,6 @@
                 prNoField.placeholder = "Error: Please enter a valid PR Number";
                 prNoField.style.color = "red";
 
-                var placeDevField = document.querySelector('input[name="place_dev"]');
-                placeDevField.placeholder = "Error: Please enter a valid Place of Delivery";
-                placeDevField.style.color = "red";
-
-                var dateDevField = document.querySelector('input[name="date_dev"]');
-                dateDevField.placeholder = "Error: Please enter a valid Date of Delivery";
-                dateDevField.style.color = "red";
-
                 var priceValField = document.querySelector('input[name="price_val"]');
                 priceValField.placeholder = "Error: Please enter a valid Price";
                 priceValField.style.color = "red";
@@ -355,8 +333,6 @@
                 var date = document.querySelector('input[name="date"]').value;
                 var mode_of_proc = document.querySelector('input[name="mode_of_proc"]').value;
                 var pr_no = document.querySelector('input[name="pr_no"]').value;
-                var place_dev = document.querySelector('input[name="place_dev"]').value;
-                var date_dev = document.querySelector('input[name="date_dev"]').value;
                 var price_val = document.querySelector('input[name="price_val"]').value;
                 var payment_term = document.querySelector('input[name="payment_term"]').value;
                 var quantity = document.querySelector('input[name="quantity"]').value;
@@ -375,8 +351,6 @@
                     'Date: ' + date + '\n' +
                     'Mode of Procurement: ' + mode_of_proc + '\n' +
                     'PR No.: ' + pr_no + '\n' +
-                    'Place of Delivery: ' + place_dev + '\n' +
-                    'Date of Delivery: ' + date_dev + '\n' +
                     'Price: ' + price_val + '\n' +
                     'Payment Term: ' + payment_term + '\n' +
                     'Quantity: ' + quantity + '\n' +
@@ -434,29 +408,41 @@
                 const item_no_select = document.getElementById('item_no_select');
                 const item_no_input = document.getElementById('item_no');
                 const description = document.getElementById('description');
-        
-                function setDescription() {
+                const unit = document.getElementById('unit');
+                const supplier = document.getElementById('supplier');
+                const mode_of_proc = document.getElementById('mode_of_proc');
+                const price_val = document.getElementById('price_val');
+                const payment_term = document.getElementById('payment_term');
+                const unit_cost = document.getElementById('unit_cost');
+
+                function setFields() {
                     // Get the item_no value from either the select dropdown or the input field
                     const itemNo = item_no_select.value ? item_no_select.value : item_no_input.value;
-        
+
                     fetch('/get-description/' + itemNo)
                         .then(response => response.json())
                         .then(data => {
-                            if (data.orders && data.orders.description) {
-                                description.value = data.orders.description;
+                            if (data.orders) {
+                                description.value = data.orders.description || '';
+                                unit.value = data.orders.unit || '';
+                                supplier.value = data.orders.supplier || '';
+                                mode_of_proc.value = data.orders.mode_of_proc || '';
+                                price_val.value = data.orders.price_val || '';
+                                payment_term.value = data.orders.payment_term || '';
+                                unit_cost.value = data.orders.unit_cost || '';
                             } else {
-                                console.log('Description not found in response', data);
+                                console.log('Data not found in response', data);
                             }
                         })
                         .catch(error => console.error('Error:', error));
                 }
-        
-                // Set the description when the page loads
-                setDescription();
-        
-                // Update the description when the selected item changes
-                item_no_select.addEventListener('change', setDescription);
-                item_no_input.addEventListener('input', setDescription);
+
+                // Set the fields when the page loads
+                setFields();
+
+                // Update the fields when the selected item changes
+                item_no_select.addEventListener('change', setFields);
+                item_no_input.addEventListener('input', setFields);
             });
         </script>
         <script>

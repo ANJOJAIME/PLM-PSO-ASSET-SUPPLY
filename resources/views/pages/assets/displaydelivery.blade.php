@@ -422,6 +422,10 @@
                             <th>BUR No.</th>
                             <th>Invoice No.</th>
                             <th>Date of Invoice</th>
+                            <th>Date of Delivery</th>
+                            <th>Place of Delivery</th>
+                            <th>Classification ID</th>
+                            <th>Category</th>
                             <th>Quantity Delivered</th>
                             <th>Unit Cost</th>
                             <th>Total Cost</th>
@@ -439,8 +443,12 @@
                             <td>{{$assetdata->d_unit}}</td>
                             <td>{{$assetdata->d_iar_no}}</td>
                             <td>{{$assetdata->d_bur_no}}</td>
-                            <td>{{$assetdata->d_invoice_no}}</td>
+                            <td>{{$assetdata->d_invoice_no}}</td>   
                             <td>{{$assetdata->d_date_invoice}}</td>
+                            <td>{{$assetdata->d_date_of_delivery}}</td>
+                            <td>{{$assetdata->d_place_of_delivery}}</td>
+                            <td>{{$assetdata->d_class_id}}</td>
+                            <td>{{$assetdata->d_category}}</td>
                             <td>{{$assetdata->d_qty}}</td>
                             <td>{{$assetdata->d_unit_cost}}</td>
                             <td>{{$assetdata->d_total_cost}}</td>
@@ -513,9 +521,25 @@
                                     <label for="i_date_acquired"><strong>Date Acquired</strong></label>
                                     <input type="date" class="form-control" name="i_date_acquired">
                                 </div>
+                                <div class="form-group">
+                                    <label for="i_location"><strong>Location</strong></label>
+                                    <input type="text" class="form-control" name="i_location">
+                                </div>
+                                <div class="form-group">
+                                    <label for="i_location_id"><strong>Location ID</strong></label>
+                                    <input type="text" class="form-control" name="i_location_id">
+                                </div>
+                                <div class="form-group">
+                                    <label for="i_site"><strong>Site</strong></label>
+                                    <input type="text" class="form-control" name="i_site">
+                                </div>
+                                <div class="form-group">
+                                    <label for="i_site_id"><strong>Site ID</strong></label>
+                                    <input type="text" class="form-control" name="i_site_id">
+                                </div>
                                 <div class="form-group">                        
                                     <label for="i_quantity"><strong>Quantity </strong>(Available Stock: {{ $balanceAfter ?? $deliveredAssetTotals->sum() }})</label>
-                                    <input type="number" class="form-control" name="i_quantity">
+                                    <input type="number" class="form-control" name="i_quantity" id="i_quantity" oninput="checkQuantity()">
                                 </div>
                                 <div class="form-group">
                                     <label for="i_unit_value"><strong>Unit Cost</strong></label>
@@ -609,6 +633,17 @@
                         document.getElementById('i_property_no').value = data.i_property_no;
                     });
             });
+        </script>
+        <script>
+            function checkQuantity() {
+                const quantityInput = document.getElementById('i_quantity');
+                const availableStock = {{ $balanceAfter ?? $deliveredAssetTotals->sum() }};
+        
+                if (quantityInput.value > availableStock) {
+                    alert('The inputted quantity is higher than the available stock of ' + availableStock + '\nMake a Purchase Request to replenish the stock.');
+                    quantityInput.value = availableStock;
+                }
+            }
         </script>
     </body>
 </html>

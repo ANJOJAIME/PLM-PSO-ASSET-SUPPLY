@@ -20,8 +20,6 @@ return new class extends Migration
             $table->string('po_no');
             $table->string('pr_no');
             $table->string('mode_of_proc');
-            $table->string('place_dev');
-            $table->string('date_dev');
             $table->string('price_val');
             $table->string('payment_term');
             $table->string('quantity');

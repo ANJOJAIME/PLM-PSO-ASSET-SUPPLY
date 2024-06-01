@@ -22,6 +22,10 @@ return new class extends Migration
             $table->string('d_bur_no');
             $table->string('d_invoice_no');
             $table->date('d_date_invoice');
+            $table->string('d_date_of_delivery');
+            $table->string('d_place_of_delivery');
+            $table->string('d_class_id');
+            $table->string('d_category');
             $table->string('d_qty');
             $table->string('d_unit_cost');
             $table->string('d_total_cost');

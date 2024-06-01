@@ -227,8 +227,8 @@
                                 <td>{{ $deliveredata->stock_no }}</td>
                                 <td>{{ $deliveredata->description }}</td>
                                 <td>
-                                    <a href="{{ route('pages.supplies.recover', ['stock_no' => $deliveredata->stock_no]) }}" class="btn-recover"><i class="fa fa-recycle"></i>Recover</a>
-                                    <form method="POST" action="{{ route('pages.supplies.forceDelete', ['stock_no' => $deliveredata->stock_no]) }}">
+                                    <a href="{{ route('pages.delivered.recover', ['stock_no' => $deliveredata->stock_no]) }}" class="btn-recover"><i class="fa fa-recycle"></i>Recover</a>
+                                    <form method="POST" action="{{ route('pages.delivered.forceDelete', ['stock_no' => $deliveredata->stock_no]) }}">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn-delete"><i class="bi bi-trash"></i>Permanently Delete</button>

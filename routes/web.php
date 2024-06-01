@@ -25,13 +25,10 @@ use App\Http\Controllers\AssetController;
 //MAIN TABLE
 Route::resource('/displaysupplies', 'SuppliesController');
 Route::get('supplies-view', 'SuppliesController@displaysupplies');
-Route::get('/deletesupply/{stock_no}', 'SuppliesController@deletesupply');
-Route::get('/searchsupply', 'SuppliesController@search');
-//Route::get('/calendar', 'SuppliesController@calendar');
 Route::get('/supplies/issued-summary', 'SuppliesController@displayIssuedSummary')->name('supplies.issued_summary');
 
 //No. Auto-generations
-Route::get('/generate-supplis-iar-no', [SuppliesController::class, 'generateIARNo']);
+Route::get('/generate-iar-no', [SuppliesController::class, 'generateIARNo']);
 Route::get('/generate-stock-no', [SuppliesController::class, 'generateStockNo']);
 Route::get('/generate-item-no', [SuppliesController::class, 'generateItemNo']);
 Route::get('/generate-pr-no', [SuppliesController::class, 'generatePrNo']);
@@ -56,8 +53,7 @@ Route::get('delivered-supplies-view', 'SuppliesController@displaydelivered');
 Route::get('/searchdelivered', 'SuppliesController@deliveredsearch');
 Route::get('/adddelivered', 'SuppliesController@adddelivered');
 Route::post('/storenewdelivered', 'SuppliesController@storenewdelivered');
-Route::get('/editdelivered/{stock_no}', 'SuppliesController@editdelivered');
-Route::put('/updatedelivered/{stock_no}', 'SuppliesController@updatedelivered');
+Route::get('/deletedelivered/{stock_no}', 'SuppliesController@deletedelivered');
 
 //FORMS
 Route::get('supply-forms-and-reports-generation', 'SuppliesController@forms');
@@ -157,9 +153,9 @@ Route::get('/inspection-acceptance-report', 'SuppliesController@IARForm');
 
 //ARCHIVE
 //SUPPLIES
-Route::get('/supplies/archive/{stock_no}/recover', 'SuppliesController@recover')->name('pages.supplies.recover');
-Route::delete('/supplies/archive/{stock_no}/forceDelete', 'SuppliesController@forceDelete')->name('pages.supplies.forceDelete');
-Route::get('/supplies/archive', 'SuppliesController@archive')->name('pages.supplies.archive');
+//Route::get('/supplies/archive/{stock_no}/recover', 'SuppliesController@recover')->name('pages.supplies.recover');
+//Route::delete('/supplies/archive/{stock_no}/forceDelete', 'SuppliesController@forceDelete')->name('pages.supplies.forceDelete');
+//Route::get('/supplies/archive', 'SuppliesController@archive')->name('pages.supplies.archive');
 
 Route::get('/assets/archive/{item_no}/recover', 'AssetController@recover')->name('pages.assets.recover');
 Route::delete('/assets/archive/{item_no}/forceDelete', 'AssetController@forceDelete')->name('pages.assets.forceDelete');
@@ -169,6 +165,11 @@ Route::get('/assets/archive', 'AssetController@archive')->name('pages.assets.arc
 Route::get('/issued/archive/{stock_no}/recover', 'SuppliesController@recoverIssued')->name('pages.issued.recover');
 Route::delete('/issued/archive/{stock_no}/forceDelete', 'SuppliesController@forceDeleteIssued')->name('pages.issued.forceDelete');
 Route::get('/issued/archive', 'SuppliesController@archiveIssued')->name('pages.issued.archive');
+
+//DELIVERED
+Route::get('/delivered/archive/{stock_no}/recover', 'SuppliesController@recoverDelivered')->name('pages.delivered.recover');
+Route::delete('/delivered/archive/{stock_no}/forceDelete', 'SuppliesController@forceDeleteDelivered')->name('pages.delivered.forceDelete');
+Route::get('/delivered/archive', 'SuppliesController@archiveDelivered')->name('pages.delivered.archive');
 
 //ASSET
 //PURCHASE ORDER

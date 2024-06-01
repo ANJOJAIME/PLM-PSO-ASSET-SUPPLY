@@ -59,8 +59,6 @@ class AssetController extends Controller
             'po_no' => 'required',
             'pr_no' => 'required',
             'mode_of_proc',
-            'place_dev',
-            'date_dev' => 'required',
             'price_val' => 'required',
             'payment_term',
             'quantity'  => 'required',
@@ -76,8 +74,6 @@ class AssetController extends Controller
         $orders->po_no = $request->input('po_no');
         $orders->pr_no = $request->input('pr_no');
         $orders->mode_of_proc = $request->input('mode_of_proc');
-        $orders->place_dev = $request->input('place_dev');
-        $orders->date_dev = $request->input('date_dev');
         $orders->price_val = $request->input('price_val');
         $orders->payment_term = $request->input('payment_term');
         $orders->quantity = $request->input('quantity');
@@ -133,6 +129,10 @@ class AssetController extends Controller
             'd_po_no' => 'required',
             'd_bur_no' => 'required',
             'd_invoice_no' => 'required',
+            'd_date_of_delivery' => 'required',
+            'd_place_of_delivery' => 'required',
+            'd_class_id' => 'required',
+            'd_category' => 'required',
             'd_date_invoice' => 'required',
             'd_qty' => 'required',
             'd_unit_cost' => 'required',
@@ -149,6 +149,10 @@ class AssetController extends Controller
         $dasset->d_po_no = $request->input('d_po_no');
         $dasset->d_bur_no = $request->input('d_bur_no');
         $dasset->d_invoice_no = $request->input('d_invoice_no');
+        $dasset->d_date_of_delivery = $request->input('d_date_of_delivery');
+        $dasset->d_place_of_delivery = $request->input('d_place_of_delivery');
+        $dasset->d_class_id = $request->input('d_class_id');
+        $dasset->d_category = $request->input('d_category');
         $dasset->d_date_invoice = $request->input('d_date_invoice');
         $dasset->d_qty = $request->input('d_qty');
         $dasset->d_unit_cost = $request->input('d_unit_cost');
@@ -194,6 +198,10 @@ class AssetController extends Controller
             'i_date_acquired'=>'required',
             'i_property_no'=>'required',
             'i_req_office'=>'required',
+            'i_location'=>'required',
+            'i_location_id'=>'required',
+            'i_site'=>'required',
+            'i_site_id'=>'required',
             'i_unit'=>'required',
             'i_quantity'=>'required',
             'i_unit_value'=>'required',
@@ -204,6 +212,10 @@ class AssetController extends Controller
         $iasset->i_date_acquired = $request->input('i_date_acquired');
         $iasset->i_property_no = $request->input('i_property_no');
         $iasset->i_req_office = $request->input('i_req_office');
+        $iasset->i_location = $request->input('i_location');
+        $iasset->i_location_id = $request->input('i_location_id');
+        $iasset->i_site = $request->input('i_site');
+        $iasset->i_site_id = $request->input('i_site_id');
         $iasset->i_unit = $request->input('i_unit');
         $iasset->i_quantity = $request->input('i_quantity');
         $iasset->i_unit_value = $request->input('i_unit_value');

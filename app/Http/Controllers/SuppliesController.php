@@ -7,6 +7,7 @@ use App\Models\Supplies;
 use App\Models\Issued;
 use App\Models\User;
 use App\Models\Department;
+use App\Models\Delivered;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\PDF;
@@ -18,58 +19,56 @@ class SuppliesController extends Controller
     //MAIN TABLE
     public function displaysupplies()
     {
-        $supplies = Supplies::select('description', 'unit')
-                     ->distinct('description')
-                     ->get();
         $notifications = Notification::all();
+        $supplies = Issued::select('description')
+                    ->groupBy('description')
+                    ->get();
         $issuedTotals = Issued::select('description', \DB::raw('SUM(quantity_issued) as total_quantity'))
                             ->groupBy('description')
                             ->pluck('total_quantity', 'description');
+        $totalDelivered = Delivered::select('item_description', \DB::raw('SUM(delivered) as total_delivered'))
+                            ->groupBy('item_description')
+                            ->pluck('total_delivered', 'item_description');
 
-        return view('pages.supplies.displaysupplies', ['supplies' => $supplies, 'notifications' => $notifications, 'issuedTotals' => $issuedTotals]);
-    }
-
-    public function search(Request $request)
-    {
-        $description = $request->input('description');
-        $supplies = Supplies::where('description', 'like', "%{$description}%")->get();
-        $notifications = Notification::all();
-
-        return view('pages.supplies.displaysupplies', ['supplies' => $supplies, 'searched_description' => $description, 'notifications' => $notifications]); 
+        return view('pages.supplies.displaysupplies', ['supplies' => $supplies, 'notifications' => $notifications, 'issuedTotals' => $issuedTotals, 'totalDelivered' => $totalDelivered]);
     }
 
     //ISSUED TABLE
     public function displayissued()
     {
         $issued = Issued::all();
-        $searched_stock_no = request('stock_no');
+        $searched_description = request('description');
         $notifications = Notification::all();
         
-        return view('pages.supplies.displayissued', ['issued' => $issued, 'searched_stock_no' => $searched_stock_no, 'notifications' => $notifications]);
+        return view('pages.supplies.displayissued', ['issued' => $issued, 'searched_description' => $searched_description, 'notifications' => $notifications]);
     }
 
     public function issuedsearch(Request $request)
     {
-        $stock_no = $request->input('stock_no');
-        $issued = Issued::where('stock_no', 'like', "%{$stock_no}%")->get();
+        $description = $request->input('description');
+        $issued = Issued::where('description', 'like', "%{$description}%")->get();
         $notifications = Notification::all();
 
-        return view('pages.supplies.displayissued', ['issued' => $issued, 'searched_stock_no' => $stock_no, 'notifications' => $notifications]);
+        return view('pages.supplies.displayissued', ['issued' => $issued, 'searched_description' => $description, 'notifications' => $notifications]);
     }
 
     public function addissued()
     {
-        $items = Supplies::all();
-        $supplies = Supplies::select('description', 'unit')
-                     ->distinct('description')
+        $items = Delivered::all();
+        $delivered = Delivered::select('item_description', 'unit')
+                     ->distinct('item_description')
                      ->get();
         $issuedTotals = Issued::select('description', \DB::raw('SUM(quantity_issued) as total_quantity'))
                             ->groupBy('description')
                             ->pluck('total_quantity', 'description');
+        $totalDelivered = Delivered::select('item_description', \DB::raw('SUM(delivered) as total_delivered'))
+                            ->groupBy('item_description')
+                            ->pluck('total_delivered', 'item_description');
         $departments = Department::all();
         
-        return view('pages.supplies.addissued', ['items' => $items, 'supplies' => $supplies, 'issuedTotals' => $issuedTotals, 'departments' => $departments]);
+        return view('pages.supplies.addissued', ['items' => $items, 'supplies' => $delivered, 'issuedTotals' => $issuedTotals, 'departments' => $departments, 'totalDelivered' => $totalDelivered]);
     }
+    
 
     public function deleteissued($stock_no)
     {
@@ -121,131 +120,96 @@ class SuppliesController extends Controller
     //DELIVERED TABLE
     public function displaydelivered()
     {
-        $delivered = Supplies::all();
-        $searched_stock_no = request('stock_no');
+        $delivered = Delivered::all();
+        $searched_item_description = request('item_description');
         $notifications = Notification::all();
-        return view('pages.supplies.displaydelivered', ['delivered' => $delivered, 'searched_stock_no' => $searched_stock_no, 'notifications' => $notifications]);
+        
+        return view('pages.supplies.displaydelivered', ['delivered' => $delivered, 'searched_item_description' => $searched_item_description, 'notifications' => $notifications]);
     }
 
     public function deliveredsearch(Request $request)
     {
-        $stock_no = $request->input('stock_no');
-        $delivered = Supplies::where('stock_no', 'like', "%{$stock_no}%")->get();
+        $item_description = $request->input('item_description');
+        $delivered = Delivered::where('item_description', 'like', "%{$item_description}%")->get();
         $notifications = Notification::all();
 
-        return view('pages.supplies.displaydelivered', ['delivered' => $delivered, 'searched_stock_no' => $stock_no, 'notifications' => $notifications]);
+        return view('pages.supplies.displaydelivered', ['delivered' => $delivered, 'searched_item_description' => $item_description, 'notifications' => $notifications]);
     }
 
     public function adddelivered()
     {
-        $items = Supplies::all();
+        $delivered = Delivered::all();
 
-        return view('pages.supplies.adddelivered', ['items' => $items]);
+        return view('pages.supplies.adddelivered', ['delivered' => $delivered]);
     }
 
     public function storenewdelivered(Request $request)
     {
-        $supply = new Supplies;
+        $delivered = new Delivered;
         
         $validatedData = $request->validate([
-            'stock_no' => 'required',
-            'description' => 'required',
             'delivery_date' => 'required',
             'actual_delivery_date' => 'required',
             'acceptance_date' => 'required',
-            'delivered' => 'required',
             'iar_no' => 'required',
             'item_no' => 'required',
-            'dr_no' => 'required',
+            'stock_no' => 'required',
+            'item_description' => 'required',
+            'delivered' => 'required',
             'unit' => 'required',
+            'dr_no' => 'required',
             'check_no' => 'required',
             'po_no' => 'required',
             'po_date' => 'required',
             'po_amount' => 'required',
-            'pr_no' => 'required',
+            'pr_number' => 'required',
             'price_per_purchase_request' => 'required',
             'bur' => 'required',
-            'remarks',
+            'remarks' => 'required',
+            
         ]);
 
-        $supply->description = $request->input('description');
-        $supply->delivery_date = $request->input('delivery_date');
-        $supply->actual_delivery_date = $request->input('actual_delivery_date');
-        $supply->acceptance_date = $request->input('acceptance_date');
-        $supply->delivered = $request->input('delivered');
-        $supply->dr_no = $request->input('dr_no');
-        $supply->unit = $request->input('unit');
-        $supply->check_no = $request->input('check_no');
-        $supply->po_no = $request->input('po_no');
-        $supply->po_date = $request->input('po_date');
-        $supply->po_amount = $request->input('po_amount');
-        $supply->price_per_purchase_request = $request->input('price_per_purchase_request');
-        $supply->bur = $request->input('bur');
-        $supply->remarks = $request->input('remarks');
-        $supply->stock_no = Supplies::generateStockNo();
-        $supply->item_no = Supplies::generateItemNo();
-        $supply->iar_no = Supplies::generateIARNo();
-
-        $supply->save();
+        $delivered->delivery_date = $request->input('delivery_date');
+        $delivered->actual_delivery_date = $request->input('actual_delivery_date');
+        $delivered->acceptance_date = $request->input('acceptance_date');
+        $delivered->iar_no = $request->input('iar_no');
+        $delivered->item_no = $request->input('item_no');
+        $delivered->stock_no = $request->input('stock_no');
+        $delivered->item_description = $request->input('item_description');
+        $delivered->unit = $request->input('unit');
+        $delivered->delivered = $request->input('delivered');
+        $delivered->dr_no = $request->input('dr_no');
+        $delivered->check_no = $request->input('check_no');
+        $delivered->po_no = $request->input('po_no');
+        $delivered->po_date = $request->input('po_date');
+        $delivered->po_amount = $request->input('po_amount');
+        $delivered->pr_number = $request->input('pr_number');
+        $delivered->price_per_purchase_request = $request->input('price_per_purchase_request');
+        $delivered->bur = $request->input('bur');
+        $delivered->remarks = $request->input('remarks');
+        $delivered->save();
 
         $notification = new Notification;
         $notification->type = 'Add';
-        $notification->details =  $supply->stock_no;
-        $notification->item =  $supply->description;
+        $notification->details =  $delivered->stock_no;
+        $notification->item =  $delivered->item_description;
         $notification->save();
 
         return redirect('/delivered-supplies-view')->with('status', 'Delivered Supply Added Successfully!');
     }
 
-    public function editdelivered($stock_no)
+    public function deletedelivered($stock_no)
     {
-        $delivered = Supplies::where('stock_no', $stock_no)->first();
-        return view('pages.supplies.editdelivered', compact('delivered'));
-    }
+        $delivered = Delivered::where('stock_no', $stock_no)->first();
+        $delivered->delete();
 
-    public function updatedelivered(Request $request, $stock_no)
-    {
-            $request->validate([
-                'delivery_date' => 'required',
-                'actual_delivery_date' => 'required',
-                'acceptance_date' => 'required',
-                'delivered' => 'required',
-                'iar_no' => 'required',
-                'item_no' => 'required',
-                'dr_no' => 'required',
-                'check_no' => 'required',
-                'po_no' => 'required',
-                'po_date' => 'required',
-                'description' => 'required',
-                'unit' => 'required',
-                'po_date' => 'required',
-                'po_amount' => 'required',
-                'pr_no' => 'required',
-                'price_per_purchase_request' => 'required',
-                'bur' => 'required',
-                'remarks' => 'required',
-            ]);
-        
-        $delivered = Supplies::where('stock_no', $stock_no)->first();
-        $delivered->delivery_date = $request->input('delivery_date');
-        $delivered->actual_delivery_date = $request->input('actual_delivery_date');
-        $delivered->acceptance_date = $request->input('acceptance_date');
-        $delivered->delivered = $request->input('delivered');
-        $delivered->iar_no = $request->input('iar_no');
-        $delivered->item_no = $request->input('item_no');
-        $delivered->dr_no = $request->input('dr_no');
-        $delivered->check_no = $request->input('check_no');
-        $delivered->po_no = $request->input('po_no');
-        $delivered->description = $request->input('description');
-        $delivered->unit = $request->input('unit');
-        $delivered->po_date = $request->input('po_date');
-        $delivered->po_amount = $request->input('po_amount');
-        $delivered->pr_no = $request->input('pr_no');
-        $delivered->price_per_purchase_request = $request->input('price_per_purchase_request');
-        $delivered->bur = $request->input('bur');
-        $delivered->remarks = $request->input('remarks');
-        $delivered->update();
-        return redirect('/delivered-supplies-view')->with('status', 'Delivered Supply Updated Successfully!');
+        $notification = new Notification;
+        $notification->type = 'Delete';
+        $notification->details =  $delivered->stock_no;
+        $notification->item =  $delivered->item_description;
+        $notification->save();
+
+        return redirect('/delivered-supplies-view')->with('status', 'Delivered Supply Deleted Successfully! Item can be recovered in archive...');
     }
 
     //DEPARTMENT
@@ -313,55 +277,6 @@ class SuppliesController extends Controller
     }
 
     //ARCHIVE CONTROLLER
-    //SUPPLIES
-    public function destroy(Supplies $delivered)
-    {
-        $supply->delete();
-
-        return redirect()->route('pages.supplies.displaysupplies');
-    }
-
-    public function archive()
-    {
-        $delivered = Supplies::onlyTrashed()->get();
-
-        return view('pages.supplies.archive', ['delivered' => $delivered]);
-    }
-
-    public function recover($stock_no)
-    {
-        $delivered = Supplies::onlyTrashed()->where('stock_no', $stock_no)->first();
-
-        if ($delivered) {
-            $delivered->restore();
-
-            $notification = new Notification;
-            $notification->type = 'Recover Item';
-            $notification->details =  $delivered->stock_no;
-            $notification->item =  $delivered->description;
-            $notification->save();
-
-            return redirect()->route('pages.supplies.archive');
-        }
-
-        // Handle the case where $supply is null, e.g., show an error message
-        return redirect()->route('pages.supplies.archive')->with('error', 'Supply not found');
-    }
-
-    public function forceDelete($stock_no)
-    {
-        $delivered = Supplies::onlyTrashed()->where('stock_no', $stock_no)->first();
-    
-        $delivered->forceDelete();
-        $notification = new Notification;
-        $notification->type = 'Item Permanently Delete';
-        $notification->details =  $delivered->stock_no;
-        $notification->item =  $delivered->description;
-        $notification->save();
-    
-        return redirect()->route('pages.supplies.archive');
-    }
-   
     //ISSUED
     public function destroyIssued(Issued $issued)
     {
@@ -410,21 +325,68 @@ class SuppliesController extends Controller
     
         return redirect()->route('pages.issued.archive');
     }
+
+    //DELIVERED
+    public function destroyDelivered(Delivered $delivered)
+    {
+        $delivered->delete();
+
+        return redirect()->route('pages.delivered.displaydelivered');
+    }
+
+    public function archiveDelivered()
+    {
+        $delivered = Delivered::onlyTrashed()->get();
+
+        return view('pages.supplies.archive', ['delivered' => $delivered]);
+    }
+
+    public function recoverDelivered($stock_no)
+    {
+        $delivered = Delivered::onlyTrashed()->where('stock_no', $stock_no)->first();
+
+        if ($delivered) {
+            $delivered->restore();
+
+            $notification = new Notification;
+            $notification->type = 'Recover Item';
+            $notification->details =  $delivered->stock_no;
+            $notification->item =  $delivered->item_description;
+            $notification->save();
+
+            return redirect()->route('pages.delivered.archive');
+        }
+        return redirect()->route('pages.delivered.archive')->with('error', 'Delivered Supply not found');
+    }
+
+    public function forceDeleteDelivered($stock_no)
+    {
+        $delivered = Delivered::onlyTrashed()->where('stock_no', $stock_no)->first();
+    
+        $delivered->forceDelete();
+        $notification = new Notification;
+        $notification->type = 'Item Permanently Delete';
+        $notification->details =  $delivered->stock_no;
+        $notification->item =  $delivered->item_description;
+        $notification->save();
+    
+        return redirect()->route('pages.delivered.archive');
+    }
     
     //NO. GENERATION
     public function generateIARNo()
     {
-        return response()->json(['iar_no' => Supplies::generateIARNo()]);
+        return response()->json(['iar_no' => Delivered::generateIARNo()]);
     }
 
     public function generateStockNo()
     {
-        return response()->json(['stock_no' => Supplies::generateStockNo()]);
+        return response()->json(['stock_no' => Delivered::generateStockNo()]);
     }
 
     public function generateItemNo()
     {
-        return response()->json(['item_no' => Supplies::generateItemNo()]);
+        return response()->json(['item_no' => Delivered::generateItemNo()]);
     }
 
     //USER PROFILE
@@ -442,26 +404,32 @@ class SuppliesController extends Controller
     //PDF
     public function displayPDF()
     {
-        $supplies = Supplies::select('description', 'unit')
-                     ->distinct('description')
-                     ->get();
+        $supplies = Issued::select('description')
+                    ->groupBy('description')
+                    ->get();
         $issuedTotals = Issued::select('description', \DB::raw('SUM(quantity_issued) as total_quantity'))
-                     ->groupBy('description')
-                     ->pluck('total_quantity', 'description');
-
-        return view('pages.supplies.order', ['supplies' => $supplies, 'issuedTotals' => $issuedTotals]);
+                    ->groupBy('description')
+                    ->pluck('total_quantity', 'description');
+        $totalDelivered = Delivered::select('item_description', \DB::raw('SUM(delivered) as total_delivered'))
+                    ->groupBy('item_description')
+                    ->pluck('total_delivered', 'item_description');
+    
+        return view('pages.supplies.order', ['supplies' => $supplies, 'issuedTotals' => $issuedTotals, 'totalDelivered' => $totalDelivered]);
     }
-
+    
     public function downloadPDF()
     {
-        $supplies = Supplies::select('description', 'unit')
-                     ->distinct('description')
-                     ->get();
+        $supplies = Issued::select('description')
+                    ->groupBy('description')
+                    ->get();
         $issuedTotals = Issued::select('description', \DB::raw('SUM(quantity_issued) as total_quantity'))
-                     ->groupBy('description')
-                     ->pluck('total_quantity', 'description');
-
-        $pdf = PDF::loadView('pages.supplies.order', ['supplies' => $supplies, 'issuedTotals' => $issuedTotals])->setPaper('a4', 'landscape');
+                    ->groupBy('description')
+                    ->pluck('total_quantity', 'description');
+        $totalDelivered = Delivered::select('item_description', \DB::raw('SUM(delivered) as total_delivered'))
+                    ->groupBy('item_description')
+                    ->pluck('total_delivered', 'item_description');
+    
+        $pdf = PDF::loadView('pages.supplies.order', ['supplies' => $supplies, 'issuedTotals' => $issuedTotals, 'totalDelivered' => $totalDelivered])->setPaper('a4', 'landscape');
         return $pdf->download('General Report Supplies.pdf');
     }
     
@@ -495,17 +463,17 @@ class SuppliesController extends Controller
     //PURCHASE REQUEST
     public function PRForm()
     {
-        $supplies = Supplies::all();
+        $supplies = Delivered::all();
         return view('pages.supplies.purchaserequest', ['supplies' => $supplies]);
     }
-    
+
     public function generatePDF(Request $request)
     {
         // Store the form data in the session
         $request->session()->put('form_data', $request->all());
 
         // Retrieve all supplies
-        $supplies = Supplies::all();
+        $supplies = Delivered::all();
 
         $pdf = PDF::loadView('pages.supplies.purchaserequest', ['pdf' => true, 'supplies' => $supplies]);
         // Download the PDF
@@ -515,8 +483,8 @@ class SuppliesController extends Controller
     public function getUnit(Request $request) 
     {
         $item_no = $request->get('item_no');
-        $supply = Supplies::all()->where('item_no', $item_no)->first();
-        return response()->json(['unit' => $supply->unit, 'description' => $supply->description]);
+        $supply = Delivered::all()->where('item_no', $item_no)->first();
+        return response()->json(['unit' => $supply->unit, 'description' => $supply->item_description, 'price_per_purchase_request' => $supply->price_per_purchase_request]);
     }
 
     //REQUISITION AND ISSUE SLIP

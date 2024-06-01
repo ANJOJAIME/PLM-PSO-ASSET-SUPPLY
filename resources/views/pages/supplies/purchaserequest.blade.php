@@ -98,8 +98,8 @@ Section: {{ session('form_data.section') }}
                         <td>{{ session('form_data.qty')[$index] }}</td>
                         <td>{{ session('form_data.unit')[$index] }}</td>
                         <td>{{ session('form_data.description')[$index] }}</td>
-                        <td>{{ session('form_data.est_unitcost')[$index] }}</td>
-                        <td>{{ session('form_data.qty')[$index] * session('form_data.est_unitcost')[$index] }}</td>
+                        <td>{{ session('form_data.price_per_purchase_request')[$index] }}</td>
+                        <td>{{ session('form_data.qty')[$index] * session('form_data.price_per_purchase_request')[$index] }}</td>
                     </tr>
                 @endforeach
             @else
@@ -109,7 +109,7 @@ Section: {{ session('form_data.section') }}
                     <td>{{ session('form_data.unit') }}</td>
                     <td>{{ session('form_data.description') }}</td>
                     <td>{{ session('form_data.est_unitcost') }}</td>
-                    <td>{{ session('form_data.qty') * session('form_data.est_unitcost') }}</td>
+                    <td>{{ session('form_data.qty') * session('form_data.price_per_purchase_request') }}</td>
                 </tr>
             @endif
         <tr>
@@ -230,6 +230,7 @@ Section: {{ session('form_data.section') }}
                     }).done(function(response) {
                         $('#unit-input').val(response.unit);
                         $('#description-input').val(response.description);
+                        $('#price_per_purchase_request-input').val(response.price_per_purchase_request);
 
                         // Open the modal
                         $("#PRModal").modal('show');
@@ -245,6 +246,9 @@ Section: {{ session('form_data.section') }}
                 $.get('/supplies/unit', {item_no: item_no}, function(data) {
                     row.find('.unit-input').val(data.unit);
                     row.find('.description-input').val(data.description);
+                    if (data && data.price_per_purchase_request) {
+                        row.find('.price_per_purchase_request-input').val(data.price_per_purchase_request);
+                    }
                 });
             });
         </script>
@@ -269,11 +273,11 @@ Section: {{ session('form_data.section') }}
                         <td><input type="number" class="form-control" name="qty[]" autocomplete="off"></td>
                         <td><input type="text" class="form-control unit-input" name="unit[]" readonly autocomplete="off"></td>
                         <td><input type="text" class="form-control description-input" name="description[]" readonly autocomplete="off"></td>
-                        <td><input type="number" class="form-control" name="est_unitcost[]" autocomplete="off"></td>
+                        <td><input type="number" class="form-control price_per_purchase_request-input" name="price_per_purchase_request-input[]" readonly autocomplete="off"></td>
                         <td><input type="number" class="form-control" name="est_cost[]" readonly autocomplete="off"></td>
                     </tr>
                 `;
-
+        
                 $('#itemsTable tbody').append(newRow);
             });
             });

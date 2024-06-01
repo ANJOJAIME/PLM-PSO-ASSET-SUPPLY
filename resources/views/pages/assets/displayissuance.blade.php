@@ -418,6 +418,10 @@
                             <th>Requesting Office</th>
                             <th>Date Issuance Report Created</th>
                             <th>Date Acquired</th>
+                            <th>Location</th>
+                            <th>Location ID</th>
+                            <th>Site</th>
+                            <th>Site ID</th>
                             <th>Quantity Issued</th>
                             <th>Unit Value</th>
                             <th>Total Value</th>
@@ -433,6 +437,10 @@
                             <td>{{$assetdata->i_req_office}}</td>
                             <td>{{$assetdata->created_at}}</td>
                             <td>{{$assetdata->i_date_acquired}}</td>
+                            <td>{{$assetdata->i_location}}</td>
+                            <td>{{$assetdata->i_location_id}}</td>
+                            <td>{{$assetdata->i_site}}</td>
+                            <td>{{$assetdata->i_site_id}}</td>
                             <td>{{$assetdata->i_quantity}}</td>
                             <td>{{$assetdata->i_unit_value}}</td>
                             <td>{{$assetdata->i_total_value}}</td>

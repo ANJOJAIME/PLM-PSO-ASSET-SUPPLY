@@ -7,41 +7,17 @@
     $currentYear = date('Y');
 
     foreach ($months as $index => $month) {
-    $delivered = \App\Models\Supplies::whereMonth('updated_at', $index + 1)
+        $delivered = \App\Models\Delivered::whereMonth('updated_at', $index + 1)
+                                          ->whereYear('updated_at', $currentYear)
+                                          ->sum('delivered');
+
+        $issued = \App\Models\Issued::whereMonth('updated_at', $index + 1)
                                      ->whereYear('updated_at', $currentYear)
-                                     ->sum('delivered');
+                                     ->sum('quantity_issued');
 
-    $issued = \App\Models\Issued::whereMonth('updated_at', $index + 1) // Changed model reference to Issued
-                                 ->whereYear('updated_at', $currentYear)
-                                 ->sum('quantity_issued'); // Assuming the field is named 'quantity_issued'
-
-    $deliveredData[] = (int)$delivered;
-    $issuedData[] = (int)$issued;
+        $deliveredData[] = (int)$delivered;
+        $issuedData[] = (int)$issued;
     }
-
-    $supplies = \App\Models\Supplies::all();
-    $highLevel = 0;
-    $midLevel = 0;
-    $lowLevel = 0;
-    $noValue = 0;
-
-    foreach ($supplies as $suppliesdata) {
-        $issuedTotal = $issuedTotals[$suppliesdata->description] ?? 0;
-        $balanceAfter = $suppliesdata->totalDelivered - $issuedTotal;
-
-        if (is_null($balanceAfter) || is_null($suppliesdata->status)) {
-            $noValue++;
-        } else if ($balanceAfter > 100) {
-            $highLevel++;
-        } else if ($balanceAfter > 50 && $balanceAfter <= 100) {
-            $midLevel++;
-        } else if ($balanceAfter <= 50 && $balanceAfter > 1) {
-            $lowLevel++;
-        }
-    }
-
-    $statusData = [$highLevel, $midLevel, $lowLevel, $noValue];
-
 @endphp
 
     <head>
@@ -376,28 +352,6 @@
                         });
         </script>
     </div>
-    <div class="piegraph">
-        <h6 style="text-align: center;"><strong>Supply Status Summary</strong></h6>
-        <canvas id="myPieChart"></canvas>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            var ctx = document.getElementById('myPieChart').getContext('2d');
-            var myPieChart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: ['High Level', 'Low Level', 'No Value'],
-                    datasets: [{
-                        data: @json($statusData),
-                        backgroundColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)', 'rgba(255, 205, 86, 1)']
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    aspectRatio: .6
-                }
-            });
-        </script>
     </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

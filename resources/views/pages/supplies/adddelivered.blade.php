@@ -148,15 +148,15 @@
                                         @enderror
                                     </div>
                                     <div class="input-group">
-                                        <label for="description"><strong>Item Description:</strong></label>
-                                        <select name="description" id="description_select" class="form-control @error('description') is-invalid @enderror">
+                                        <label for="item_description"><strong>Item Description:</strong></label>
+                                        <select name="item_description" id="description_select" class="form-control @error('item_description') is-invalid @enderror">
                                             <option value="">Select Item Description</option>
-                                            @foreach($items as $item)
-                                                <option value="{{ $item->description }}" data-unit="{{ $item->unit }}">{{ $item->description }}</option>
+                                            @foreach($delivered as $item)
+                                                <option value="{{ $item->item_description }}" data-unit="{{ $item->unit }}">{{ $item->item_description }}</option>
                                             @endforeach
                                         </select>
-                                        <input type="text" id="description" name="description" class="form-control @error('description') is-invalid @enderror">
-                                        @error('description')
+                                        <input type="text" id="item_description" name="item_description" class="form-control @error('item_description') is-invalid @enderror">
+                                        @error('item_description')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -190,7 +190,7 @@
                                     </div> 
                                     <div class="input-group">
                                         <label for="iar_no"><strong>IAR No.:</strong></label>
-                                        <input type="text" id="iar_no" name='v' class="form-control @error('iar_no') is-invalid @enderror">
+                                        <input type="text" id="iar_no"  name='iar_no' class="form-control @error('iar_no') is-invalid @enderror">
                                         <button id="generate-iar-no" type="button">Generate IAR No</button>
                                         @error('iar_no')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -246,9 +246,9 @@
                                         @enderror
                                     </div>
                                     <div class="input-group"> 
-                                        <label for="pr_no"><strong>PR No.:</strong></label>
-                                        <input type="text" id="pr_no" name="pr_no" class="form-control @error('pr_no') is-invalid @enderror">
-                                        @error('pr_no')
+                                        <label for="pr_number"><strong>PR No.:</strong></label>
+                                        <input type="text" id="pr_number" name="pr_number" class="form-control @error('pr_number') is-invalid @enderror">
+                                        @error('pr_number')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -294,51 +294,6 @@
                 });
             });
         </script>
-        <script>
-            document.querySelector('form').addEventListener('submit', function(event) {
-                var stock_no = document.querySelector('input[name="stock_no"]').value;
-                var description = document.querySelector('input[name="description"]').value;
-                var unit = document.querySelector('input[name="unit"]').value;
-                var delivery_date = document.querySelector('input[name="delivery_date"]').value;
-                var actual_delivery_date = document.querySelector('input[name="actual_delivery_date"]').value;
-                var acceptance_date = document.querySelector('input[name="acceptance_date"]').value;
-                var delivered = document.querySelector('input[name="delivered"]').value;
-                var iar_no = document.querySelector('input[name="iar_no"]').value;
-                var item_no = document.querySelector('input[name="item_no"]').value;
-                var dr_no = document.querySelector('input[name="dr_no"]').value;
-                var check_no = document.querySelector('input[name="check_no"]').value;
-                var po_no = document.querySelector('input[name="po_no"]').value;
-                var po_date = document.querySelector('input[name="po_date"]').value;
-                var po_amount = document.querySelector('input[name="po_amount"]').value;
-                var pr_no = document.querySelector('input[name="pr_no"]').value;
-                var price_per_purchase_request = document.querySelector('input[name="price_per_purchase_request"]').value;
-                var bur = document.querySelector('input[name="bur"]').value;
-                var remarks = document.querySelector('input[name="remarks"]').value;
-
-                var message = 'Are you sure you want to EDIT this item:\n' +
-                    'Stock No.: ' + stock_no + '\n' +
-                    'Item Description: ' + description + '\n' +
-                    'Unit: ' + unit + '\n' +
-                    'Delivery Date: ' + delivery_date + '\n' +
-                    'Actual Delivery Date: ' + actual_delivery_date + '\n' +
-                    'Acceptance Date: ' + acceptance_date + '\n' +
-                    'Quantity Delivered: ' + delivered + '\n' +
-                    'IAR No.: ' + iar_no + '\n' +
-                    'Item No.: ' + item_no + '\n' +
-                    'DR No.: ' + dr_no + '\n' +
-                    'Check No.: ' + check_no + '\n' +
-                    'PO No.: ' + po_no + '\n' +
-                    'PO Date: ' + po_date + '\n' +
-                    'PO Amount: ' + po_amount + '\n' +
-                    'PR No.: ' + pr_no + '\n' +
-                    'Price Per Purchase Request: ' + price_per_purchase_request + '\n' +
-                    'BUR: ' + bur + '\n' +
-                    'Remarks: ' + remarks + '\n';
-                if (!confirm(message)) {
-                    event.preventDefault();
-                }
-            });
-        </script>
 
         <script>
                 document.getElementById('generate-stock-no').addEventListener('click', function() {
@@ -351,7 +306,7 @@
         </script>
         <script>
             document.getElementById('generate-iar-no').addEventListener('click', function() {
-                fetch('/generate-supplis-iar-no')
+                fetch('/generate-iar-no')
                     .then(response => response.json())
                     .then(data => {
                         document.getElementById('iar_no').value = data.iar_no;

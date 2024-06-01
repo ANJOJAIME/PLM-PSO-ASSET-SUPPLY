@@ -308,7 +308,7 @@
             <form action="/searchdelivered" method="get" autocomplete="off">
                 <div style="display: flex; align-items: center;">
                     <i class="fa fa-search" style="color: #4F74BB; margin-right: 5px;"></i>
-                    <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="stock_no" placeholder="Search here by Stock No...">
+                    <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="item_description" placeholder="Search here by Item Description...">
                 </div>
             </form>
         </div>
@@ -348,7 +348,7 @@
                 <a class="issued" href="/issued-supplies-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issued</a>
                 <a class="department" href="/plm-departments" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">PLM Departments</a>
                 <a class="reports&forms" href="supply-forms-and-reports-generation" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Reports and Forms</a>
-                <a class="archives" href="{{ route('pages.supplies.archive') }}" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivered Archive</a>
+                <a class="archives" href="{{ route('pages.delivered.archive') }}" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivered Archive</a>
                 <a class="Issuedarchives" href="{{ route('pages.issued.archive') }}" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issued Archive</a>
             </div>
         </div>
@@ -393,7 +393,7 @@
                         <tr>
                             <td>{{$delivereddata->stock_no}}</td>
                             <td>{{$delivereddata->item_no}}</td>
-                            <td>{{$delivereddata->description}}</td>
+                            <td>{{$delivereddata->item_description}}</td>
                             <td>{{$delivereddata->unit}}</td>
                             <td>{{$delivereddata->delivery_date}}</td>
                             <td>{{$delivereddata->actual_delivery_date}}</td>
@@ -402,7 +402,7 @@
                             <td>{{$delivereddata->iar_no}}</td>
                             <td>{{$delivereddata->dr_no}}</td>
                             <td>{{$delivereddata->check_no}}</td>
-                            <td>{{$delivereddata->pr_no}}</td>
+                            <td>{{$delivereddata->pr_number}}</td>
                             <td>{{$delivereddata->po_no}}</td>
                             <td>{{$delivereddata->po_date}}</td>
                             <td>{{$delivereddata->po_amount}}</td>
@@ -410,7 +410,7 @@
                             <td>{{$delivereddata->bur}}</td>
                             <td>{{$delivereddata->remarks}}</td>
                             <td>
-                                <a href="{{ url('deletesupply/'.$delivereddata->stock_no)}}" class="btn-delete" style="text-decoration: none;" onclick="return confirm('Are you sure you want to delete this data with Stock No. {{$delivereddata->stock_no}} in the delivered?')"><i class="bi bi-trash"></i>Delete</a>
+                                <a href="{{ url('deletedelivered/'.$delivereddata->stock_no)}}" class="btn-delete" style="text-decoration: none;" onclick="return confirm('Are you sure you want to delete this data with Stock No. {{$delivereddata->stock_no}} in the delivered?')"><i class="bi bi-trash"></i>Delete</a>
                             </td>
                         </tr>
                         @endforeach

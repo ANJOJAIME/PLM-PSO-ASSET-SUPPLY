@@ -16,8 +16,6 @@ class PurchaseOrder extends Model
         'po_no',
         'pr_no',
         'mode_of_proc',
-        'place_dev',
-        'date_dev',
         'price_val',
         'payment_term',
         'quantity',

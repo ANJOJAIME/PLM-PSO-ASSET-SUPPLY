@@ -52,7 +52,6 @@
         <table class="table table-striped">
             <tr>
                 <th>Item Description</th>
-                <th>Unit</th>
                 <th>Delivered</th>
                 <th>Issued</th>
                 <th>Balance</th>
@@ -62,7 +61,8 @@
                 @foreach($supplies as $suppliesdata)
                     @php
                         $issuedTotal = $issuedTotals[$suppliesdata->description] ?? 0;
-                        $balanceAfter = $suppliesdata->totalDelivered - $issuedTotal;
+                        $deliveredTotal = $totalDelivered[$suppliesdata->description] ?? 0;
+                        $balanceAfter = $deliveredTotal - $issuedTotal;
                         $status = 'No value yet'; // Default status
                         if ($balanceAfter <= 50 && $balanceAfter > 1) {
                             $status = 'LOW LEVEL';
@@ -70,12 +70,13 @@
                             $status = 'MID LEVEL';
                         } elseif ($balanceAfter > 100) {
                             $status = 'HIGH LEVEL';
+                        } else {
+                            $status = 'OUT OF STOCK';
                         }
                     @endphp
                     <tr>
                         <td>{{$suppliesdata->description}}</td>
-                        <td>{{$suppliesdata->unit}}</td>
-                        <td>{{$suppliesdata->totalDelivered}}</td>
+                        <td>{{$deliveredTotal}}</td>
                         <td>{{ $issuedTotal }}</td>
                         <td>{{ $balanceAfter }}</td>
                         <td>{{ $status }}</td>

@@ -329,7 +329,7 @@
             <form action="/searchissued" method="get" autocomplete="off">
                 <div style="display: flex; align-items: center;">
                     <i class="fa fa-search" style="color: #4F74BB; margin-right: 5px;"></i>
-                    <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="stock_no" placeholder="Search here by Stock No...">
+                    <input type="text" style="border: none; background-color: transparent; width: 430px; outline: none;" name="description" placeholder="Search here by Description...">
                 </div>
             </form>
         </div>
@@ -351,7 +351,7 @@
                 <a class="issued" href="/issued-supplies-view" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issued</a>
                 <a class="department" href="/plm-departments" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">PLM Departments</a>
                 <a class="reports&forms" href="supply-forms-and-reports-generation" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Reports and Forms</a>
-                <a class="archives" href="{{ route('pages.supplies.archive') }}" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivered Archive</a>
+                <a class="archives" href="{{ route('pages.delivered.archive') }}" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivered Archive</a>
                 <a class="Issuedarchives" href="{{ route('pages.issued.archive') }}" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issued Archive</a>
             </div>
         </div>

@@ -170,14 +170,16 @@ if (isset($issued) && $issued->stock_no) {
                                         @foreach($items as $item)
                                             @php
                                                 // Calculate the total issued for the current item description
-                                                $issuedTotal = $issuedTotals[$item->description] ?? 0;
+                                                $issuedTotal = $issuedTotals[$item->item_description] ?? 0;
+                                                // Calculate the total delivered for the current item description
+                                                $deliveredTotal = $totalDelivered[$item->item_description] ?? 0;
                                                 // Calculate the remaining balance for the current supply
-                                                $balanceAfter = $item->totalDelivered - $issuedTotal;
+                                                $balanceAfter = $deliveredTotal - $issuedTotal;
                                             @endphp
                                             <option value="{{ $item->stock_no }}"
                                                     {{ old('stock_no', $issued->stock_no ?? '') == $item->stock_no ? 'selected' : '' }}
                                                     @if($balanceAfter <= 0) disabled @endif>
-                                                {{ $item->stock_no }} - {{ $item->description }}
+                                                {{ $item->stock_no }} - {{ $item->item_description }}
                                                 @if($balanceAfter <= 0)
                                                     (Out of Stock)
                                                 @endif

@@ -426,8 +426,6 @@
                             <th>Date Purchase Order Created</th>
                             <th>Mode of Procurement</th>
                             <th>PR No.</th>
-                            <th>Place of Delivery</th>
-                            <th>Date of Delivery</th>
                             <th>Price/Value</th>
                             <th>Payment Term</th>
                             <th>Quantity</th>
@@ -447,8 +445,6 @@
                             <td>{{$order->updated_at}}</td>
                             <td>{{$order->mode_of_proc}}</td>
                             <td>{{$order->pr_no}}</td>
-                            <td>{{$order->place_dev}}</td>
-                            <td>{{$order->date_dev}}</td>
                             <td>{{$order->price_val}}</td>
                             <td>{{$order->payment_term}}</td>
                             <td>{{$order->quantity}}</td>
@@ -523,6 +519,52 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label for="d_date_of_delivery" class="col-sm-2 col-form-label m-label"><strong>Date of Delivery</strong></label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control" name="d_date_of_delivery">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="d_place_of_delivery" class="col-sm-2 col-form-label m-label"><strong>Place of Delivery</strong></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="d_place_of_delivery">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="d_class_id" class="col-sm-2 col-form-label m-label"><strong>Class ID</strong></label>
+                                <div class="col-sm-10">
+                                    <select id="d_class_id" name="d_class_id" class="form-control" onchange="setCategory()">
+                                        <option value="">Select Class ID</option>
+                                        <option value="Books">BOOK - Books</option>
+                                        <option value="COMM">COMM - Communication Equipment</option>
+                                        <option value="DRRE">DRRE - Disaster Response and Rescue Equipment</option>
+                                        <option value="FIRE">FIRE - Firefighting Equipment and Accessories</option>
+                                        <option value="FUFI">FUFI - Furniture and Fixtures</option>
+                                        <option value="ITES">ITES - Information and Communication Technology Equipment</option>
+                                        <option value="LAND">LAND - Land</option>
+                                        <option value="MACH">MACH - Machinery</option>
+                                        <option value="MOOE">MOOE - Maintenance and Other Operating Expenses</option>
+                                        <option value="MDLE">MDLE - Medical Equipment</option>
+                                        <option value="MILE">MILE - Military, Police and Security Equipment</option>
+                                        <option value="MOVE">MOVE - Motor Vehicles</option>
+                                        <option value="OFEQ">OFEQ - Office Equipment</option>
+                                        <option value="LAIM">LAIM - Other Land Improvements</option>
+                                        <option value="OTME">OTME - Other Machinery and Equipment</option>
+                                        <option value="OPPE">OPPE - Other Property Plant and Equipment</option>
+                                        <option value="OSTR">OSTR - Other Structures</option>
+                                        <option value="BLDG">BLDG - School Buildings</option>
+                                        <option value="SPEQ">SPEQ - Sports Equipment</option>
+                                        <option value="TSCE">TSCE - Technical and Scientific Equipment</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="d_category" class="col-sm-2 col-form-label m-label"><strong>Category</strong></label>
+                                <div class="col-sm-10">
+                                    <input id="d_category" type="text" class="form-control" name="d_category">
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label for="d_iar_no" class="col-sm-2 col-form-label m-label"><strong>IAR No</strong></label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" name="d_iar_no" id="d_iar_no">
@@ -556,7 +598,7 @@
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="confirmCheck" required>
                                         <label class="form-check-label" for="confirmCheck">
-                                            <i>Confirmed if delivered items are correct<i>
+                                            <i>Confirm if delivered items are correct<i>
                                         </label>
                                     </div>
                                 </div>
@@ -670,6 +712,37 @@
                         document.getElementById('d_iar_no').value = data.d_iar_no;
                     });
             });
+        </script>
+        <script>
+            function setCategory() {
+                const classIdSelect = document.getElementById('d_class_id');
+                const categoryInput = document.getElementById('d_category');
+
+                const classIdMap = {
+                    'BOOK': 'Books',
+                    'COMM': 'Communication Equipment',
+                    'DRRE': 'Disaster Response and Rescue Equipment',
+                    'FIRE': 'Firefighting Equipment and Accessories',
+                    'FUFI': 'Furniture and Fixtures',
+                    'ITES': 'Information and Communication Technology Equipment',
+                    'LAND': 'Land',
+                    'MACH': 'Machinery',
+                    'MOOE': 'Maintenance and Other Operating Expenses',
+                    'MDLE': 'Medical Equipment',
+                    'MILE': 'Military, Police and Security Equipment',
+                    'MOVE': 'Motor Vehicles',
+                    'OFEQ': 'Office Equipment',
+                    'LAIM': 'Other Land Improvements',
+                    'OTME': 'Other Machinery and Equipment',
+                    'OPPE': 'Other Property Plant and Equipment',
+                    'OSTR': 'Other Structures',
+                    'BLDG': 'School Buildings',
+                    'SPEQ': 'Sports Equipment',
+                    'TSCE': 'Technical and Scientific Equipment'
+                };
+
+                categoryInput.value = classIdMap[classIdSelect.value] || '';
+            }
         </script>
     </body>
 </html>
