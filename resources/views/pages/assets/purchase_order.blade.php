@@ -323,11 +323,9 @@
             }
             .input-group label {
                 flex-shrink: 0;
-                width: 50px;
+                width: 60px;
                 
             }
-            
-            
             .form-control {
                 border-radius: none;
                 width: 250px;
@@ -341,8 +339,8 @@
                 left: 500px;
             }
             .m-label {
-                
                 width: 100px;
+                margin-right: -10px;
             }
             .modal-header {
                 color: black;
@@ -369,7 +367,7 @@
                 <a class="delivered" href="/delivery-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery</a>
                 <a class="issuance" href="/issuance-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issuance</a>
                 <a class="purchase_order" href="/purchase-order-view" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Purchase Order</a>
-                <a class="assets_transer" href="/asset-transfer-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Asset Transfer</a>
+                <!-- <a class="assets_transer" href="/asset-transfer-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Asset Transfer</a> -->
                 <a class="supplier" href="/suppliers-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Suppliers</a>
                 <a class="department" href="/asset-plm-departments" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">PLM Departments</a>
                 <a class="reports&forms" href="asset-forms-and-reports-generation" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Reports and Forms</a>
@@ -426,6 +424,7 @@
                             <th>Date Purchase Order Created</th>
                             <th>Mode of Procurement</th>
                             <th>PR No.</th>
+                            <th>ICS No.</th>
                             <th>Price/Value</th>
                             <th>Payment Term</th>
                             <th>Quantity</th>
@@ -445,6 +444,7 @@
                             <td>{{$order->updated_at}}</td>
                             <td>{{$order->mode_of_proc}}</td>
                             <td>{{$order->pr_no}}</td>
+                            <td>{{$order->ics_no}}</td>
                             <td>{{$order->price_val}}</td>
                             <td>{{$order->payment_term}}</td>
                             <td>{{$order->quantity}}</td>
@@ -519,7 +519,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="d_date_of_delivery" class="col-sm-2 col-form-label m-label"><strong>Date of Delivery</strong></label>
+                                <label for="d_date_of_delivery" class="col-sm-2 col-form-label m-label"><strong>Delivery Date</strong></label>
                                 <div class="col-sm-10">
                                     <input type="date" class="form-control" name="d_date_of_delivery">
                                 </div>
@@ -535,7 +535,7 @@
                                 <div class="col-sm-10">
                                     <select id="d_class_id" name="d_class_id" class="form-control" onchange="setCategory()">
                                         <option value="">Select Class ID</option>
-                                        <option value="Books">BOOK - Books</option>
+                                        <option value="BOOK">BOOK - Books</option>
                                         <option value="COMM">COMM - Communication Equipment</option>
                                         <option value="DRRE">DRRE - Disaster Response and Rescue Equipment</option>
                                         <option value="FIRE">FIRE - Firefighting Equipment and Accessories</option>
@@ -571,10 +571,8 @@
                                     <button id="generate-asset-iar-no" type="button">Generate IAR No</button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group1">
                             <div class="form-group row">
-                                <label for="d_bur_no" class="col-sm-2 col-form-label m-label"><strong>BUR No</strong></label>
+                                <label for="d_bur_no" class="col-sm-4 col-form-label m-label"><strong>BUR No</strong></label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" name="d_bur_no">
                                 </div>

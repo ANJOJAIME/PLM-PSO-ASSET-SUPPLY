@@ -39,6 +39,8 @@ Route::get('/generate-asset-iar-no', [AssetController::class, 'generateAssetIARN
 Route::get('/generate-property-no', [AssetController::class, 'generatePropertyNo']);
 Route::get('/generate-par-no', [AssetController::class, 'generateParNo']);
 Route::get('/generate-prs-no', [AssetController::class, 'generatePrsNo']);
+Route::get('/generate-ics-no/{unit_cost}', 'AssetController@generateICSNo');
+
 
 //ISSUED TABLE
 Route::get('issued-supplies-view', 'SuppliesController@displayissued');

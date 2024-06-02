@@ -65,6 +65,7 @@ class AssetController extends Controller
             'unit',
             'unit_cost' => 'required',
             'is_delivered',
+            'ics_no',
         ]);
         
         $orders->item_no = $request->input('item_no');
@@ -78,8 +79,8 @@ class AssetController extends Controller
         $orders->payment_term = $request->input('payment_term');
         $orders->quantity = $request->input('quantity');
         $orders->unit = $request->input('unit');
-        $orders->unit_cost = $request->input('unit_cost');  
-
+        $orders->unit_cost = $request->input('unit_cost'); 
+        $orders->ics_no = $request->input('ics_no');
         $orders->save();
 
         return redirect('/purchase-order-view')->with('status', 'Purchase Order Added Successfully!');
@@ -102,6 +103,7 @@ class AssetController extends Controller
     //DELIVERY
     public function displaydelivery()
     {
+        $dasset = DeliveredAsset::all();
         $issuedAssetTotals = IssuedAsset::select('i_description', \DB::raw('SUM(i_quantity) as i_total_quantity'))
                             ->groupBy('i_description')
                             ->pluck('i_total_quantity', 'i_description');
@@ -109,9 +111,9 @@ class AssetController extends Controller
         $deliveredAssetTotals = DeliveredAsset::select('d_description', \DB::raw('SUM(d_qty) as d_totalDelivered'))
                             ->groupBy('d_description')
                             ->pluck('d_totalDelivered', 'd_description');
-        $dasset = DeliveredAsset::all();
         $iasset = IssuedAsset::all();
         $departments = Department::all();
+        
         return view('pages.assets.displaydelivery', ['dasset' => $dasset, 'iasset' => $iasset, 'departments' => $departments, 'issuedAssetTotals' => $issuedAssetTotals, 'deliveredAssetTotals' => $deliveredAssetTotals]);
     }
 
@@ -233,44 +235,6 @@ class AssetController extends Controller
         return redirect('/issuance-view')->with('status', 'Issued Asset Deleted Successfully! Item can be recovered in archive...');
     }
 
-    //ASSET TRANSFER
-    public function displayassettransfer()
-    {
-        $transfer = AssetTransfer::all();
-        $departments = Department::all();
-        return view('pages.assets.displayassettransfer', ['transfer' => $transfer, 'departments' => $departments]);
-    }
-
-    public function makenewassettransfer(Request $request)
-    {
-        $transfer = new AssetTransfer;
-
-        $validatedData = $request->validate([
-            'are_no' => 'required',
-            'received_from' => 'required',
-            'received_by' => 'required',
-            'received_from_office' => 'required',
-            'used_in_office' => 'required',
-            'date_received' => 'required',
-            'end_user' => 'required',
-            'new_are_no' => 'required',
-            'prs_no' => 'required',
-        ]);
-
-        $transfer->are_no = $request->input('are_no');
-        $transfer->received_from = $request->input('received_from');
-        $transfer->received_by = $request->input('received_by');
-        $transfer->received_from_office = $request->input('received_from_office');
-        $transfer->used_in_office = $request->input('used_in_office');
-        $transfer->date_received = $request->input('date_received');
-        $transfer->end_user = $request->input('end_user');
-        $transfer->new_are_no = $request->input('new_are_no');
-        $transfer->prs_no = $request->input('prs_no');
-
-        $transfer->save();
-        return redirect('/asset-transfer-view')->with('status', 'Asset Transfer Added Successfully!');
-    }
-
 
     //NO. GENERATION
     public function generateItemNo()
@@ -301,6 +265,12 @@ class AssetController extends Controller
     public function generatePrsNo()
     {
         return response()->json(['prs_no' => AssetTransfer::generatePrsNo()]);
+    }
+
+    public function generateICSNo($unit_cost)
+    {
+        $ics_no = PurchaseOrder::generateICSNo($unit_cost);
+        return response()->json(['ics_no' => $ics_no]);
     }
 
     //FORMS

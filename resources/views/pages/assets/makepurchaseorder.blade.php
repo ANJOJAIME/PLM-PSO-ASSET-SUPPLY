@@ -244,6 +244,11 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
+                                    <div class="input-group">
+                                        <label for="ics_no"><strong>ICS No</strong></label>
+                                            <input type="text" name="ics_no" id="ics_no" class="form-control @error('ics_no') is-invalid @enderror" >
+                                            <button id="generate-ics-no" type="button">Generate ICS No</button>
+                                    </div>
                                 </div>
                                 <div>
                                     <button type="submit" class="btn btn-primary">Save</button>
@@ -255,6 +260,8 @@
             </div>
         </div>
         <script>
+            var errorOccurred = {{ $errors->count() > 0 ? 'true' : 'false' }};
+
             if (errorOccurred) {
                 var stockNoField = document.querySelector('input[name="item_no"]');
                 stockNoField.placeholder = "Error: Please enter a valid Item Number";
@@ -430,6 +437,9 @@
                                 price_val.value = data.orders.price_val || '';
                                 payment_term.value = data.orders.payment_term || '';
                                 unit_cost.value = data.orders.unit_cost || '';
+
+                                var event = new Event('change');
+                                unit_cost.dispatchEvent(event);
                             } else {
                                 console.log('Data not found in response', data);
                             }
@@ -453,6 +463,17 @@
                             document.getElementById('item_no').value = data.item_no;
                         });
                 });
+        </script>
+        <script>
+        document.getElementById('unit_cost').addEventListener('change', function() {
+            var unit_cost = this.value;
+            fetch('/generate-ics-no/' + unit_cost)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('ics_no').value = data.ics_no;
+                })
+                .catch(error => console.error('Error:', error));
+        });
         </script>
     </body>
 </html>
