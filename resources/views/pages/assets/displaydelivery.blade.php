@@ -256,7 +256,6 @@
             #notificationButton {
                 position: absolute;
                 top: 10px;
-              
                 background-color: blue;
                 color: white;
                 padding: 5px 5px;
@@ -334,6 +333,12 @@
                 z-index: 3; 
                 top: 138px; 
                 left: 300px;
+            }
+            .form-control {
+                border-radius: none;
+                height: 31px;
+                border: 0.5px solid #000;
+                background: #D1DFFF;
             }
         </style>
     </head>
@@ -623,13 +628,13 @@
         <script>
             function checkQuantity() {
                 const quantityInput = document.getElementById('i_quantity');
-                const availableStock = {{ $balanceAfter ?? $deliveredAssetTotals->sum() }};
+                const availableStock = <?php echo $balanceAfter ?? $deliveredAssetTotals->sum(); ?>;
         
                 if (quantityInput.value > availableStock) {
                     alert('The inputted quantity is higher than the available stock of ' + availableStock + '\nMake a Purchase Request to replenish the stock.');
                     quantityInput.value = availableStock;
                 }
-            }
+            }       
         </script>
     </body>
 </html>
