@@ -52,15 +52,16 @@
             }
             .table-container {
                 position: absolute;
-                left: 160px;
+                left: 11%;
                 top: 160px;
-                min-height: calc(100vh - 200px); 
-                max-height: calc(100vh - 200px); 
-                max-width: calc(100vw - 350px);
+                height: 70%;
+                width: 80%;
                 overflow-y: auto;
-                overflow-x: auto;
-                border-radius: 15px;
-                background-color: white;
+    overflow-x: auto; /* Ensures horizontal scrolling */
+    scrollbar-width: thin; /* Adjust the width of the scrollbar */
+    scrollbar-color: #4F74BB #EFF0FF; /* Adjust the colors of the scrollbar */
+    border-radius: 15px;
+    background-color: white;
             }
 
             .table-container table {
@@ -69,7 +70,7 @@
                 height: 100%;
                 border-radius: 15px;
                 overflow: hidden;
-                table-layout: fixed;
+                table-layout: auto;
                 
             }
 
@@ -85,20 +86,15 @@
             }
 
             .table-container th {
-                position: sticky;
-                background-color: #e6edfd;
-                font-weight: bold;
-            }
+    position: sticky;
+    top: 0; /* Ensures the header stays at the top while scrolling */
+    background-color: #e6edfd;
+    font-weight: bold;
+    white-space: nowrap; /* Prevents text from wrapping */
+    padding: 20px; /* Increased padding for table headers */
+}
 
-            .table-container tbody tr:nth-child(odd) {
-                background-color: white;
-            }
-            .table-container tbody tr:nth-child(even) {
-                background-color: #f8f9fc;
-            }
-            .table-container tbody tr:hover {
-                background-color: #dfe0e3;
-            }
+           
             .btn-recover, .btn-delete{
                 background-color: #EFF0FF; 
                 color: #000;

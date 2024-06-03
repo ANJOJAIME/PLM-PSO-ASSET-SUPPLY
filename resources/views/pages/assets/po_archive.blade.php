@@ -36,53 +36,46 @@
             }
            
             .table-container {
-                position: absolute;
-                left: 11%;
-                top: 160px;
-                height: 70%;
-                width: 80%;
-                overflow-y: auto;
-                overflow-x: auto;
-                border-radius: 15px;
-                background-color: white;
+                    position: absolute;
+                    left: 11%;
+                    top: 175px;
+                    height: 70%;
+                    width: 75%;
+                    overflow-y: auto;
+                    overflow-x: auto; /* Ensures horizontal scrolling */
+                    scrollbar-width: thin; /* Adjust the width of the scrollbar */
+                    scrollbar-color: #4F74BB #EFF0FF; /* Adjust the colors of the scrollbar */
+                    border-radius: 15px;
+                    background-color: white;
             }
+.table-container table {
+    border-collapse: collapse;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    overflow: hidden;
+    table-layout: auto; /* Adjusts column width automatically */
+}
 
-            .table-container table {
-                border-collapse: collapse;
-                width: 100%;
-                height: 100%;
-                border-radius: 15px;
-                overflow: hidden;
-                table-layout: fixed;
-                
-            }
+.table-container th, .table-container td {
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #ddd;
+}
 
-            .table-container th, .table-container td {
-                text-align: center;
-                padding: 8px;
-                border: 1px solid #ddd;
-            }
+.table-container td {
+    border-collapse: separate;
+    word-wrap: break-word; /* Ensures long words break to the next line */
+}
 
-            .table-container td{
-                border-collapse: separate;
-                word-wrap: break-word;
-            }
-
-            .table-container th {
-                position: sticky;
-                background-color: #e6edfd;
-                font-weight: bold;
-            }
-
-            .table-container tbody tr:nth-child(odd) {
-                background-color: white;
-            }
-            .table-container tbody tr:nth-child(even) {
-                background-color: #f8f9fc;
-            }
-            .table-container tbody tr:hover {
-                background-color: #dfe0e3;
-            }
+.table-container th {
+    position: sticky;
+    top: 0; /* Ensures the header stays at the top while scrolling */
+    background-color: #e6edfd;
+    font-weight: bold;
+    white-space: nowrap; /* Prevents text from wrapping */
+    padding: 20px; /* Increased padding for table headers */
+}
             .btn-recover, .btn-delete{
                 background-color: #EFF0FF; 
                 color: #000;

@@ -49,44 +49,51 @@
             }
 
             .table-container {
-                position: absolute;
-                left: 300px;
-                top: 180px;
-                min-height: calc(100vh - 200px); 
-                max-height: calc(100vh - 200px); 
-                max-width: calc(100vw - 350px);
-                overflow-y: auto;
-                overflow-x: auto;
-                border-radius: 15px;
-                background-color: white;
+                    position: absolute;
+                    left: 22%;
+                    top: 175px;
+                    height: 70%;
+                    width: 75%;
+                    overflow-y: auto;
+                    overflow-x: auto; /* Ensures horizontal scrolling */
+                    scrollbar-width: thin; /* Adjust the width of the scrollbar */
+                    scrollbar-color: #4F74BB #EFF0FF; /* Adjust the colors of the scrollbar */
+                    border-radius: 15px;
+                    background-color: white;
             }
 
-            .table-container table {
-                border-collapse: collapse;
-                width: 100%;
-                height: 100%;
-                border-radius: 15px;
-                overflow: hidden;
-                table-layout: fixed;
-                
-            }
+.table-container table {
+    border-collapse: collapse;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    overflow: hidden;
+    table-layout: auto; /* Adjusts column width automatically */
+}
 
-            .table-container th, .table-container td {
-                text-align: center;
-                padding: 8px;
-                border: 1px solid #ddd;
-            }
+.table-container th, .table-container td {
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #ddd;
+}
 
-            .table-container td{
-                border-collapse: separate;
-                word-wrap: break-word;
-            }
+.table-container td {
+    border-collapse: separate;
+    word-wrap: break-word; /* Ensures long words break to the next line */
+}
 
-            .table-container th {
-                position: sticky;
-                background-color: #e6edfd;
-                font-weight: bold;
-            }
+.table-container th {
+    position: sticky;
+    top: 0; /* Ensures the header stays at the top while scrolling */
+    background-color: #e6edfd;
+    font-weight: bold;
+    white-space: nowrap; /* Prevents text from wrapping */
+    padding: 20px; /* Increased padding for table headers */
+}
+
+/* Custom scrollbar styles for WebKit browsers (Chrome, Safari) */
+
+
 
             .dropdown {
                 position: absolute;
