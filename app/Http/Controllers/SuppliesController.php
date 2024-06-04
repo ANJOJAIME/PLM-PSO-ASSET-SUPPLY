@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Supplies;
 use App\Models\Issued;
 use App\Models\User;
+use App\Models\Supplier;
 use App\Models\Department;
 use App\Models\Delivered;
 use App\Models\Notification;
@@ -117,6 +118,33 @@ class SuppliesController extends Controller
         return redirect('/issued-supplies-view')->with('status', 'Issued Supply Added Successfully!');
     }
 
+    public function editissued($stock_no)
+    {
+        $issued = Issued::where('stock_no', $stock_no)->first();
+
+        return view('pages.supplies.editissued', ['issued' => $issued]);
+    }
+
+    public function updateissued(Request $request, $stock_no)
+    {
+        $issued = Issued::where('stock_no', $stock_no)->first();
+
+        if (!$issued) {
+            return redirect('issued-supplies-view')->with('error', 'No matching record found!');
+        }
+        $issued->description = $request->input('description');
+        $issued->date_issuance = $request->input('date_issuance');
+        $issued->stock_no = $request->input('stock_no');
+        $issued->report_no = $request->input('report_no');
+        $issued->requesting_office = $request->input('requesting_office');
+        $issued->quantity_issued = $request->input('quantity_issued');
+        $issued->ris_no = $request->input('ris_no');
+    
+        $issued->save();
+    
+        return redirect('issued-supplies-view')->with('status', 'Issued Supply Updated Successfully!');
+    }
+
     //DELIVERED TABLE
     public function displaydelivered()
     {
@@ -139,8 +167,9 @@ class SuppliesController extends Controller
     public function adddelivered()
     {
         $delivered = Delivered::all();
+        $suppliers = Supplier::all();
 
-        return view('pages.supplies.adddelivered', ['delivered' => $delivered]);
+        return view('pages.supplies.adddelivered', ['delivered' => $delivered, 'suppliers' => $suppliers]);
     }
 
     public function storenewdelivered(Request $request)
@@ -148,17 +177,17 @@ class SuppliesController extends Controller
         $delivered = new Delivered;
         
         $validatedData = $request->validate([
-            'delivery_date' => 'required',
+            'stock_type' => 'required',
             'actual_delivery_date' => 'required',
-            'acceptance_date' => 'required',
             'iar_no' => 'required',
             'item_no' => 'required',
             'stock_no' => 'required',
             'item_description' => 'required',
+            'supplier' => 'required',
             'delivered' => 'required',
             'unit' => 'required',
             'dr_no' => 'required',
-            'check_no' => 'required',
+            'check_no',
             'po_no' => 'required',
             'po_date' => 'required',
             'po_amount' => 'required',
@@ -166,16 +195,21 @@ class SuppliesController extends Controller
             'price_per_purchase_request' => 'required',
             'bur' => 'required',
             'remarks' => 'required',
-            
+            'photo' => 'image|mimes:jpeg,jpg|max:2048'
         ]);
 
-        $delivered->delivery_date = $request->input('delivery_date');
+        if ($request->hasFile('photo')) {
+            $imageName = time().'.'.$request->photo->extension();  
+            $request->photo->move(public_path('images'), $imageName);
+        }
+
         $delivered->actual_delivery_date = $request->input('actual_delivery_date');
-        $delivered->acceptance_date = $request->input('acceptance_date');
+        $delivered->stock_type = $request->input('stock_type');
         $delivered->iar_no = $request->input('iar_no');
         $delivered->item_no = $request->input('item_no');
         $delivered->stock_no = $request->input('stock_no');
         $delivered->item_description = $request->input('item_description');
+        $delivered->supplier = $request->input('supplier');
         $delivered->unit = $request->input('unit');
         $delivered->delivered = $request->input('delivered');
         $delivered->dr_no = $request->input('dr_no');
@@ -187,6 +221,7 @@ class SuppliesController extends Controller
         $delivered->price_per_purchase_request = $request->input('price_per_purchase_request');
         $delivered->bur = $request->input('bur');
         $delivered->remarks = $request->input('remarks');
+        $delivered->photo = $imageName;
         $delivered->save();
 
         $notification = new Notification;
@@ -210,6 +245,44 @@ class SuppliesController extends Controller
         $notification->save();
 
         return redirect('/delivered-supplies-view')->with('status', 'Delivered Supply Deleted Successfully! Item can be recovered in archive...');
+    }
+
+    public function editdelivered($stock_no)
+    {
+        $delivered = Delivered::where('stock_no', $stock_no)->first();
+        return view('pages.supplies.editdelivered', ['delivered' => $delivered]);
+    }
+
+    public function updatedelivered(Request $request, $stock_no)
+    {
+        $delivered = Delivered::where('stock_no', $stock_no)->first();
+
+        if (!$delivered) {
+            return redirect('delivered-supplies-view')->with('error', 'No matching record found!');
+        }
+
+        $delivered->actual_delivery_date = $request->input('actual_delivery_date');
+        $delivered->stock_type = $request->input('stock_type');
+        $delivered->iar_no = $request->input('iar_no');
+        $delivered->item_no = $request->input('item_no');
+        $delivered->stock_no = $request->input('stock_no');
+        $delivered->item_description = $request->input('item_description');
+        $delivered->supplier = $request->input('supplier');
+        $delivered->unit = $request->input('unit');
+        $delivered->delivered = $request->input('delivered');
+        $delivered->dr_no = $request->input('dr_no');
+        $delivered->check_no = $request->input('check_no');
+        $delivered->po_no = $request->input('po_no');
+        $delivered->po_date = $request->input('po_date');
+        $delivered->po_amount = $request->input('po_amount');
+        $delivered->pr_number = $request->input('pr_number');
+        $delivered->price_per_purchase_request = $request->input('price_per_purchase_request');
+        $delivered->bur = $request->input('bur');
+        $delivered->remarks = $request->input('remarks');
+
+        $delivered->save();
+    
+        return redirect('delivered-supplies-view')->with('status', 'Delivered Supply Updated Successfully!');
     }
 
     //DEPARTMENT
@@ -379,9 +452,10 @@ class SuppliesController extends Controller
         return response()->json(['iar_no' => Delivered::generateIARNo()]);
     }
 
-    public function generateStockNo()
+    public function generateStockNo(Request $request)
     {
-        return response()->json(['stock_no' => Delivered::generateStockNo()]);
+        $stockType = $request->query('stock_type');
+        return response()->json(['stock_no' => Delivered::generateStockNo($stockType)]);
     }
 
     public function generateItemNo()

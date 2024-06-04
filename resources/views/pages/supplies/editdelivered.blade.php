@@ -138,65 +138,57 @@
                     <div class="card">
                         <div class="card-body">
                             <h1><strong>Edit Delivered Supply</strong></h1>
-                            <form action="{{url('/updatedelivered/'.$delivered->stock_no)}}" class="form-body" method="POST" autocomplete="off">
+                            <form action="{{url('/update-delivered/'.$delivered->stock_no)}}" class="form-body" method="POST" autocomplete="off">
                                 @csrf 
                                 @method ('PUT')
                                 <div class="input-group">
                                     <div class="input-group">
+                                        <label for="stock_type"><strong>Stock Type:</strong></label>
+                                        <input type="text" name="stock_type" value="{{ $delivered->stock_type }}"  style="width: 345px; height: 32px; background-color: rgba(209,223,255,255); border: 0.5px solid #000; border-radius: 2px; padding-left: 12px; color: rgba(86,93,103,255)">
+                                    </div>
+                                    <div class="input-group">
                                         <label for="stock_no"><strong>Stock No.:</strong></label>
-                                        <input type="text" name="stock_no" value="{{ $delivered->stock_no }}" readonly style="width: 345px; height: 32px; background-color: rgba(209,223,255,255); border: 0.5px solid #000; border-radius: 2px; padding-left: 12px; color: rgba(86,93,103,255)">
+                                        <input type="text" name="stock_no" value="{{ $delivered->stock_no }}"  style="width: 345px; height: 32px; background-color: rgba(209,223,255,255); border: 0.5px solid #000; border-radius: 2px; padding-left: 12px; color: rgba(86,93,103,255)">
                                     </div>
                                     <div class="input-group">
-                                        <label for="description"><strong>Item Description:</strong></label>
-                                        <input type="text" name="description" value="{{ $delivered->description }}" style="width: 345px; height: 32px; background-color: rgba(209,223,255,255); border: 0.5px solid #000; border-radius: 2px; padding-left: 12px; color: rgba(86,93,103,255)">
+                                        <label for="item_description"><strong>Item Description:</strong></label>
+                                        <input type="text" name="item_description" value="{{ $delivered->item_description }}" style="width: 345px; height: 32px; background-color: rgba(209,223,255,255); border: 0.5px solid #000; border-radius: 2px; padding-left: 12px; color: rgba(86,93,103,255)">
                                     </div>
                                     <div class="input-group">
-                                        <label for="delivery_date"><strong>Delivery Date:</strong></label>
-                                        <input type="date" name="delivery_date" value="{{ $delivered->delivery_date }}" class="form-control @error('delivery_date') is-invalid @enderror">
-                                        @error('delivery_date')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+                                        <label for="supplier"><strong>Supplier:</strong></label>
+                                        <input type="text" name="supplier" value="{{ $delivered->supplier }}" style="width: 345px; height: 32px; background-color: rgba(209,223,255,255); border: 0.5px solid #000; border-radius: 2px; padding-left: 12px; color: rgba(86,93,103,255)">
                                     </div>
                                     <div class="input-group">
-                                        <label for="actual_delivery_date"><strong>Actual Delivery Date:</strong></label>
+                                        <label for="actual_delivery_date"><strong>Delivery Date:</strong></label>
                                         <input type="date" name="actual_delivery_date" value="{{ $delivered->actual_delivery_date }}" class="form-control @error('actual_delivery_date') is-invalid @enderror">
                                         @error('actual_delivery_date')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="input-group">
-                                        <label for="acceptance_date"><strong>Acceptance Date:</strong></label>
-                                        <input type="date" name="acceptance_date" value="{{ $delivered->acceptance_date }}" class="form-control @error('acceptance_date') is-invalid @enderror">
-                                        @error('acceptance_date')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="input-group">
-                                        <label for="delivered"><strong>Qunatity Delivered:</strong></label>
-                                        <input type="text" name="delivered" value="{{ $delivered->delivered }}" readonly class="form-control @error('delivered') is-invalid @enderror">
+                                        <label for="delivered"><strong>Quantity Delivered:</strong></label>
+                                        <input type="text" name="delivered" value="{{ $delivered->delivered }}"  class="form-control @error('delivered') is-invalid @enderror">
                                         @error('delivered')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div> 
                                     <div class="input-group">
                                         <label for="iar_no"><strong>IAR No.:</strong></label>
-                                        <input type="text" id="iar_no" name='iar_no' value="{{ $delivered->iar_no }}" readonly class="form-control @error('iar_no') is-invalid @enderror">
-                                        <button id="generate-iar-no" type="button">Generate IAR No</button>
+                                        <input type="text" id="iar_no" name='iar_no' value="{{ $delivered->iar_no }}"  class="form-control @error('iar_no') is-invalid @enderror">
                                         @error('iar_no')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="input-group">
                                         <label for="item_no"><strong>Item No.:</strong></label>
-                                        <input type="text" id="item_no" name='item_no' readonly value="{{ old('item_no', $delivered->item_no) }}" class="form-control @error('item_no') is-invalid @enderror">
-                                        <button id="generate-item-no" type="button">Generate Item No</button>
+                                        <input type="text" id="item_no" name='item_no'  value="{{ old('item_no', $delivered->item_no) }}" class="form-control @error('item_no') is-invalid @enderror">
                                         @error('item_no')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="input-group">
                                         <label for="dr_no"><strong>DR No.:</strong></label>
-                                        <input type="text" name="dr_no" value="{{ $delivered->dr_no }}" readonly class="form-control @error('dr_no') is-invalid @enderror">
+                                        <input type="text" name="dr_no" value="{{ $delivered->dr_no }}"  class="form-control @error('dr_no') is-invalid @enderror">
                                         @error('dr_no')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -205,18 +197,18 @@
                                 <div class="input-group1">
                                     <div class="input-group">
                                         <label for="unit"><strong>Unit:</strong></label>
-                                        <input type="text" name="unit" value="{{ $delivered->unit }}" readonly style="width: 345px; height: 32px; background-color: rgba(209,223,255,255); border: 0.5px solid #000; border-radius: 2px; padding-left: 12px; color: rgba(86,93,103,255)">
+                                        <input type="text" name="unit" value="{{ $delivered->unit }}"  style="width: 345px; height: 32px; background-color: rgba(209,223,255,255); border: 0.5px solid #000; border-radius: 2px; padding-left: 12px; color: rgba(86,93,103,255)">
                                     </div>
                                     <div class="input-group">
                                         <label for="check_no"><strong>Check No.:</strong></label>
-                                        <input type="text" name="check_no" value="{{ $delivered->check_no }}" readonly class="form-control @error('check_no') is-invalid @enderror">
+                                        <input type="text" name="check_no" value="{{ $delivered->check_no }}"  class="form-control @error('check_no') is-invalid @enderror">
                                         @error('check_no')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="input-group">
                                         <label for="po_no"><strong>PO No.:</strong></label>
-                                        <input type="text" name="po_no" value="{{ $delivered->po_no }}" readonly class="form-control @error('po_no') is-invalid @enderror">
+                                        <input type="text" name="po_no" value="{{ $delivered->po_no }}"  class="form-control @error('po_no') is-invalid @enderror">
                                         @error('po_no')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -236,9 +228,9 @@
                                         @enderror
                                     </div>
                                     <div class="input-group"> 
-                                        <label for="pr_no"><strong>PR No.:</strong></label>
-                                        <input type="text" name="pr_no" value="{{ $delivered->pr_no }}" readonly class="form-control @error('pr_no') is-invalid @enderror">
-                                        @error('pr_no')
+                                        <label for="pr_number"><strong>PR No.:</strong></label>
+                                        <input type="text" name="pr_number" value="{{ $delivered->pr_number }}"  class="form-control @error('pr_number') is-invalid @enderror">
+                                        @error('pr_number')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -276,7 +268,7 @@
             <script>
                 document.querySelector('form').addEventListener('submit', function(event) {
                     var item_no = document.querySelector('input[name="item_no"]').value;
-                    var description = document.querySelector('input[name="description"]').value;
+                    var description = document.querySelector('input[name="item_description"]').value;
                     var unit = document.querySelector('input[name="unit"]').value;
                     var dr_no = document.querySelector('input[name="dr_no"]').value;
                     var check_no = document.querySelector('input[name="check_no"]').value;
@@ -290,7 +282,7 @@
 
                     var message = 'Are you sure you want to EDIT this item:\n' +
                         'Item No: ' + item_no + '\n' +
-                        'Description: ' + description + '\n' +
+                        'Description: ' + item_description + '\n' +
                         'Unit: ' + unit + '\n' +
                         'DR No: ' + dr_no + '\n' +
                         'Check No: ' + check_no + '\n' +

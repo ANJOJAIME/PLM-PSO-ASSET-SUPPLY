@@ -312,6 +312,21 @@
                 left: 300px;
                 /* Add your additional styles here */
             }
+            .high-level {
+                background-color: #90ee90; /* Light green */
+            }
+
+            .mid-level {
+                background-color: #ffff99; /* Light yellow */
+            }
+
+            .low-level {
+                background-color: #ffcc99; /* Light orange */
+            }
+
+            .out-of-stock {
+                background-color: #ff9999; /* Light red */
+            }
         </style>
     </head>
     <body>
@@ -372,7 +387,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                       
                     @foreach($supplies as $suppliesdata)
                         @php
                             $issuedTotal = $issuedTotals[$suppliesdata->description] ?? 0;
@@ -380,24 +394,30 @@
 
                             $balanceAfter = $deliveredTotal - $issuedTotal;
                             $status = 'No value yet'; // Default status
-                            if ($balanceAfter <= 50 && $balanceAfter > 1) {
-                                $status = 'LOW LEVEL';
-                            } elseif ($balanceAfter > 50 && $balanceAfter <= 100) {
-                                $status = 'MID LEVEL';
-                            } elseif ($balanceAfter > 100) {
+                            $percentage = ($issuedTotal / $deliveredTotal) * 100;
+                            $class = '';
+                            if ($percentage <= 20) {
                                 $status = 'HIGH LEVEL';
-                            } elseif ($balanceAfter <= 0) {
+                                $class = 'high-level';
+                            } elseif ($percentage > 20 && $percentage <= 50) {
+                                $status = 'MID LEVEL';
+                                $class = 'mid-level';
+                            } elseif ($percentage > 50 && $percentage <= 99) {
+                                $status = 'LOW LEVEL';
+                                $class = 'low-level';
+                            } elseif ($percentage == 100) {
                                 $status = 'OUT OF STOCK';
+                                $class = 'out-of-stock';
                             }
                         @endphp
-                        <tr>
+                        <tr class="{{ $class }}">
                             <td>{{$suppliesdata->description}}</td>
                             <td>{{$deliveredTotal}}</td>
                             <td>{{ $issuedTotal }}</td>
                             <td>{{ $balanceAfter }}</td>
                             <td>{{ $status }}</td>
                         </tr>
-                        @endforeach
+                    @endforeach
                     </tbody>
                 </table>
             </div>

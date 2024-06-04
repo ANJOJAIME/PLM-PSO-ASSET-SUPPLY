@@ -108,36 +108,63 @@
             <img src="/image/PLMLogo.png" alt="logo">
         </header>
         <div class ="card-header">
-            <a href="{{url('supplies-view')}}" class="btn btn1-primary">Cancel</a>
+            <a href="{{url('issued-supplies-view')}}" class="btn btn1-primary">Cancel</a>
         </div>
-
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-body">
-                            <h1><strong>Edit Supply Main</strong></h1>
-                            <form action="{{url('/updatesupplies/'.$supply->pr_no)}}" class="form-body" method="POST" autocomplete="off">
+                            <h1><strong>Edit Issued</strong></h1>
+                            <form action="{{url('/update-issued/'.$issued->stock_no)}}" class="form-body" method="POST" autocomplete="off">
                                 @csrf 
                                 @method ('PUT') 
                                 <div class="input-group">
                                     <label for="stock_no"><strong>Stock No:</strong></label>
-                                    <input type="text" name="stock_no" value="{{ $supply->stock_no }}" class="form-control @error('description') is-invalid @enderror">
+                                    <input type="text" name="stock_no" value="{{ $issued->stock_no }}" class="form-control @error('description') is-invalid @enderror">
                                     @error('stock_no')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="input-group">
                                     <label for="description"><strong>Item Description:</strong></label>
-                                    <input type="text" name="description" value="{{ $supply->description }}" class="form-control @error('description') is-invalid @enderror">
+                                    <input type="text" name="description" value="{{ $issued->description }}" class="form-control @error('description') is-invalid @enderror">
                                     @error('description')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="input-group">
-                                    <label for="unit"><strong>Unit:</strong></label>
-                                    <input type="text" name="unit" value="{{ $supply->unit }}" class="form-control @error('unit') is-invalid @enderror">
-                                    @error('unit')
+                                    <label for="date_issuance"><strong>Date of Issuance:</strong></label>
+                                    <input type="date" name="date_issuance" value="{{ $issued->date_issuance }}" class="form-control @error('date_issuance') is-invalid @enderror">
+                                    @error('date_issuance')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="input-group">
+                                    <label for="requesting_office"><strong>Requesting Office:</strong></label>
+                                    <input type="text" name="requesting_office" value="{{ $issued->requesting_office }}" class="form-control @error('requesting_office') is-invalid @enderror">
+                                    @error('requesting_office')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="input-group">
+                                    <label for="report_no"><strong>Report No:</strong></label>
+                                    <input type="text" name="report_no" value="{{ $issued->report_no }}" class="form-control @error('report_no') is-invalid @enderror">
+                                    @error('report_no')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="input-group">
+                                    <label for="ris_no"><strong>RIS No:</strong></label>
+                                    <input type="text" name="ris_no" value="{{ $issued->ris_no }}" class="form-control @error('ris_no') is-invalid @enderror">
+                                    @error('ris_no')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="input-group">
+                                    <label for="quantity_issued"><strong>Quantity:</strong></label>
+                                    <input type="text" name="quantity_issued" value="{{ $issued->quantity_issued }}" class="form-control @error('quantity_issued') is-invalid @enderror">
+                                    @error('quantity_issued')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -150,37 +177,5 @@
                 </div>
             </div>
         </div>
-        <script>
-            if (errorOccurred) {
-                var stockNoField = document.querySelector('input[name="stock_no"]');
-                stockNoField.placeholder = "Error: Please enter a valid Stock Number";
-                stockNoField.style.color = "red";
-
-                var descriptionField = document.querySelector('input[name="description"]');
-                descriptionField.placeholder = "Error: Please enter a valid Description";
-                descriptionField.style.color = "red";
-
-                var unitField = document.querySelector('input[name="unit"]');
-                unitField.placeholder = "Error: Please enter a Valid Unit";
-                unitField.style.color = "red";
-            }
-        </script>
-        <script>
-            document.querySelector('form').addEventListener('submit', function(event) {
-                var stock_no = document.querySelector('input[name="stock_no"]').value;
-                var description = document.querySelector('input[name="description"]').value;
-                var unit = document.querySelector('input[name="unit"]').value;
-
-                var message = 'Are you sure you want to EDIT this item:\n' +
-                    'Stock No: ' + stock_no + '\n' +
-                    'Description: ' + description + '\n' +
-                    'Unit: ' + unit + '\n' +
-                    "\nif not select 'cancel'";
-
-                if (!confirm(message)) {
-                    event.preventDefault();
-                }
-            });
-        </script>
     </body>
 </html>

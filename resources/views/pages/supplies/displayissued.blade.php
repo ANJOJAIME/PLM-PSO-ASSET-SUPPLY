@@ -401,7 +401,8 @@
                             <td>{{$issueddata->ris_no}}</td>
                             <td>{{$issueddata->quantity_issued}}</td>
                             <td>
-                            <a href="{{ url('deleteissued/'.$issueddata->stock_no)}}" class="btn-delete" style="text-decoration: none;" onclick="return confirm('Are you sure you want to delete this data with Stock No. {{$issueddata->stock_no}} in the supplies?')"><i class="bi bi-trash"></i>Delete</a>
+                                <a href="{{ url('deleteissued/'.$issueddata->stock_no)}}" class="btn-delete" style="text-decoration: none;" onclick="return confirm('Are you sure you want to delete this data with Stock No. {{$issueddata->stock_no}} in the supplies?')"><i class="bi bi-trash"></i>Delete</a>
+                                <a href="{{ url('edit-issued/'.$issueddata->stock_no)}}" class="btn-edit" style="text-decoration: none;"><i class="bi bi-pencil-square"></i>Edit</a>    
                             </td>
                         </tr>
                         @endforeach

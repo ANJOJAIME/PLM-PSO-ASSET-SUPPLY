@@ -49,6 +49,8 @@ Route::get('/searchissued', 'SuppliesController@issuedsearch');
 Route::get('/addissued', 'SuppliesController@addissued');
 Route::post('/storenewissued', 'SuppliesController@storenewissued');
 Route::get('/deleteissued/{stock_no}', 'SuppliesController@deleteissued');
+Route::get('/edit-issued/{stock_no}', 'SuppliesController@editissued');
+Route::put('/update-issued/{stock_no}', 'SuppliesController@updateissued');
 
 //DELIVERED TABLE
 Route::get('delivered-supplies-view', 'SuppliesController@displaydelivered');
@@ -56,6 +58,8 @@ Route::get('/searchdelivered', 'SuppliesController@deliveredsearch');
 Route::get('/adddelivered', 'SuppliesController@adddelivered');
 Route::post('/storenewdelivered', 'SuppliesController@storenewdelivered');
 Route::get('/deletedelivered/{stock_no}', 'SuppliesController@deletedelivered');
+Route::get('/edit-delivered/{stock_no}', 'SuppliesController@editdelivered');
+Route::put('/update-delivered/{stock_no}', 'SuppliesController@updatedelivered');
 
 //FORMS
 Route::get('supply-forms-and-reports-generation', 'SuppliesController@forms');

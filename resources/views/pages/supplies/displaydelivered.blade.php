@@ -378,9 +378,8 @@
                             <th>Item No.</th>
                             <th>Item Description</th>
                             <th>Unit</th>
-                            <th>Delivery Date</th>
+                            <th>Supplier</th>
                             <th>Actual Delivery Date</th>
-                            <th>Acceptance Date</th>
                             <th>Quantity Delivered</th>
                             <th>IAR No.</th>
                             <th>DR No.</th>
@@ -392,6 +391,7 @@
                             <th>Price Per Purchase Request</th>
                             <th>BUR</th>
                             <th>Remarks</th>
+                            <th>Photo</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -402,9 +402,8 @@
                             <td>{{$delivereddata->item_no}}</td>
                             <td>{{$delivereddata->item_description}}</td>
                             <td>{{$delivereddata->unit}}</td>
-                            <td>{{$delivereddata->delivery_date}}</td>
+                            <td>{{$delivereddata->supplier}}</td>
                             <td>{{$delivereddata->actual_delivery_date}}</td>
-                            <td>{{$delivereddata->acceptance_date}}</td>
                             <td>{{$delivereddata->delivered}}</td>
                             <td>{{$delivereddata->iar_no}}</td>
                             <td>{{$delivereddata->dr_no}}</td>
@@ -417,7 +416,26 @@
                             <td>{{$delivereddata->bur}}</td>
                             <td>{{$delivereddata->remarks}}</td>
                             <td>
+                                @if($delivereddata->photo)
+                                    <button type="button" data-toggle="modal" data-target="#photoModal{{ $delivereddata->id }}">
+                                        View Photo
+                                    </button>
+                                    <div class="modal fade" id="photoModal{{ $delivereddata->id }}" tabindex="-1" role="dialog" aria-labelledby="photoModalLabel{{ $delivereddata->id }}" aria-hidden="true">
+                                        <div class="modal-dialog d-flex align-items-center justify-content-center" role="document">
+                                            <div class="modal-content mx-auto" style="background: transparent; border: none;">
+                                                <div class="modal-body" style="background: transparent; display: flex; justify-content: center; align-items: center;">
+                                                    <img src="{{ asset('images/' . $delivereddata->photo) }}" alt="Photo" class="img-fluid" style="max-width: 90%; max-height: 90vh;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @else
+                                    No Photo
+                                @endif
+                            </td>
+                            <td>
                                 <a href="{{ url('deletedelivered/'.$delivereddata->stock_no)}}" class="btn-delete" style="text-decoration: none;" onclick="return confirm('Are you sure you want to delete this data with Stock No. {{$delivereddata->stock_no}} in the delivered?')"><i class="bi bi-trash"></i>Delete</a>
+                                <a href="{{ url('edit-delivered/'.$delivereddata->stock_no)}}" class="btn-edit" style="text-decoration: none;"><i class="bi bi-pencil-square"></i>Edit</a>
                             </td>
                         </tr>
                         @endforeach
@@ -425,10 +443,12 @@
                 </table>
             </div>
         </div>
-
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script>
             $(document).ready(function(){
             $("input[type='submit']").hover(function(){

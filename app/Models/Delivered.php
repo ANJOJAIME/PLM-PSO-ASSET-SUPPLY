@@ -13,9 +13,8 @@ class Delivered extends Model
     protected $table = 'delivered';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'delivery_date',
         'actual_delivery_date',
-        'acceptance_date',
+        'stock_no',
         'iar_no',
         'item_no',
         'stock_no',
@@ -31,6 +30,8 @@ class Delivered extends Model
         'price_per_purchase_request',
         'bur',
         'remarks',
+        'supplier',
+        'photo',
     ];
 
     public function getKeyName()
@@ -51,23 +52,30 @@ class Delivered extends Model
         return "S{$year}-{$month}-{$number}";
     }
 
-
-    public static function generateStockNo()
+    public static function generateStockNo($stock_type)
     {
-        $stockNos = self::withTrashed()->pluck('stock_no')->toArray();
+        $prefixes = ['CS', 'GOS', 'MIS', 'MIM', 'OUR', 'IBM'];
+
+        if (!in_array($stock_type, $prefixes)) {
+            throw new \Exception("Invalid stock type: {$stock_type}");
+        }
+
+        $stockNos = self::withTrashed()->where('stock_no', 'like', "{$stock_type}%")->pluck('stock_no')->toArray();
 
         $maxNumber = 0;
         foreach ($stockNos as $stockNo) {
-            $number = intval(substr($stockNo, 2));
+            $number = intval(substr($stockNo, strlen($stock_type)));
             if ($number > $maxNumber) {
                 $maxNumber = $number;
             }
         }
-        // Increment the number
-        $number = str_pad($maxNumber + 1, 3, '0', STR_PAD_LEFT);
 
-        return "CS{$number}";
+        // Increment the number
+        $number = str_pad($maxNumber + 1, 4, '0', STR_PAD_LEFT);
+
+        return "{$stock_type}{$number}";
     }
+
 
     public static function generateItemNo()
     {

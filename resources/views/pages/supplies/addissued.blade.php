@@ -177,6 +177,7 @@ if (isset($issued) && $issued->stock_no) {
                                                 $balanceAfter = $deliveredTotal - $issuedTotal;
                                             @endphp
                                             <option value="{{ $item->stock_no }}"
+                                                    data-balance="{{ $balanceAfter }}"
                                                     {{ old('stock_no', $issued->stock_no ?? '') == $item->stock_no ? 'selected' : '' }}
                                                     @if($balanceAfter <= 0) disabled @endif>
                                                 {{ $item->stock_no }} - {{ $item->item_description }}
@@ -241,8 +242,8 @@ if (isset($issued) && $issued->stock_no) {
                                         @enderror
                                     </div>
                                     <div class="input-group">
-                                        <label for="quantity_issued"><strong>Quantity Issued:</strong></label>
-                                        <input type="text" name="quantity_issued" class="form-control @error('quantity_issued') is-invalid @enderror">
+                                        <label for="quantity_issued"><strong>Quantity to Issue </strong>(Available: <span id="balanceAfter"></span>)</label>
+                                        <input type="number" name="quantity_issued" class="form-control @error('quantity_issued') is-invalid @enderror" id="quantity_issued"  oninput="checkQuantity()">
                                         @error('issued')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -298,8 +299,23 @@ if (isset($issued) && $issued->stock_no) {
             }
         });
         </script>
-
-
-
+        <script>
+            document.getElementById('stock_no').addEventListener('change', function() {
+                var selectedOption = this.options[this.selectedIndex];
+                var balance = selectedOption.getAttribute('data-balance');
+                document.getElementById('balanceAfter').textContent = balance;
+            });
+        </script>
+        <script>
+            function checkQuantity() {
+                var quantityIssued = document.getElementById('quantity_issued').value;
+                var balanceAfter = document.getElementById('balanceAfter').textContent;
+            
+                if (parseInt(quantityIssued) > parseInt(balanceAfter)) {
+                    alert('The quantity to issue cannot be greater than the available balance.');
+                    quantity_issued.value = balanceAfter;
+                }
+            }
+        </script>
     </body>
 </html>

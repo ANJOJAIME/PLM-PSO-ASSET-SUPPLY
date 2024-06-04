@@ -135,10 +135,24 @@
                 <div class="col-md-6">
                     <div class="card-body">
                         <h1><strong>ADD DELIVERED</strong></h1>
-                        <form action="{{url('/storenewdelivered')}}" class="form-body" method="POST" autocomplete="off">
+                        <form action="{{url('/storenewdelivered')}}" class="form-body" method="POST" autocomplete="off" enctype="multipart/form-data">
                             @csrf
-
                             <div class="input-group">
+                                    <div class="input-group">
+                                        <label for="stock_type"><strong>Stock Type:</strong></label>
+                                        <select name="stock_type" id="stock_type" class="form-control @error('stock_type') is-invalid @enderror">
+                                            <option value="">Select Stock Type</option>
+                                            <option value="CS">CS</option>
+                                            <option value="GOS">GOS</option>
+                                            <option value="MIS">MIS</option>
+                                            <option value="MIM">MIM</option>
+                                            <option value="OUR">OUR</option>
+                                            <option value="IBM">IBM</option>
+                                        </select>
+                                        @error('stock_type')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                     <div class="input-group">
                                         <label for="stock_no"><strong>Stock No.:</strong></label>
                                         <input type="text" id="stock_no" name="stock_no" class="form-control @error('stock_no') is-invalid @enderror" >
@@ -161,28 +175,25 @@
                                         @enderror
                                     </div>
                                     <div class="input-group">
-                                        <label for="delivery_date"><strong>Delivery Date:</strong></label>
-                                        <input type="date" name="delivery_date" class="form-control @error('delivery_date') is-invalid @enderror">
-                                        @error('delivery_date')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+                                        <label for="supplier"><strong>Supplier:</strong></label>
+                                        <select id="supplier" name="supplier" style="width: 347px; height: 32px; background-color: rgba(209,223,255,255); border: 0.5px solid #000; border-radius: 2px; padding-left: 12px; color: rgba(86,93,103,255)">
+                                            <option value="">Select Supplier</option>
+                                            @foreach($suppliers as $item)
+                                                @if(!is_null($item->name))
+                                                    <option value="{{ $item->name }}">{{ $item->name }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="input-group">
-                                        <label for="actual_delivery_date"><strong>Actual Delivery Date:</strong></label>
+                                        <label for="actual_delivery_date"><strong>Delivery Date:</strong></label>
                                         <input type="date" name="actual_delivery_date" class="form-control @error('actual_delivery_date') is-invalid @enderror">
                                         @error('actual_delivery_date')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="input-group">
-                                        <label for="acceptance_date"><strong>Acceptance Date:</strong></label>
-                                        <input type="date" name="acceptance_date" class="form-control @error('acceptance_date') is-invalid @enderror">
-                                        @error('acceptance_date')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="input-group">
-                                        <label for="delivered"><strong>Qunatity Delivered:</strong></label>
+                                        <label for="delivered"><strong>Quantity Delivered:</strong></label>
                                         <input type="number" name="delivered" class="form-control @error('delivered') is-invalid @enderror">
                                         @error('delivered')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -211,12 +222,12 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                </div>
-                                <div class="input-group1">
                                     <div class="input-group">
                                         <label for="unit"><strong>Unit:</strong></label>
                                         <input type="text" name="unit" style="width: 345px; height: 32px; background-color: rgba(209,223,255,255); border: 0.5px solid #000; border-radius: 2px; padding-left: 12px; color: rgba(86,93,103,255)">
                                     </div>
+                                </div>
+                                <div class="input-group1">
                                     <div class="input-group">
                                         <label for="check_no"><strong>Check No.:</strong></label>
                                         <input type="text" name="check_no" class="form-control @error('check_no') is-invalid @enderror">
@@ -274,10 +285,18 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
+                                    <div class="input-group">
+                                        <label for="photo"><strong>Photo:</strong></label>
+                                        <input type="file" id="photo" name="photo" class="form-control @error('photo') is-invalid @enderror" style="height: 45px">
+                                        @error('photo')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                 </div>
                                 <div>
                                     <button type="submit" class="btn btn-primary">Save</button>
                                 </div>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -296,13 +315,16 @@
         </script>
 
         <script>
-                document.getElementById('generate-stock-no').addEventListener('click', function() {
-                    fetch('/generate-stock-no')
-                        .then(response => response.json())
-                        .then(data => {
-                            document.getElementById('stock_no').value = data.stock_no;
-                        });
-                });
+            document.getElementById('generate-stock-no').addEventListener('click', function() {
+                // Get the selected stock type
+                var stockType = document.getElementById('stock_type').value;
+        
+                fetch('/generate-stock-no?stock_type=' + encodeURIComponent(stockType))
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('stock_no').value = data.stock_no;
+                    });
+            });
         </script>
         <script>
             document.getElementById('generate-iar-no').addEventListener('click', function() {
@@ -325,7 +347,7 @@
             <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const select = document.querySelector('#description_select');
-                const input = document.querySelector('#description');
+                const input = document.querySelector('#item_description');
 
                 select.addEventListener('change', function() {
                     // If the select is not on default, disable input
@@ -350,7 +372,5 @@
                 });
             });
             </script>
-            
-
     </body>
 </html>
