@@ -145,7 +145,7 @@
         </style>
 
     <body>
-        <div class="label"><strong>Archived Delivered</strong></div>
+        <div class="label"><strong>Archived Issued</strong></div>
         <header class="custom-header">
             <img src="/image/PLMLogo.png" alt="logo">
         </header>
