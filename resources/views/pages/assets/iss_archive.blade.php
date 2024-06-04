@@ -62,6 +62,7 @@
     text-align: center;
     padding: 8px;
     border: 1px solid #ddd;
+    white-space: nowrap; /* Prevents text from wrapping */
 }
 
 .table-container td {
