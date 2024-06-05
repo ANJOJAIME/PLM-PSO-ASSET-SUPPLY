@@ -397,7 +397,6 @@
                             <th>Property No</th>
                             <th>Unit</th>
                             <th>Requesting Office</th>
-                            <th>Date Issuance Report Created</th>
                             <th>Date Acquired</th>
                             <th>Location</th>
                             <th>Location ID</th>
@@ -416,7 +415,6 @@
                             <td>{{$assetdata->i_property_no}}</td>
                             <td>{{$assetdata->i_unit}}</td>
                             <td>{{$assetdata->i_req_office}}</td>
-                            <td>{{$assetdata->created_at}}</td>
                             <td>{{$assetdata->i_date_acquired}}</td>
                             <td>{{$assetdata->i_location}}</td>
                             <td>{{$assetdata->i_location_id}}</td>

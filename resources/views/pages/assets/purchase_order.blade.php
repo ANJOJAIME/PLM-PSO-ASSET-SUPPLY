@@ -387,12 +387,6 @@
                 </i>
             </button>
         </div>
-        <div>
-            <h4>
-                <a href="{{url('/makenewdelivery')}}" class="btn btn-primary"><strong>Make Purchase Order</strong></a>
-            </h4>
-        <div>
-
         <div class="success-alert" style="position: fixed; top:350px; right:600px; z-index: 4;">
             @if(session('status'))
                 <div id="alert" class="alert alert-success">{{session('status')}}</div>
@@ -408,173 +402,52 @@
                 <table class="table table-bordered">
                     <thead>
                     <tr>
-                            <th>Item No.</th> 
-                            <th>Item Description</th>
-                            <th>Unit</th>
-                            <th>Purchase Order No.</th>
-                            <th>Supplier</th>
-                            <th>TIN No.</th>
-                            <th>Mode of Procurement</th>
-                            <th>PR No.</th>
-                            <th>Price/Value</th>
-                            <th>Payment Term</th>
-                            <th>Quantity</th>
-                            <th>Unit Cost</th>
-                            <th>Amount</th>
-                            <th>Action</th>
+                            <th>Supplier</th> 
+                            <th>Telephone No.</th>
+                            <th>PO Date</th>
+                            <th>Address</th>
+                            <th>TIN</th>
+                      		<th>Mode of Procurement</th>
+                            <th>PO Authorized</th>
+                            <th>PO Authorized Position</th>
+                            <th>PO CFA</th>
+                            <th>PO CFA Position</th>
+                            <th>Status</th>
+                            <th>Amount in Word</th>
+                      		<th>Place of PO</th>
+                            <th>Po Date OD</th>
+                            <th>PO Validity</th>
+                            <th>PO Term</th>
+                      		<th>PO Number</th>
                         </tr>
                     </thead>
                         @foreach($orders as $order)
                         <tr>
-                            <td>{{$order->item_no}}</td>
-                            <td>{{$order->description}}</td>
-                            <td>{{$order->unit}}</td>
-                            <td>{{$order->po_no}}</td>
                             <td>{{$order->supplier}}</td>
-                            <td>{{$order->tin_no}}</td>
-                            <td>{{$order->mode_of_proc}}</td>
-                            <td>{{$order->pr_no}}</td>
-                            <td>{{$order->price_val}}</td>
-                            <td>{{$order->payment_term}}</td>
-                            <td>{{$order->quantity}}</td>
-                            <td>{{$order->unit_cost}}</td>
-                            <td>{{ $order->quantity * $order->unit_cost }}</td>
-                            <td> 
-                                <button id="deliveryButton{{$order->id}}" type="button" data-toggle="modal" data-target="#deliveryModal{{$order->id}}" {{ $order->is_delivered ? 'disabled' : '' }}>
-                                    {{ $order->is_delivered ? 'Delivered' : 'Deliver' }}
-                                </button>
-                                <a href="{{url('/delete-purchase-order/'.$order->id)}}" class="btn btn-delete">Delete</a>
-                            </td>
+                            <td>{{$order->tel_no}}</td>
+                            <td>{{$order->po_date}}</td>
+                            <td>{{$order->address}}</td>
+                            <td>{{$order->tin}}</td>
+                            <td>{{$order->mop}}</td>
+                            <td>{{$order->po_auth}}</td>
+                            <td>{{$order->po_authPos}}</td>
+                            <td>{{$order->po_cfa}}</td>
+                            <td>{{$order->po_cfapos}}</td>
+                            <td>{{$order->po_status}}</td>
+                            <td>{{$order->po_word}}</td>
+                          	<td>{{$order->po_place}}</td>
+                            <td>{{$order->po_dateod}}</td>
+                            <td>{{$order->po_validity}}</td>
+                            <td>{{$order->po_term}}</td>
+                            <td>{{$order->po_number}}</td>
+                            
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
-        @foreach($orders as $order)
-        <div class="modal fade" id="deliveryModal{{$order->id}}" tabindex="-1" role="dialog" aria-labelledby="deliveryModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deliveryModalLabel"><strong>Confirm Delivery</strong></h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form action="{{url('/storenewdelivery')}}" method="POST">
-                        @csrf
-                        <div class="modal-body">
-                        <div class="form-group">
-                            <div class="form-group">
-                                <label for="d_item_no"><strong>Item Number</strong></label>
-                                <div>
-                                    <input type="text" class="form-control" name="d_item_no" value="{{$order->item_no}}" readonly>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="d_description"><strong>Description</strong></label>
-                                    <input type="text" class="form-control" name="d_description" value="{{$order->description}}" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="d_po_no"><strong>PO No</strong></label>
-                                    <input type="text" class="form-control" name="d_po_no" value="{{$order->po_no}}" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="d_date_po"><strong>Date of PO:</strong></label>
-                                    <input type="text" class="form-control" name="d_date_po" value="{{$order->updated_at}}" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="d_pr_no"><strong>PR No</strong></label>
-                                    <input type="text" class="form-control" name="d_pr_no" value="{{$order->pr_no}}" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="d_supplier"><strong>Supplier</strong></label>
-                                    <input type="text" class="form-control" name="d_supplier" value="{{$order->supplier}}" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="d_unit"><strong>Unit</strong></label>
-                                    <input type="text" class="form-control" name="d_unit" value="{{$order->unit}}" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="d_date_of_delivery"><strong>Delivery Date</strong></label>
-                                    <input type="date" class="form-control" name="d_date_of_delivery">
-                            </div>
-                            <div class="form-group">
-                                <label for="d_place_of_delivery"><strong>Place of Delivery</strong></label>
-                                    <input type="text" class="form-control" name="d_place_of_delivery">
-                            </div>
-                            <div class="form-group">
-                                <label for="d_class_id"><strong>Class ID</strong></label>
-                                <select id="d_class_id" name="d_class_id" class="form-control" onchange="updateCategoryOptions()">
-                                    <option value="">Select Class ID</option>
-                                    @foreach($class as $classdata)
-                                        <option value="{{ $classdata->class_id }}">{{ $classdata->class_id }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="d_category"><strong>Category</strong></label>
-                                <select id="d_category" name="d_category" class="form-control">
-                                    <option value="">Select Category</option>
-                                    <!-- Options will be populated by JavaScript -->
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="d_iar_no"><strong>IAR No</strong></label>
-                                    <input type="text" class="form-control" name="d_iar_no" id="d_iar_no">
-                                    <button id="generate-asset-iar-no" type="button">Generate IAR No</button>
-                            </div>
-                            <div class="form-group">
-                                <label for="d_ics_no"><strong>ICS No</strong></label> 
-                                <label for="splv">
-                                    <input type="radio" id="splv" name="option" value="SPLV"> SPLV
-                                </label>
-                                <label for="sphv">
-                                    <input type="radio" id="sphv" name="option" value="SPHV"> SPHV
-                                </label>
-                                <label for="rrsp">
-                                    <input type="radio" id="rrsp" name="option" value="RRSP"> RRSP
-                                </label>
-                                <input type="text" name="d_ics_no" id="d_ics_no" class="form-control @error('d_ics_no') is-invalid @enderror" >
-                                <button id="generate-asset-ics-no" type="button">Generate ICS No</button>
-                            </div>
-                            <div class="form-group">
-                                <label for="d_bur_no"><strong>BUR No</strong></label>
-                                    <input type="text" class="form-control" name="d_bur_no">
-                            </div>
-                            <div class="form-group">
-                                <label for="d_invoice_no"><strong>Invoice No</strong></label>
-                                    <input type="text" class="form-control" name="d_invoice_no">
-                            </div>
-                            <div class="form-group">
-                                <label for="d_date_invoice"><strong>Date of Invoice</strong></label>
-                                    <input type="date" class="form-control" name="d_date_invoice">
-                            </div>
-                            <div class="form-group">
-                                <label for="d_qty"><strong>Quantity Delivered</strong></label>
-                                    <input type="number" class="form-control" name="d_qty">
-                            </div>
-                            <div class="form-group">
-                                <label for="d_unit_cost"><strong>Unit Cost</strong></label>
-                                    <input type="number" class="form-control" name="d_unit_cost">
-                            </div>
-                            <div class="form-group">
-                                <label for="d_total_cost"><strong>Total Cost</strong></label>
-                                    <input type="number" class="form-control" name="d_total_cost">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button id="modalDeliveryButton{{$order->id}}" type="submit" class="btn btn-success">
-                                Save
-                            </button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        @endforeach
+        
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
@@ -642,15 +515,5 @@
                 }
             }
         </script>
-        <script>
-            document.getElementById('generate-asset-iar-no').addEventListener('click', function() {
-                fetch('/generate-asset-iar-no')
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('d_iar_no').value = data.d_iar_no;
-                    });
-            });
-        </script>
-
     </body>
 </html>

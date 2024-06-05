@@ -57,4 +57,20 @@ class DeliveredAsset extends Model
 
         return $year . '-' . $number;
     }
+  
+  	public static function generateAssetItemNo()
+    {
+        $year = date('Y');
+        $lastItemNo = self::where('d_item_no', 'like', $year.'%')->orderBy('d_item_no', 'desc')->first();
+
+        if ($lastItemNo) {
+            $number = intval(substr($lastItemNo->d_item_no, 4)) + 1;
+        } else {
+            $number = 1;
+        }
+        $number = str_pad($number, 6, '0', STR_PAD_LEFT);
+
+        return $year . $number;
+    }
+
 }

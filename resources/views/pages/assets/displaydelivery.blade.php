@@ -346,6 +346,11 @@
                 <input type="text" class="search" name="stock_no" placeholder="Search here..." autocomplete="off"> 
             </form>
         </div>
+      	<div>
+            <h4>
+                <a href="{{url('/makenewdelivery')}}" class="btn btn-primary"><strong>Add Delivery</strong></a>
+            </h4>
+        <div>
         <div class="side-bar" style="padding: 10px;">
             <h2 style="color: white; text-align: right; font-size: 20px; padding-top: 80px; padding-right: 10px"><strong>Assets Management</strong></h2>
             <div class="items">

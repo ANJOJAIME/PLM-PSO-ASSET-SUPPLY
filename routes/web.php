@@ -35,7 +35,7 @@ Route::get('/generate-pr-no', [SuppliesController::class, 'generatePrNo']);
 Route::get('/generate-report-no', [SuppliesController::class, 'generateReportNo']);
 Route::get('/generate-ris-no', [SuppliesController::class, 'generateRisNo']);
 
-Route::get('/generate-item-no', [AssetController::class, 'generateItemNo']);
+Route::get('/generate-asset-item-no', [AssetController::class, 'generateAssetItemNo']);
 Route::get('/generate-class-id', [AssetController::class, 'generateClassId']);
 Route::get('/generate-asset-iar-no', [AssetController::class, 'generateAssetIARNo']);
 Route::get('/generate-property-no', [AssetController::class, 'generatePropertyNo']);

@@ -34,7 +34,7 @@ class AssetController extends Controller
     }*/
 
     //PURCHASE ORDER
-    public function displaypurchaseorder()
+    /*public function displaypurchaseorder()
     {
         $orders = PurchaseOrder::all();
         $dasset = DeliveredAsset::all();
@@ -101,7 +101,16 @@ class AssetController extends Controller
     {
         $orders = PurchaseOrder::where('item_no', $itemNo)->first();
         return response()->json(['orders' => $orders]);
-    }
+    }*/
+  
+  	//PURCHASE ORDER
+  	
+  	public function displaypurchaseorder()
+  	{
+      	$orders = PurchaseOrder::all();
+  
+  		return view('pages.assets.purchase_order', ['orders' => $orders]);
+  	}
 
     //DELIVERY
     public function displaydelivery()
@@ -127,7 +136,8 @@ class AssetController extends Controller
         $classToCategoryMap = ClassCategory::all()->groupBy('class_id')->map(function ($classItems) {
             return $classItems->pluck('category');
         });
-        return view('pages.assets.addassetdelivered', ['dasset' => $dasset, 'class' => $class, 'classToCategoryMap' => $classToCategoryMap]);
+      	$orders = PurchaseOrder::all();
+        return view('pages.assets.addassetdelivered', ['dasset' => $dasset, 'class' => $class, 'classToCategoryMap' => $classToCategoryMap, 'orders' => $orders]);
     }
 
     public function storenew_delivered_asset(Request $request)
@@ -150,10 +160,10 @@ class AssetController extends Controller
             'd_class_id' => 'required',
             'd_category' => 'required',
             'd_date_invoice' => 'required',
-            'd_qty' => 'required',
             'd_unit_cost' => 'required',
             'd_total_cost' => 'required',
             'd_date_po' => 'required',
+            'd_qty' => 'required',
         ]);
 
         $dasset->d_item_no = $request->input('d_item_no');
@@ -171,18 +181,35 @@ class AssetController extends Controller
         $dasset->d_class_id = $request->input('d_class_id');
         $dasset->d_category = $request->input('d_category');
         $dasset->d_date_invoice = $request->input('d_date_invoice');
-        $dasset->d_qty = $request->input('d_qty');
         $dasset->d_unit_cost = $request->input('d_unit_cost');
         $dasset->d_total_cost = $request->input('d_total_cost');
         $dasset->d_date_po = $request->input('d_date_po');
+        $dasset->d_qty = $request->input('d_qty');
 
         $dasset->save();
-        $order = PurchaseOrder::where('id', $dasset->d_po_no)->first();
-        if ($order) {
-            $order->is_delivered = true;
-            $order->save();
-        }
 
+        $d_description = $request->input('d_description');
+        $d_unit = $request->input('d_unit');
+        $d_qty = $request->input('d_qty');
+        $d_unit_cost = $request->input('d_unit_cost');
+        $currentYear = date('Y'); // Get the current year
+
+        // Get the last IssuedAsset record
+        $lastIssuedAsset = IssuedAsset::orderBy('id', 'desc')->first();
+
+        // Get the last i_property_no and increment it for the new records
+        $lastPropertyNo = $lastIssuedAsset ? intval($lastIssuedAsset->i_property_no) : 0;
+
+        for ($i = 1; $i <= $d_qty; $i++) {
+            $issuedAsset = new IssuedAsset;
+            $issuedAsset->i_property_no = str_pad($lastPropertyNo + $i, 5, '0', STR_PAD_LEFT); // This will generate numbers like 00001, 00002, etc., continuously
+            $issuedAsset->i_description = $d_description;
+            $issuedAsset->i_unit = $d_unit;
+            $issuedAsset->i_unit_value = $d_unit_cost;
+            $issuedAsset->i_par_no = $currentYear . '-' . str_pad($i, 6, '0', STR_PAD_LEFT); // This will generate numbers like YEAR-000001, YEAR-000002, etc.
+            $issuedAsset->save();
+        }
+ 
         return redirect('/delivery-view')->with('status', 'Delivered Asset Added Successfully!');
     }
 
@@ -332,9 +359,9 @@ class AssetController extends Controller
     }
 
     //NO. GENERATION
-    public function generateItemNo()
+    public function generateAssetItemNo()
     {
-        return response()->json(['item_no' => PurchaseOrder::generateItemNo()]);
+        return response()->json(['d_item_no' => DeliveredAsset::generateAssetItemNo()]);
     }
 
     public function generateClassId()
