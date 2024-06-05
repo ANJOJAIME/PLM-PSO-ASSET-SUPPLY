@@ -225,7 +225,8 @@ if (isset($issued) && $issued->stock_no) {
                                     </div>
                                     <div class="input-group">
                                         <label for="report_no"><strong>Report No:</strong></label>
-                                        <input type="text" name="report_no" class="form-control @error('report_no') is-invalid @enderror">
+                                        <input type="text" name="report_no" id="report_no" class="form-control @error('report_no') is-invalid @enderror">
+                                        <button id="generate-report-no" type="button">Generate Report No</button>
                                         @error('report_no')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -234,7 +235,8 @@ if (isset($issued) && $issued->stock_no) {
                                     </div>
                                     <div class="input-group">
                                         <label for="ris_no"><strong>RIS No:</strong></label>
-                                        <input type="text" name="ris_no" class="form-control @error('ris_no') is-invalid @enderror">
+                                        <input type="text" name="ris_no" id="ris_no" class="form-control @error('ris_no') is-invalid @enderror">
+                                        <button id="generate-ris-no" type="button">Generate RIS No</button>
                                         @error('ris_no')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -316,6 +318,40 @@ if (isset($issued) && $issued->stock_no) {
                     quantity_issued.value = balanceAfter;
                 }
             }
+        </script>
+        <script>
+            document.getElementById('generate-report-no').addEventListener('click', function() {
+                fetch('/generate-report-no')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        document.getElementById('report_no').value = data.report_no;
+                    })
+                    .catch(error => {
+                        console.error('There has been a problem with your fetch operation:', error);
+                    });
+            });
+        </script>
+        <script>
+            document.getElementById('generate-ris-no').addEventListener('click', function() {
+                fetch('/generate-ris-no')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        document.getElementById('ris_no').value = data.ris_no;
+                    })
+                    .catch(error => {
+                        console.error('There has been a problem with your fetch operation:', error);
+                    });
+            });
         </script>
     </body>
 </html>

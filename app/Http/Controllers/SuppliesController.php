@@ -27,12 +27,13 @@ class SuppliesController extends Controller
         $issuedTotals = Issued::select('description', \DB::raw('SUM(quantity_issued) as total_quantity'))
                             ->groupBy('description')
                             ->pluck('total_quantity', 'description');
-        $totalDelivered = Delivered::select('item_description', \DB::raw('SUM(delivered) as total_delivered'))
-                            ->groupBy('item_description')
-                            ->pluck('total_delivered', 'item_description');
+        $totalDelivered = Delivered::select('item_description', \DB::raw('SUM(delivered) as total_delivered')) // Use 'item_description'
+                            ->groupBy('item_description') // Use 'item_description'
+                            ->pluck('total_delivered', 'item_description'); // Use 'item_description'
 
         return view('pages.supplies.displaysupplies', ['supplies' => $supplies, 'notifications' => $notifications, 'issuedTotals' => $issuedTotals, 'totalDelivered' => $totalDelivered]);
     }
+
 
     //ISSUED TABLE
     public function displayissued()
@@ -462,6 +463,19 @@ class SuppliesController extends Controller
     {
         return response()->json(['item_no' => Delivered::generateItemNo()]);
     }
+
+    public function generateReportNo()
+    {
+        $issued = new Issued();
+        return response()->json(['report_no' => $issued->generateReportNo()]);
+    }
+
+    public function generateRisNo()
+    {
+        $issued = new Issued();
+        return response()->json(['ris_no' => $issued->generateRisNo()]);
+    }
+
 
     //USER PROFILE
     public function displayprofile()

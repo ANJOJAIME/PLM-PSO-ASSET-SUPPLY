@@ -128,7 +128,7 @@
                                 </div>
                                 <div class="input-group">
                                     <label for="description"><strong>Item Description:</strong></label>
-                                    <input type="text" name="description" value="{{ $issued->description }}" class="form-control @error('description') is-invalid @enderror">
+                                    <input type="text" name="description" value="{{ $issued->description }}" class="form-control @error('description') is-invalid @enderror" readonly>
                                     @error('description')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror

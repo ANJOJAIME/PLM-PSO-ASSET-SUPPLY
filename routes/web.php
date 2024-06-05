@@ -32,6 +32,8 @@ Route::get('/generate-iar-no', [SuppliesController::class, 'generateIARNo']);
 Route::get('/generate-stock-no', [SuppliesController::class, 'generateStockNo']);
 Route::get('/generate-item-no', [SuppliesController::class, 'generateItemNo']);
 Route::get('/generate-pr-no', [SuppliesController::class, 'generatePrNo']);
+Route::get('/generate-report-no', [SuppliesController::class, 'generateReportNo']);
+Route::get('/generate-ris-no', [SuppliesController::class, 'generateRisNo']);
 
 Route::get('/generate-item-no', [AssetController::class, 'generateItemNo']);
 Route::get('/generate-class-id', [AssetController::class, 'generateClassId']);
@@ -121,6 +123,12 @@ Route::get('/assets-searchdept', 'AssetController@assetdepartmentsearch');
 Route::get('asset-forms-and-reports-generation', 'AssetController@assetforms');
 Route::get('/assets-pdf', 'AssetController@downloadAssets');
 Route::get('/assetpdf-view', 'AssetController@assetPDF');
+
+//CLASS CATEGORY
+Route::get('/class-category', 'AssetController@displayclasscategory');
+Route::get('/addclasscategory', 'AssetController@addclasscategory');
+Route::post('/storeclasscategory', 'AssetController@storeclasscategory');
+Route::get('/deleteclasscategory/{id}', 'AssetController@deleteclasscategory');
 
 //================================================================================================================================================================//
 //LOGIN ROUTES

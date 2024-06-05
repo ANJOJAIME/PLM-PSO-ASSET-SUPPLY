@@ -331,7 +331,7 @@
         </style>
     </head>
     <body>
-        <h1 class="label"><strong>Assets :Suppliers</strong></h1>
+        <h1 class="label"><strong>Assets: Class ID and Category</strong></h1>
         <header class="custom-header">
             <img src="/image/PLMLogo.png" alt="logo">
         </header>
@@ -348,9 +348,9 @@
                 <a class="issuance" href="/issuance-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issuance</a>
                 <a class="purchase_order" href="/purchase-order-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Purchase Order</a>
                 <!-- <a class="assets_transer" href="/asset-transfer-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Asset Transfer</a> -->
-                <a class="supplier" href="/suppliers-view" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Suppliers</a>
+                <a class="supplier" href="/suppliers-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Suppliers</a>
                 <a class="department" href="/asset-plm-departments" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">PLM Departments</a>
-                <a class="class" href="/class-category" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Class ID and Categories</a>
+                <a class="class" href="/class-category" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Class ID and Categories</a>
                 <a class="reports&forms" href="asset-forms-and-reports-generation" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Reports and Forms</a>
                 <a class="po_archive" href="/purchase-order/archive" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Purchase Order Archive</a>
                 <a class="dArchive" href="/delivery/archive" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery Archive</a>
@@ -359,7 +359,7 @@
         </div>
         <div>
             <h4>
-                <a href="{{url('/addsupplier')}}" class="btn btn-primary"><strong>ADD SUPPLIER</strong></a>
+                <a href="{{url('/addclasscategory')}}" class="btn btn-primary"><strong>ADD CLASS</strong></a>
             </h4>
         <div>
         <div class="profile">
@@ -396,19 +396,17 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Company</th>
-                            <th>Address</th>
-                            <th>Contact Number</th>
+                            <th>Class ID</th>
+                            <th>Category</th>
                             <th>Action</th>
                         </tr>
                     </thead>
-                        @foreach($suppliers as $supplierdata)
+                        @foreach($class as $classdata)
                         <tr>
-                            <td>{{$supplierdata->name}}</td>
-                            <td>{{$supplierdata->address}}</td>
-                            <td>{{$supplierdata->contact_number}}</td>
+                            <td>{{$classdata->class_id}}</td>
+                            <td>{{$classdata->category}}</td>
                             <td>
-                                <a href="{{url('/deletesupplier/'.$supplierdata->id)}}" class="btn btn-delete">Delete</a>
+                                <a href="{{url('/deleteclasscategory/'.$classdata->id)}}" class="btn btn-delete">Delete</a>
                             </td>
                         </tr>
                         @endforeach
@@ -416,7 +414,6 @@
                 </table>
             </div>
         </div>
-
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>

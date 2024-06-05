@@ -8,6 +8,7 @@ use App\Models\Department;
 use App\Models\PurchaseOrder;
 use App\Models\DeliveredAsset;
 use App\Models\IssuedAsset;
+use App\Models\ClassCategory;
 use App\Models\AssetTransfer;
 use App\Models\Notification;
 use Barryvdh\DomPDF\Facade\PDF;
@@ -37,7 +38,11 @@ class AssetController extends Controller
     {
         $orders = PurchaseOrder::all();
         $dasset = DeliveredAsset::all();
-        return view('pages.assets.purchase_order', ['orders' => $orders, 'dasset' => $dasset]);
+        $class = ClassCategory::all();
+        $classToCategoryMap = ClassCategory::all()->groupBy('class_id')->map(function ($classItems) {
+            return $classItems->pluck('category');
+        });
+        return view('pages.assets.purchase_order', ['orders' => $orders, 'dasset' => $dasset, 'class' => $class, 'classToCategoryMap' => $classToCategoryMap]);
     }
 
     public function makePurchaseOrder()
@@ -235,6 +240,41 @@ class AssetController extends Controller
         return redirect('/issuance-view')->with('status', 'Issued Asset Deleted Successfully! Item can be recovered in archive...');
     }
 
+    //CLASS AND CATEGORY
+    public function displayclasscategory()
+    {
+        $class = ClassCategory::all();
+        return view('pages.assets.displayclasscategory', ['class' => $class]);
+    }
+
+    public function addclasscategory()
+    {
+        $class = ClassCategory::all();
+        return view('pages.assets.addclasscategory');
+    }
+
+    public function storeclasscategory(Request $request)
+    {
+        $class = new ClassCategory;
+        $validatedData = $request->validate([
+            'class_id' => 'required',
+            'category' => 'required',
+        ]);
+
+        $class->class_id = $request->input('class_id');
+        $class->category = $request->input('category');
+        $class->save();
+
+        return redirect('/class-category')->with('status', 'Class and Category Added Successfully!');
+    }
+
+    public function deleteclasscategory($id)
+    {
+        $class = ClassCategory::find($id);
+        $class->delete();
+
+        return redirect('/class-category')->with('status', 'Class and Category Deleted Successfully!');
+    }
 
     //NO. GENERATION
     public function generateItemNo()

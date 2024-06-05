@@ -152,7 +152,7 @@
                                     </div>
                                     <div class="input-group">
                                         <label for="item_description"><strong>Item Description:</strong></label>
-                                        <input type="text" name="item_description" value="{{ $delivered->item_description }}" style="width: 345px; height: 32px; background-color: rgba(209,223,255,255); border: 0.5px solid #000; border-radius: 2px; padding-left: 12px; color: rgba(86,93,103,255)">
+                                        <input type="text" name="item_description" value="{{ $delivered->item_description }}" style="width: 345px; height: 32px; background-color: rgba(209,223,255,255); border: 0.5px solid #000; border-radius: 2px; padding-left: 12px; color: rgba(86,93,103,255)" readonly>
                                     </div>
                                     <div class="input-group">
                                         <label for="supplier"><strong>Supplier:</strong></label>
