@@ -151,7 +151,7 @@
                 position: absolute;
                 justify-content: center;
                 top: 80px;
-                left: 300px;
+                left: 350px;
                 height: 180px;
                 width: 180px;
                 background: white;
@@ -162,18 +162,7 @@
                 position: absolute;
                 justify-content: center;
                 top: 80px;
-                left: 500px;
-                height: 180px;
-                width: 180px;
-                background: white;
-                padding: 10px;
-                border-radius: 8px;
-            }
-            .specific2 {
-                position: absolute;
-                justify-content: center;
-                top: 280px;
-                left: 300px;
+                left: 550px;
                 height: 180px;
                 width: 180px;
                 background: white;
@@ -183,8 +172,19 @@
             .specific3 {
                 position: absolute;
                 justify-content: center;
-                top: 280px;
-                left: 500px;
+                top: 320px;
+                left: 350px;
+                height: 180px;
+                width: 180px;
+                background: white;
+                padding: 10px;
+                border-radius: 8px;
+            }
+            .specific2 {
+                position: absolute;
+                justify-content: center;
+                top: 320px;
+                left: 550px;
                 height: 180px;
                 width: 180px;
                 background: white;
@@ -216,9 +216,9 @@
             .linegraph {
                 position: absolute;
                 top: 80px;
-                left: 71%;
-                width: 27.5%;
-                height: 65%;
+                left: 61%;
+                width: 30.5%;
+                height: 70%;
                 border-radius: 8px;
                 background: #E6EDFD;
                 box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -287,12 +287,13 @@
             <label style="position: absolute; top: 30px; font-size: 25px; left: 0px; text-align: center; color: #4F74BB;"><strong>Purchase Request</strong></label>
             <a class="btn btn-outline-primary" style="position: absolute; top: 125px; right: 45px;" href="{{url('/purchase-request-form')}}">Generate</a>
         </div>
-        <div class="specific2">
-            <label style="position: absolute; top: 30px; font-size: 25px; left: 0px; text-align: center; color: #4F74BB;"><strong>Requisition and Issue Slip</strong></label>
-            <a href="{{url('/requisition-issue-form')}}" class="btn btn-outline-primary" style="position: absolute; top: 125px; right: 45px;">Generate</a>
-        </div>
+
         <div class="specific3">
             <label style="position: absolute; top: 10px; font-size: 25px; left: 0px; text-align: center; color: #4F74BB;"><strong>Inspection & Acceptance Report</strong></label>
+            <a href="{{url('/inspection-acceptance-report')}}" class="btn btn-outline-primary" style="position: absolute; top: 125px; right: 45px;">Generate</a>
+        </div>
+        <div class="specific2">
+            <label style="position: absolute; top: 10px; font-size: 25px; left: 0px; text-align: center; color: #4F74BB;"><strong>SSMI</strong></label>
             <a href="{{url('/inspection-acceptance-report')}}" class="btn btn-outline-primary" style="position: absolute; top: 125px; right: 45px;">Generate</a>
         </div>
         <!--

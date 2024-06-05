@@ -570,9 +570,9 @@ class SuppliesController extends Controller
 
     public function getUnit(Request $request) 
     {
-        $item_no = $request->get('item_no');
-        $supply = Delivered::all()->where('item_no', $item_no)->first();
-        return response()->json(['unit' => $supply->unit, 'description' => $supply->item_description, 'price_per_purchase_request' => $supply->price_per_purchase_request]);
+        $item_description = $request->get('item_description');
+        $supply = Delivered::all()->where('item_description', $item_description)->first();
+        return response()->json(['unit' => $supply->unit]);
     }
 
     //REQUISITION AND ISSUE SLIP

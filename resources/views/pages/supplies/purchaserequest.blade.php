@@ -80,39 +80,38 @@ Section: {{ session('form_data.section') }}
 
     <table style="border: 1px solid black; text-align: center;">
         <tr>
-            <th>Item <br>
-                No.</th>
+            <th>No.</th>
+            <th >Item Description</th>
             <th>Qty</th>
             <th>Unit of <br>
                 Issue</th>
-            <th >Item Description</th>
             <th>Estimated <br>
                 Unit Cost</th>
             <th>Estimated <br>
                 Cost</th>
-        </tr>
-            @if(is_array(session('form_data.item_no')))
-                @foreach(session('form_data.item_no') as $index => $item_no)
+            </tr>
+            @if(is_array(session('form_data.item_description')))
+                @foreach(session('form_data.item_description') as $index => $item_description)
                     <tr>
-                        <td>{{ $item_no }}</td>
+                        <td>{{ $index + 1 }}</td> <!-- Increment item_no here -->
+                        <td>{{ session('form_data.item_description')[$index] }}</td>
                         <td>{{ session('form_data.qty')[$index] }}</td>
                         <td>{{ session('form_data.unit')[$index] }}</td>
-                        <td>{{ session('form_data.description')[$index] }}</td>
-                        <td>{{ session('form_data.price_per_purchase_request')[$index] }}</td>
-                        <td>{{ session('form_data.qty')[$index] * session('form_data.price_per_purchase_request')[$index] }}</td>
+                        <td>{{ is_array(session('form_data.price_per_purchase_request')) ? session('form_data.price_per_purchase_request')[$index] : '' }}</td>
+                        <td>{{ (is_array(session('form_data.qty')) && is_array(session('form_data.price_per_purchase_request'))) ? session('form_data.qty')[$index] * session('form_data.price_per_purchase_request')[$index] : '' }}</td>
                     </tr>
                 @endforeach
             @else
                 <tr>
-                    <td>{{ session('form_data.item_no') }}</td>
+                    <td>1</td> <!-- Set item_no to 1 here -->
+                    <td>{{ session('form_data.item_description') }}</td>
                     <td>{{ session('form_data.qty') }}</td>
                     <td>{{ session('form_data.unit') }}</td>
-                    <td>{{ session('form_data.description') }}</td>
-                    <td>{{ session('form_data.est_unitcost') }}</td>
-                    <td>{{ session('form_data.qty') * session('form_data.price_per_purchase_request') }}</td>
+                    <td>{{ session('form_data.price_per_purchase_request') ?? '' }}</td>
+                    <td>{{ (session('form_data.qty') && session('form_data.price_per_purchase_request')) ? session('form_data.qty') * session('form_data.price_per_purchase_request') : '' }}</td>
                 </tr>
             @endif
-        <tr>
+            <tr>
             <td colspan="6" style="text-align: left;">Purposes: {{ session('form_data.purpose') }}</td>
             </tr>
             <tr>
@@ -188,10 +187,10 @@ Section: {{ session('form_data.section') }}
                             <table id="itemsTable" class="table" style="border: 1px solid black; text-align: center;">
                                 <thead>
                                     <tr>
-                                        <th>Item No</th>
+                                        <th>No.</th>
+                                        <th>Description</th>
                                         <th>Quantity</th>
                                         <th>Unit</th>
-                                        <th>Description</th>
                                         <th>Estimated Unit Cost</th>
                                         <th>Estimated Cost</th>
                                     </tr>
@@ -221,16 +220,14 @@ Section: {{ session('form_data.section') }}
         <script>
             $(document).ready(function() {
                 $('#item-input').change(function() {
-                    var item_no = $(this).val();
+                    var item_description = $(this).val();
 
                     $.ajax({
                         url: '/getItemDetails', // Replace with the actual URL to your function
                         method: 'GET',
-                        data: { item_no: item_no }
+                        data: { item_description: item_description }
                     }).done(function(response) {
                         $('#unit-input').val(response.unit);
-                        $('#description-input').val(response.description);
-                        $('#price_per_purchase_request-input').val(response.price_per_purchase_request);
 
                         // Open the modal
                         $("#PRModal").modal('show');
@@ -240,15 +237,11 @@ Section: {{ session('form_data.section') }}
         </script>
         <script>
             $(document).on('change', '.item-input', function() {
-                var item_no = $(this).val();
+                var item_description = $(this).val();
                 var row = $(this).closest('tr');
 
-                $.get('/supplies/unit', {item_no: item_no}, function(data) {
+                $.get('/supplies/unit', {item_description: item_description}, function(data) {
                     row.find('.unit-input').val(data.unit);
-                    row.find('.description-input').val(data.description);
-                    if (data && data.price_per_purchase_request) {
-                        row.find('.price_per_purchase_request-input').val(data.price_per_purchase_request);
-                    }
                 });
             });
         </script>
@@ -257,29 +250,32 @@ Section: {{ session('form_data.section') }}
         </script>
         <script>
             $(document).ready(function() {
-                $('#addRow').click(function() {
-                var newRow = `
-                    <tr>
-                        <td>
-                            <select class="form-control item-input" name="item_no[]">
-                                <option value="">Select an item</option>
-                                @foreach($supplies as $supply)
-                                    @if(!is_null($supply->item_no))
-                                        <option value="{{ $supply->item_no }}">{{ $supply->item_no }}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                        </td>
-                        <td><input type="number" class="form-control" name="qty[]" autocomplete="off"></td>
-                        <td><input type="text" class="form-control unit-input" name="unit[]" readonly autocomplete="off"></td>
-                        <td><input type="text" class="form-control description-input" name="description[]" readonly autocomplete="off"></td>
-                        <td><input type="number" class="form-control price_per_purchase_request-input" name="price_per_purchase_request-input[]" readonly autocomplete="off"></td>
-                        <td><input type="number" class="form-control" name="est_cost[]" readonly autocomplete="off"></td>
-                    </tr>
-                `;
+                var rowNum = 1; // Initialize row number
         
-                $('#itemsTable tbody').append(newRow);
-            });
+                $('#addRow').click(function() {
+                    var newRow = `
+                        <tr>
+                            <td>${rowNum}</td> <!-- Add row number here -->
+                            <td>
+                                <select class="form-control item-input" name="item_description[]">
+                                    <option value="">Select an Item</option>
+                                    @foreach($supplies as $supply)
+                                        @if(!is_null($supply->item_description))
+                                            <option value="{{ $supply->item_description }}">{{ $supply->item_description }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td><input type="number" class="form-control" name="qty[]" autocomplete="off"></td>
+                            <td><input type="text" class="form-control unit-input" name="unit[]" readonly autocomplete="off"></td>
+                            <td><input type="number" class="form-control price_per_purchase_request-input" name="price_per_purchase_request[]" autocomplete="off"></td>
+                            <td><input type="number" class="form-control" name="est_cost[]" readonly autocomplete="off"></td>
+                        </tr>
+                    `;
+        
+                    $('#itemsTable tbody').append(newRow);
+                    rowNum++; // Increment row number
+                });
             });
         </script>
 </body>
