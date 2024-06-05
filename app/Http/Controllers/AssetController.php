@@ -16,7 +16,7 @@ use Barryvdh\DomPDF\Facade\PDF;
 class AssetController extends Controller
 {
     //MAIN TABLE
-    public function displayasset()
+    /*public function displayasset()
     {
         $asset = IssuedAsset::select('i_description')
                     ->groupBy('i_description')
@@ -31,7 +31,7 @@ class AssetController extends Controller
                             ->pluck('d_totalDelivered', 'd_description');
 
         return view('pages.assets.displayassets', ['asset' => $asset, 'issuedAssetTotals' => $issuedAssetTotals, 'deliveredAssetTotals' => $deliveredAssetTotals]);
-    }
+    }*/
 
     //PURCHASE ORDER
     public function displaypurchaseorder()
@@ -70,7 +70,6 @@ class AssetController extends Controller
             'unit',
             'unit_cost' => 'required',
             'is_delivered',
-            'ics_no',
         ]);
         
         $orders->item_no = $request->input('item_no');
@@ -85,7 +84,6 @@ class AssetController extends Controller
         $orders->quantity = $request->input('quantity');
         $orders->unit = $request->input('unit');
         $orders->unit_cost = $request->input('unit_cost'); 
-        $orders->ics_no = $request->input('ics_no');
         $orders->save();
 
         return redirect('/purchase-order-view')->with('status', 'Purchase Order Added Successfully!');
@@ -122,6 +120,16 @@ class AssetController extends Controller
         return view('pages.assets.displaydelivery', ['dasset' => $dasset, 'iasset' => $iasset, 'departments' => $departments, 'issuedAssetTotals' => $issuedAssetTotals, 'deliveredAssetTotals' => $deliveredAssetTotals]);
     }
 
+    public function makedeliveredasset()
+    {
+        $dasset = DeliveredAsset::all();
+        $class = ClassCategory::all();
+        $classToCategoryMap = ClassCategory::all()->groupBy('class_id')->map(function ($classItems) {
+            return $classItems->pluck('category');
+        });
+        return view('pages.assets.addassetdelivered', ['dasset' => $dasset, 'class' => $class, 'classToCategoryMap' => $classToCategoryMap]);
+    }
+
     public function storenew_delivered_asset(Request $request)
     {
         $dasset = new DeliveredAsset;
@@ -131,6 +139,7 @@ class AssetController extends Controller
             'd_description' => 'required',
             'd_unit' => 'required',
             'd_iar_no' => 'required',
+            'd_ics_no' => 'required',
             'd_supplier' => 'required',
             'd_pr_no' => 'required',
             'd_po_no' => 'required',
@@ -151,6 +160,7 @@ class AssetController extends Controller
         $dasset->d_description = $request->input('d_description');
         $dasset->d_unit = $request->input('d_unit');
         $dasset->d_iar_no = $request->input('d_iar_no');
+        $dasset->d_ics_no = $request->input('d_ics_no');
         $dasset->d_supplier = $request->input('d_supplier');
         $dasset->d_pr_no = $request->input('d_pr_no');
         $dasset->d_po_no = $request->input('d_po_no');
@@ -167,7 +177,7 @@ class AssetController extends Controller
         $dasset->d_date_po = $request->input('d_date_po');
 
         $dasset->save();
-        $order = PurchaseOrder::where('po_no', $dasset->d_po_no)->first();
+        $order = PurchaseOrder::where('id', $dasset->d_po_no)->first();
         if ($order) {
             $order->is_delivered = true;
             $order->save();
@@ -276,6 +286,51 @@ class AssetController extends Controller
         return redirect('/class-category')->with('status', 'Class and Category Deleted Successfully!');
     }
 
+    //ASSET TRANSFER
+    public function displayassettransfer()
+    {
+        $assettransfer = AssetTransfer::all();
+        $departments = Department::all();
+        return view('pages.assets.displayassettransfer', ['assettransfer' => $assettransfer, 'departments' => $departments]);
+    }
+
+    public function storeassettransfer(Request $request)
+    {
+        $assettransfer = new AssetTransfer;
+        $validatedData = $request->validate([
+            'at_are_no' => 'required',
+            'at_received_from' => 'required',
+            'at_received_by' => 'required',
+            'at_received_from_office' => 'required',
+            'at_used_in_office' => 'required',
+            'at_date_received' => 'required',
+            'at_end_user' => 'required',
+            'at_new_are_no' => 'required',
+            'at_prs_no' => 'required',
+        ]);
+
+        $assettransfer->at_are_no = $request->input('at_are_no');
+        $assettransfer->at_received_from = $request->input('at_received_from');
+        $assettransfer->at_received_by = $request->input('at_received_by');
+        $assettransfer->at_received_from_office = $request->input('at_received_from_office');
+        $assettransfer->at_used_in_office = $request->input('at_used_in_office');
+        $assettransfer->at_date_received = $request->input('at_date_received');
+        $assettransfer->at_end_user = $request->input('at_end_user');
+        $assettransfer->at_new_are_no = $request->input('at_new_are_no');
+        $assettransfer->at_prs_no = $request->input('at_prs_no');
+        $assettransfer->save();
+
+        return redirect('/asset-transfer-view')->with('status', 'Asset Transfer Added Successfully!');
+    }
+
+    public function deleteassettransfer($id)
+    {
+        $assettransfer = AssetTransfer::find($id);
+        $assettransfer->delete();
+
+        return redirect('/asset-transfer-view')->with('status', 'Asset Transfer Deleted Successfully! Item can be recovered in archive...');
+    }
+
     //NO. GENERATION
     public function generateItemNo()
     {
@@ -304,14 +359,26 @@ class AssetController extends Controller
 
     public function generatePrsNo()
     {
-        return response()->json(['prs_no' => AssetTransfer::generatePrsNo()]);
+        return response()->json(['at_prs_no' => AssetTransfer::generatePrsNo()]);
     }
 
-    public function generateICSNo($unit_cost)
+    public function generateICSNo(Request $request)
     {
-        $ics_no = PurchaseOrder::generateICSNo($unit_cost);
-        return response()->json(['ics_no' => $ics_no]);
+        $option = $request->input('option');
+        $year = date('Y');
+        $month = date('m');
+        $series = $this->getSeries($option);
+
+        $icsNo = "{$option}-{$year}-{$month}-{$series}";
+
+        return response()->json(['icsNo' => $icsNo]);
     }
+
+    private function getSeries($option)
+    {
+        return DeliveredAsset::where('d_ics_no', 'like', "{$option}-%")->count() + 1;
+    }
+
 
     //FORMS
     

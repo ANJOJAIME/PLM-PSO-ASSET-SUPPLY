@@ -13,15 +13,15 @@ class AssetTransfer extends Model
     protected $table = 'asset_transfer';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'are_no',
-        'received_from',
-        'received_by',
-        'received_from_office',
-        'used_in_office',
-        'date_received',
-        'end_user',
-        'new_are_no',
-        'prs_no',
+        'at_are_no',
+        'at_received_from',
+        'at_received_by',
+        'at_received_from_office',
+        'at_used_in_office',
+        'at_date_received',
+        'at_end_user',
+        'at_new_are_no',
+        'at_prs_no',
     ];
 
     public function getKeyName()
@@ -33,10 +33,10 @@ class AssetTransfer extends Model
     public static function generatePrsNo()
     {
         $year = date('Y');
-        $lastPrsNo = self::where('prs_no', 'like', $year.'-%')->orderBy('prs_no', 'desc')->first();
+        $lastPrsNo = self::where('at_prs_no', 'like', $year.'-%')->orderBy('at_prs_no', 'desc')->first();
 
         if ($lastPrsNo) {
-            $number = intval(substr($lastPrsNo->prs_no, 5)) + 1;
+            $number = intval(substr($lastPrsNo->at_prs_no, 5)) + 1;
         } else {
             $number = 1;
         }

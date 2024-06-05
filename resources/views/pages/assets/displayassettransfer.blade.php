@@ -350,13 +350,13 @@
         <div class="side-bar" style="padding: 10px;">
             <h2 style="color: white; text-align: right; font-size: 20px; padding-top: 80px; padding-right: 10px"><strong>Assets Management</strong></h2>
             <div class="items">
-                <a class="main" href="/asset-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Main</a>
-                <a class="delivered" href="/delivery-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery</a>
+                <!--<a class="main" href="/asset-view" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Main</a>-->                <a class="delivered" href="/delivery-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery</a>
                 <a class="issuance" href="/issuance-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issuance</a>
                 <a class="purchase_order" href="/purchase-order-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Purchase Order</a>
                 <a class="assets_transer" href="/asset-transfer-view" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Asset Transfer</a>
                 <a class="supplier" href="/suppliers-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Suppliers</a>
                 <a class="department" href="/asset-plm-departments" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">PLM Departments</a>
+                <a class="class" href="/class-category" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Class ID and Categories</a>
                 <a class="reports&forms" href="asset-forms-and-reports-generation" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Reports and Forms</a>
                 <a class="po_archive" href="/purchase-order/archive" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Purchase Order Archive</a>
                 <a class="dArchive" href="/delivery/archive" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery Archive</a>
@@ -409,19 +409,19 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                        @foreach($transfer as $transferdata)
+                        @foreach($assettransfer as $transferdata)
                         <tr>
-                            <td>{{$transferdata->are_no}}</td>
-                            <td>{{$transferdata->received_from}}</td>
-                            <td>{{$transferdata->received_by}}</td>
-                            <td>{{$transferdata->received_from_office}}</td>
-                            <td>{{$transferdata->used_in_office}}</td>
-                            <td>{{$transferdata->date_received}}</td>
-                            <td>{{$transferdata->end_user}}</td>
-                            <td>{{$transferdata->new_are_no}}</td>
-                            <td>{{$transferdata->prs_no}}</td>
+                            <td>{{$transferdata->at_are_no}}</td>
+                            <td>{{$transferdata->at_received_from}}</td>
+                            <td>{{$transferdata->at_received_by}}</td>
+                            <td>{{$transferdata->at_received_from_office}}</td>
+                            <td>{{$transferdata->at_used_in_office}}</td>
+                            <td>{{$transferdata->at_date_received}}</td>
+                            <td>{{$transferdata->at_end_user}}</td>
+                            <td>{{$transferdata->at_new_are_no}}</td>
+                            <td>{{$transferdata->at_prs_no}}</td>
                             <td>
-                                <a href="/deletedelivery/{{$transferdata->id}}" class="btn btn-outline-danger">Delete</a>
+                                <a href="/deleteassettransfer/{{$transferdata->id}}" class="btn btn-outline-danger">Delete</a>
                             </td>
                         </tr>
                         @endforeach
@@ -445,56 +445,56 @@
                         @csrf
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="are_no"><strong>ARE No</strong></label>
-                                <input type="text" class="form-control" id="are_no" name="are_no" required>
+                                <label for="at_are_no"><strong>ARE No</strong></label>
+                                <input type="text" class="form-control" id="at_are_no" name="at_are_no" required>
                             </div>
                             <div class="form-group">
-                                <label for="received_from"><strong>Received From</strong></label>
-                                <input type="text" class="form-control" id="received_from" name="received_from" required>
+                                <label for="at_received_from"><strong>Received From</strong></label>
+                                <input type="text" class="form-control" id="at_received_from" name="at_received_from" required>
                             </div>
                             <div class="form-group">
-                                <label for="received_by"><strong>Received By</strong></label>
-                                <input type="text" class="form-control" id="received_by" name="received_by" required>
+                                <label for="at_received_by"><strong>Received By</strong></label>
+                                <input type="text" class="form-control" id="at_received_by" name="at_received_by" required>
                             </div>
                             <div class="form-group">
-                                <label for="received_from_office"><strong>Received From Office</strong></label>
-                                    <select name="received_from_office" class="form-control @error('received_from_office') is-invalid @enderror">
+                                <label for="at_received_from_office"><strong>Received From Office</strong></label>
+                                    <select name="at_received_from_office" class="form-control @error('at_received_from_office') is-invalid @enderror">
                                         <option value="">Select Office</option>
                                         @foreach($departments as $department)
                                             <option value="{{ $department->department_name }}"
-                                                {{ $asset->received_from_office ?? '' == $department->department_name ? 'selected' : '' }}>
+                                                {{ $asset->at_received_from_office ?? '' == $department->department_name ? 'selected' : '' }}>
                                                 {{ $department->department_name }}
                                             </option>
                                         @endforeach
                                     </select>
                             </div>
                             <div class="form-group">
-                                <label for="used_in_office"><strong>Used In Office</strong></label>
-                                <select name="used_in_office" class="form-control @error('used_in_office') is-invalid @enderror">
+                                <label for="at_used_in_office"><strong>Used In Office</strong></label>
+                                <select name="at_used_in_office" class="form-control @error('at_used_in_office') is-invalid @enderror">
                                         <option value="">Select Office</option>
                                         @foreach($departments as $department)
                                             <option value="{{ $department->department_name }}"
-                                                {{ $asset->used_in_office ?? '' == $department->department_name ? 'selected' : '' }}>
+                                                {{ $asset->at_used_in_office ?? '' == $department->department_name ? 'selected' : '' }}>
                                                 {{ $department->department_name }}
                                             </option>
                                         @endforeach
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="date_received"><strong>Date Received</strong></label>
-                                <input type="date" class="form-control" id="date_received" name="date_received" required>
+                                <label for="at_date_received"><strong>Date Received</strong></label>
+                                <input type="date" class="form-control" id="at_date_received" name="at_date_received" required>
                             </div>
                             <div class="form-group">
-                                <label for="end_user"><strong>End User</label>
-                                <input type="text" class="form-control" id="end_user" name="end_user" required>
+                                <label for="at_end_user"><strong>End User</label>
+                                <input type="text" class="form-control" id="at_end_user" name="at_end_user" required>
                             </div>
                             <div class="form-group">
-                                <label for="new_are_no">New ARE No</label>
-                                <input type="text" class="form-control" id="new_are_no" name="new_are_no" required>
+                                <label for="at_new_are_no">New ARE No</label>
+                                <input type="text" class="form-control" id="at_new_are_no" name="at_new_are_no" required>
                             </div>
                             <div class="form-group">
-                                <label for="prs_no">PRS No</label>
-                                <input type="text" class="form-control" id="prs_no" name="prs_no" required>
+                                <label for="at_prs_no">PRS No</label>
+                                <input type="text" class="form-control" id="at_prs_no" name="at_prs_no" required>
                             </div>
                             <div>
                                 <button id="generate-prs-no" type="button">Generate PRS No</button>
@@ -573,7 +573,7 @@
                 fetch('/generate-prs-no')
                     .then(response => response.json())
                     .then(data => {
-                        document.getElementById('prs_no').value = data.prs_no;
+                        document.getElementById('at_prs_no').value = data.at_prs_no;
                     });
             });
         </script>

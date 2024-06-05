@@ -356,11 +356,10 @@
         <div class="side-bar" style="padding: 10px;">
             <h2 style="color: white; text-align: right; font-size: 20px; padding-top: 80px; padding-right: 10px"><strong>Assets Management</strong></h2>
             <div class="items">
-                <a class="main" href="/asset-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Main</a>
-                <a class="delivered" href="/delivery-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery</a>
+                <!--<a class="main" href="/asset-view" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Main</a>-->                <a class="delivered" href="/delivery-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery</a>
                 <a class="issuance" href="/issuance-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issuance</a>
                 <a class="purchase_order" href="/purchase-order-view" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Purchase Order</a>
-                <!-- <a class="assets_transer" href="/asset-transfer-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Asset Transfer</a> -->
+                <a class="assets_transer" href="/asset-transfer-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Asset Transfer</a>
                 <a class="supplier" href="/suppliers-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Suppliers</a>
                 <a class="department" href="/asset-plm-departments" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">PLM Departments</a>
                 <a class="class" href="/class-category" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Class ID and Categories</a>
@@ -390,7 +389,7 @@
         </div>
         <div>
             <h4>
-                <a href="{{url('/makepurchaseorder')}}" class="btn btn-primary"><strong>Make Purchase Order</strong></a>
+                <a href="{{url('/makenewdelivery')}}" class="btn btn-primary"><strong>Make Purchase Order</strong></a>
             </h4>
         <div>
 
@@ -415,10 +414,8 @@
                             <th>Purchase Order No.</th>
                             <th>Supplier</th>
                             <th>TIN No.</th>
-                            <th>Date Purchase Order Created</th>
                             <th>Mode of Procurement</th>
                             <th>PR No.</th>
-                            <th>ICS No.</th>
                             <th>Price/Value</th>
                             <th>Payment Term</th>
                             <th>Quantity</th>
@@ -435,10 +432,8 @@
                             <td>{{$order->po_no}}</td>
                             <td>{{$order->supplier}}</td>
                             <td>{{$order->tin_no}}</td>
-                            <td>{{$order->updated_at}}</td>
                             <td>{{$order->mode_of_proc}}</td>
                             <td>{{$order->pr_no}}</td>
-                            <td>{{$order->ics_no}}</td>
                             <td>{{$order->price_val}}</td>
                             <td>{{$order->payment_term}}</td>
                             <td>{{$order->quantity}}</td>
@@ -531,6 +526,20 @@
                                     <button id="generate-asset-iar-no" type="button">Generate IAR No</button>
                             </div>
                             <div class="form-group">
+                                <label for="d_ics_no"><strong>ICS No</strong></label> 
+                                <label for="splv">
+                                    <input type="radio" id="splv" name="option" value="SPLV"> SPLV
+                                </label>
+                                <label for="sphv">
+                                    <input type="radio" id="sphv" name="option" value="SPHV"> SPHV
+                                </label>
+                                <label for="rrsp">
+                                    <input type="radio" id="rrsp" name="option" value="RRSP"> RRSP
+                                </label>
+                                <input type="text" name="d_ics_no" id="d_ics_no" class="form-control @error('d_ics_no') is-invalid @enderror" >
+                                <button id="generate-asset-ics-no" type="button">Generate ICS No</button>
+                            </div>
+                            <div class="form-group">
                                 <label for="d_bur_no"><strong>BUR No</strong></label>
                                     <input type="text" class="form-control" name="d_bur_no">
                             </div>
@@ -543,22 +552,16 @@
                                     <input type="date" class="form-control" name="d_date_invoice">
                             </div>
                             <div class="form-group">
-                                <label for="d_qty"><strong>Quantity</strong></label>
-                                    <input type="text" class="form-control" name="d_qty" value="{{$order->quantity}}" readonly>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="confirmCheck" required>
-                                        <label class="form-check-label" for="confirmCheck">
-                                            <i>Confirm if delivered items are correct<i>
-                                        </label>
-                                    </div>
+                                <label for="d_qty"><strong>Quantity Delivered</strong></label>
+                                    <input type="number" class="form-control" name="d_qty">
                             </div>
                             <div class="form-group">
                                 <label for="d_unit_cost"><strong>Unit Cost</strong></label>
-                                    <input type="text" class="form-control" name="d_unit_cost" value="{{$order->unit_cost}}" readonly>
+                                    <input type="number" class="form-control" name="d_unit_cost">
                             </div>
                             <div class="form-group">
                                 <label for="d_total_cost"><strong>Total Cost</strong></label>
-                                    <input type="text" class="form-control" name="d_total_cost" value="{{$order->quantity * $order->unit_cost}}" readonly>
+                                    <input type="number" class="form-control" name="d_total_cost">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -640,16 +643,6 @@
             }
         </script>
         <script>
-        $(document).ready(function() {
-            $('form').on('submit', function(e) {
-                if (!$('#confirmCheck').is(':checked')) {
-                    e.preventDefault();
-                    alert('Please confirm before submitting the form.');
-                }
-            });
-        });
-        </script>
-        <script>
             document.getElementById('generate-asset-iar-no').addEventListener('click', function() {
                 fetch('/generate-asset-iar-no')
                     .then(response => response.json())
@@ -658,33 +651,6 @@
                     });
             });
         </script>
-        <script>
-            function updateCategoryOptions() {
-                var classId = document.getElementById('d_class_id').value;
-                var categorySelect = document.getElementById('d_category');
-        
-                // Clear existing options, but keep the default option
-                while (categorySelect.options.length > 1) {
-                    categorySelect.remove(1);
-                }
-        
-                // Get the map of class_ids to categories
-                var classToCategoryMap = @json($classToCategoryMap);
-        
-                // Get the categories for the selected class_id
-                var categories = classToCategoryMap[classId];
-        
-                // Check if there are any categories for the selected class_id
-                if (categories) {
-                    // Add new options to the categorySelect
-                    categories.forEach(category => {
-                        var option = document.createElement('option');
-                        option.value = category;
-                        option.text = category;
-                        categorySelect.add(option);
-                    });
-                }
-            }
-        </script>
+
     </body>
 </html>

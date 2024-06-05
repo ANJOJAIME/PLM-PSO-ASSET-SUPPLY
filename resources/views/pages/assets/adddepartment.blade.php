@@ -144,7 +144,7 @@
             <img src="/image/PLMLogo.png" alt="logo">
         </header>
         <div class ="card-header">
-            <a href="{{url('plm-departments')}}" class="btn btn1-primary">Cancel</a>
+            <a href="{{url('asset-plm-departments')}}" class="btn btn1-primary">Cancel</a>
         </div>
 
         <div class="container">

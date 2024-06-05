@@ -41,7 +41,7 @@ Route::get('/generate-asset-iar-no', [AssetController::class, 'generateAssetIARN
 Route::get('/generate-property-no', [AssetController::class, 'generatePropertyNo']);
 Route::get('/generate-par-no', [AssetController::class, 'generateParNo']);
 Route::get('/generate-prs-no', [AssetController::class, 'generatePrsNo']);
-Route::get('/generate-ics-no/{unit_cost}', 'AssetController@generateICSNo');
+Route::post('/generateICSNo', 'AssetController@generateICSNo');
 
 
 //ISSUED TABLE
@@ -82,7 +82,7 @@ Route::get('/addsupplier', 'SupplierController@addSupplier');
 Route::post('/storesupplier', 'SupplierController@storeSupplier');
 Route::get('/deletesupplier/{id}', 'SupplierController@deleteSupplier');
 //MAIN TABLE
-Route::resource('/displayasset', 'AssetController');
+/*Route::resource('/displayasset', 'AssetController');
 Route::get('asset-view', 'AssetController@displayasset');
 Route::get('/addasset', 'AssetController@addasset');
 Route::post('/storeasset', 'AssetController@storenewasset');
@@ -90,7 +90,7 @@ Route::get('/editasset/{pr_no}', 'AssetController@editasset');
 Route::put('/updateasset/{pr_no}', 'AssetController@updateasset');
 Route::get('/deleteasset/{pr_no}', 'AssetController@deleteasset');
 Route::get('/searchasset', 'AssetController@search');
-
+*/
 //PURCHASE ORDER
 Route::get('purchase-order-view', 'AssetController@displaypurchaseorder');
 Route::get('/makepurchaseorder', 'AssetController@makePurchaseOrder');
@@ -100,6 +100,7 @@ Route::get('/delete-purchase-order/{id}', 'AssetController@deletePurchaseOrder')
 
 //DELIVERY TABLE
 Route::get('delivery-view', 'AssetController@displaydelivery');
+Route::get('/makenewdelivery', 'AssetController@makedeliveredasset');
 Route::post('/storenewdelivery', 'AssetController@storenew_delivered_asset');
 Route::get('/deletedelivery/{id}', 'AssetController@deletedeliveredasset');
 
@@ -110,7 +111,8 @@ Route::get('/deleteissuance/{id}', 'AssetController@delete_issued_asset');
 
 //ASSET TRANSFER
 Route::get('/asset-transfer-view', 'AssetController@displayassettransfer');
-Route::post('/makenewtransfer', 'AssetController@makenewassettransfer');
+Route::post('/makenewtransfer', 'AssetController@storeassettransfer');
+Route::get('/deleteassettransfer/{id}', 'AssetController@deleteassettransfer');
 
 //DEPARTMENT
 Route::get('/asset-plm-departments', 'AssetController@assetdisplaydepartment');

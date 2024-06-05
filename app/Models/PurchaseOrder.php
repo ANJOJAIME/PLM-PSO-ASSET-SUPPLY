@@ -22,7 +22,6 @@ class PurchaseOrder extends Model
         'unit',
         'unit_cost',
         'is_delivered',
-        'ics_no',
     ];
 
     protected $table = 'purchase_order';
@@ -44,32 +43,4 @@ class PurchaseOrder extends Model
         return $year . $number;
     }
 
-    public static function generateICSNo($unit_cost)
-    {
-        $year = date('Y');
-        $month = date('m');
-        $prefix = '';
-
-        if ($unit_cost < 5000) {
-            $prefix = 'SPLV';
-        } elseif ($unit_cost >= 5000 && $unit_cost <= 50000) {
-            $prefix = 'SPHV';
-        } else {
-            $prefix = 'CO';
-        }
-
-        $lastIcsNo = PurchaseOrder::where('ics_no', 'like', $prefix.'-'.$year.'-'.$month.'-%')->orderBy('ics_no', 'desc')->first();
-
-        if ($lastIcsNo) {
-            $number = intval(substr($lastIcsNo->ics_no, strlen($prefix.'-'.$year.'-'.$month.'-'))) + 1;
-        } else {
-            $number = 1;
-        }
-
-        $number = str_pad($number, 4, '0', STR_PAD_LEFT);
-
-        $ics_no = $prefix.'-'.$year.'-'.$month.'-'.$number;
-
-        return $ics_no;
-    }
 }

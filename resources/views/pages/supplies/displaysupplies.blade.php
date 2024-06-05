@@ -395,7 +395,8 @@
 
                             $balanceAfter = $deliveredTotal - $issuedTotal;
                             $status = 'No value yet'; // Default status
-                            $percentage = ($issuedTotal / $deliveredTotal) * 100;
+                            $percentage = $deliveredTotal != 0 ? ($issuedTotal / $deliveredTotal) * 100 : 0;
+
                             $class = '';
                             if ($percentage <= 20) {
                                 $status = 'HIGH LEVEL';

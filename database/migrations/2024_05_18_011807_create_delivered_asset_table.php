@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('d_unit_cost');
             $table->string('d_total_cost');
             $table->date('d_date_po');
+            $table->string('d_ics_no');
             $table->id();
             $table->timestamps();
             $table->softDeletes();

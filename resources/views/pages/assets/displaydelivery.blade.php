@@ -349,11 +349,10 @@
         <div class="side-bar" style="padding: 10px;">
             <h2 style="color: white; text-align: right; font-size: 20px; padding-top: 80px; padding-right: 10px"><strong>Assets Management</strong></h2>
             <div class="items">
-                <a class="main" href="/asset-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Main</a>
-                <a class="delivered" href="/delivery-view" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery</a>
+                <!--<a class="main" href="/asset-view" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Main</a>-->                <a class="delivered" href="/delivery-view" style="color: #4F74BB; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Delivery</a>
                 <a class="issuance" href="/issuance-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Issuance</a>
                 <a class="purchase_order" href="/purchase-order-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Purchase Order</a>
-                <!-- <a class="assets_transer" href="/asset-transfer-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Asset Transfer</a> -->
+                <a class="assets_transer" href="/asset-transfer-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Asset Transfer</a>
                 <a class="supplier" href="/suppliers-view" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Suppliers</a>
                 <a class="department" href="/asset-plm-departments" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">PLM Departments</a>
                 <a class="class" href="/class-category" style="color: white; background-color: transparent; display: block; text-align: right; padding-right: 10px; font-family: Arial">Class ID and Categories</a>
@@ -405,6 +404,7 @@
                             <th>Supplier</th>
                             <th>Unit</th>
                             <th>IAR No.</th>
+                            <th>ICS No.</th>
                             <th>BUR No.</th>
                             <th>Invoice No.</th>
                             <th>Date of Invoice</th>
@@ -428,6 +428,7 @@
                             <td>{{$assetdata->d_supplier}}</td>
                             <td>{{$assetdata->d_unit}}</td>
                             <td>{{$assetdata->d_iar_no}}</td>
+                            <td>{{$assetdata->d_ics_no}}</td>
                             <td>{{$assetdata->d_bur_no}}</td>
                             <td>{{$assetdata->d_invoice_no}}</td>   
                             <td>{{$assetdata->d_date_invoice}}</td>

@@ -14,6 +14,7 @@ class DeliveredAsset extends Model
         'd_item_no',
         'd_description',
         'd_unit',
+        'd_ics_no',
         'd_iar_no',
         'd_supplier',
         'd_pr_no',
